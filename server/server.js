@@ -1,0 +1,145 @@
+
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI, Modality } from "@google/genai";
+import OpenAI from 'openai';
+import nodemailer from 'nodemailer';
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const PORT = process.env.PORT || 3001;
+
+app.post('/gemini', async (req, res) => {
+    const { prompt, systemInstruction, apiKey } = req.body;
+    const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY || apiKey;
+
+    if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
+
+    try {
+        const ai = new GoogleGenAI(key);
+        const model = ai.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: {
+                role: 'system',
+                parts: [{ text: systemInstruction }]
+            }
+        });
+
+        const result = await model.generateContent({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7 }
+        });
+
+        res.json({ content: result.response.text() });
+    } catch (error) {
+        console.error('Gemini Proxy Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/openai', async (req, res) => {
+    const { prompt, systemInstruction, apiKey } = req.body;
+    const key = process.env.OPENAI_API_KEY || apiKey;
+
+    if (!key) return res.status(400).json({ error: 'OpenAI API Key missing' });
+
+    try {
+        const openai = new OpenAI({ apiKey: key });
+        const response = await openai.chat.completions.create({
+            model: "gpt-4-turbo-preview",
+            messages: [
+                { role: "system", content: systemInstruction },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.7
+        });
+        res.json({ content: response.choices[0].message.content });
+    } catch (error) {
+        console.error('OpenAI Proxy Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/tts', async (req, res) => {
+    const { text, apiKey } = req.body;
+    const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY || apiKey;
+
+    if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
+
+    try {
+        const ai = new GoogleGenAI(key);
+        const result = await ai.getGenerativeModel({ model: "gemini-1.5-flash" }).generateContent({
+            contents: [{ parts: [{ text: text }] }],
+            generationConfig: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName: 'Kore' },
+                    },
+                },
+            },
+        });
+
+        const base64Audio = result.response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        res.json({ audio: base64Audio });
+    } catch (error) {
+        console.error('TTS Proxy Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use your preferred service or SMTP config
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+app.post('/welcome-email', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Welcome to Noble Clarity Engine',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+                <h1 style="color: #2563EB;">Welcome to the Engine! 🚀</h1>
+                <p>Hi there,</p>
+                <p>We are thrilled to verify that your account has been successfully created. You can now access your Financial Intelligence Dashboard anytime.</p>
+                <p><strong>Next Steps:</strong></p>
+                <ul>
+                    <li>Explore the Dashboard</li>
+                    <li>Set up your financial goals</li>
+                    <li>Ask the AI Coach for advice</li>
+                </ul>
+                <p>If you have any questions, feel free to reply to this email.</p>
+                <br>
+                <p>Cheers,</p>
+                <p>The Noble World Team</p>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Welcome email sent to ${email}`);
+        res.status(200).json({ message: 'Welcome email sent successfully' });
+    } catch (error) {
+        console.error('Error sending welcome email:', error);
+        res.status(500).json({ error: 'Failed to send welcome email', details: error.message });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Noble Clarity Proxy running on http://localhost:${PORT}`);
+});
