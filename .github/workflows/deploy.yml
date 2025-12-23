@@ -41,7 +41,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
-        security: false
+        security: loose
         timeout: 60000
         log-level: verbose
         local-dir: ./dist/
@@ -54,7 +54,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
-        security: false
+        security: loose
         timeout: 60000
         log-level: verbose
         local-dir: ./server/
