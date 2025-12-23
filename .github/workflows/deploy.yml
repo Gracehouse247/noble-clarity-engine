@@ -42,10 +42,10 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         security: loose
-        timeout: 60000
+        timeout: 90000
         log-level: verbose
         local-dir: ./dist/
-        server-dir: public_html/clarity/ # ASSUMED SUBDOMAIN ROOT
+        server-dir: public_html/clarity/
 
     - name: Deploy Backend to cPanel via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -55,7 +55,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         security: loose
-        timeout: 60000
+        timeout: 90000
         log-level: verbose
         local-dir: ./server/
-        server-dir: noble-server/ # MUST MATCH cPANEL APP ROOT
+        server-dir: noble-server/
