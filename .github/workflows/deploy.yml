@@ -42,6 +42,8 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         security: false
+        timeout: 60000
+        log-level: verbose
         local-dir: ./dist/
         server-dir: public_html/clarity/ # ASSUMED SUBDOMAIN ROOT
 
@@ -53,5 +55,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         security: false
+        timeout: 60000
+        log-level: verbose
         local-dir: ./server/
         server-dir: noble-server/ # MUST MATCH cPANEL APP ROOT
