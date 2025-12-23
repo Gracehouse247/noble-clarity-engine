@@ -34,20 +34,24 @@ jobs:
         VITE_FLUTTERWAVE_PUBLIC_KEY: ${{ secrets.VITE_FLUTTERWAVE_PUBLIC_KEY }}
         VITE_PROXY_URL: https://clarity.noblesworld.com.ng/api
 
-    - name: Deploy Frontend to cPanel via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+    - name: Deploy Frontend to cPanel via SFTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        protocol: sftp
         local-dir: ./dist/
         server-dir: public_html/clarity/
 
-    - name: Deploy Backend to cPanel via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+    - name: Deploy Backend to cPanel via SFTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        protocol: sftp
         local-dir: ./server/
         server-dir: noble-server/
