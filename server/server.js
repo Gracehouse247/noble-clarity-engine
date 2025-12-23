@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { GoogleGenAI, Modality } from "@google/genai";
-import { GoogleGenAI, Modality } from "@google/genai";
 import OpenAI from 'openai';
 import nodemailer from 'nodemailer';
 
