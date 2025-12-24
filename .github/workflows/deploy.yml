@@ -35,28 +35,18 @@ jobs:
         VITE_APP_URL: "https://clarity.noblesworld.com.ng"
         VITE_PROXY_URL: "https://clarity.noblesworld.com.ng/api"
 
-    - name: Deploy Frontend to cPanel (Port 21)
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        port: 21
-        protocol: ftp
-        timeout: 60000
-        local-dir: ./dist/
-        server-dir: ./
+    - name: Prepare Deployment Folder
+      run: |
+        mkdir deploy-package
+        cp -R dist/* deploy-package/
+        mkdir deploy-package/server
+        cp -R server/* deploy-package/server/
+        cp .cpanel.yml deploy-package/
 
-    - name: Deploy Backend to cPanel (Port 21)
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    - name: Push to Deploy Branch
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        port: 21
-        protocol: ftp
-        timeout: 60000
-        local-dir: ./server/
-        server-dir: ../noble-server/
-        # Note: If the FTP account is restricted to public_html/clarity, 
-        # we might need to adjust this path or create a higher-level FTP account.
+        folder: deploy-package
+        branch: deploy
+        token: ${{ secrets.GITHUB_TOKEN }}
+        clean: true
