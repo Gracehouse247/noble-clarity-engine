@@ -16,7 +16,8 @@ const PORT = process.env.PORT || 3001;
 
 // Root / Health check routes
 app.get('/', (req, res) => {
-    res.json({ status: 'active', message: 'Noble Clarity Engine API is Running', timestamp: new Date().toISOString() });
+    res.set('Content-Type', 'text/html');
+    res.send('<h1>Noble Clarity Engine API is Running</h1><p>Status: Active</p>');
 });
 
 app.get('/api', (req, res) => {
