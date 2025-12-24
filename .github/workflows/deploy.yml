@@ -42,6 +42,8 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
+        protocol: ftp
+        timeout: 60000
         local-dir: ./dist/
         server-dir: ./
 
@@ -52,6 +54,8 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
+        protocol: ftp
+        timeout: 60000
         local-dir: ./server/
         server-dir: ../noble-server/
         # Note: If the FTP account is restricted to public_html/clarity, 
