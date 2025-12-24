@@ -32,26 +32,27 @@ jobs:
         VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
         VITE_PAYSTACK_PUBLIC_KEY: ${{ secrets.VITE_PAYSTACK_PUBLIC_KEY }}
         VITE_FLUTTERWAVE_PUBLIC_KEY: ${{ secrets.VITE_FLUTTERWAVE_PUBLIC_KEY }}
-        VITE_PROXY_URL: https://clarity.noblesworld.com.ng/api
+        VITE_APP_URL: "https://clarity.noblesworld.com.ng"
+        VITE_PROXY_URL: "https://clarity.noblesworld.com.ng/api"
 
-    - name: Deploy Frontend to cPanel via SFTP
+    - name: Deploy Frontend to cPanel (Port 21)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        port: 22
-        protocol: sftp
+        port: 21
         local-dir: ./dist/
-        server-dir: public_html/clarity/
+        server-dir: ./
 
-    - name: Deploy Backend to cPanel via SFTP
+    - name: Deploy Backend to cPanel (Port 21)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        port: 22
-        protocol: sftp
+        port: 21
         local-dir: ./server/
-        server-dir: noble-server/
+        server-dir: ../noble-server/
+        # Note: If the FTP account is restricted to public_html/clarity, 
+        # we might need to adjust this path or create a higher-level FTP account.

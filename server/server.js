@@ -14,7 +14,19 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-app.post('/gemini', async (req, res) => {
+// Root / Health check routes
+app.get('/', (req, res) => {
+    res.json({ status: 'active', message: 'Noble Clarity Engine API is Running', timestamp: new Date().toISOString() });
+});
+
+app.get('/api', (req, res) => {
+    res.json({ status: 'active', message: 'Noble Clarity Engine API is Running (Prefix Detected)', timestamp: new Date().toISOString() });
+});
+
+// Helper to handle both /api/route and /route
+const apiPath = (path) => [`${path}`, `/api${path}`];
+
+app.post(apiPath('/gemini'), async (req, res) => {
     const { prompt, systemInstruction, apiKey } = req.body;
     const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY || apiKey;
 
@@ -42,7 +54,7 @@ app.post('/gemini', async (req, res) => {
     }
 });
 
-app.post('/openai', async (req, res) => {
+app.post(apiPath('/openai'), async (req, res) => {
     const { prompt, systemInstruction, apiKey } = req.body;
     const key = process.env.OPENAI_API_KEY || apiKey;
 
@@ -65,7 +77,7 @@ app.post('/openai', async (req, res) => {
     }
 });
 
-app.post('/tts', async (req, res) => {
+app.post(apiPath('/tts'), async (req, res) => {
     const { text, apiKey } = req.body;
     const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY || apiKey;
 
@@ -101,7 +113,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-app.post('/welcome-email', async (req, res) => {
+app.post(apiPath('/welcome-email'), async (req, res) => {
     const { email } = req.body;
 
     if (!email) return res.status(400).json({ error: 'Email is required' });
