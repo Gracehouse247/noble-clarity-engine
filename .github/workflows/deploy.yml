@@ -43,6 +43,8 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
         server-dir: public_html/clarity/
+        protocol: ftp
+        port: 21
 
     - name: Deploy Backend to cPanel via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -52,3 +54,5 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./server/
         server-dir: noble-server/
+        protocol: ftp
+        port: 21
