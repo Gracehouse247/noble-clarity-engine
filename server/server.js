@@ -148,6 +148,12 @@ app.post(apiPath('/welcome-email'), async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Noble Clarity Proxy running on http://localhost:${PORT}`);
-});
+// For local development only
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Noble Clarity Proxy running on http://localhost:${PORT}`);
+    });
+}
+
+// Export for Vercel functions
+export default app;
