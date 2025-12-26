@@ -1,228 +1,584 @@
 
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Rocket,
-  Shield,
-  Target,
-  TrendingUp,
-  ArrowRight,
-  Play,
-  Zap,
-  CheckCircle2,
-  Lock,
-  Globe,
-  Star,
-  Quote,
-  BarChart,
-  PieChart,
-  Bot
-} from 'lucide-react';
 import { useUser } from '../contexts/NobleContext';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
 
 const LandingPage: React.FunctionComponent = () => {
   const navigate = useNavigate();
-  const { reviews } = useUser();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
   const [authMode, setAuthMode] = React.useState<'login' | 'signup'>('login');
+
+  // Scenario Planner State
+  const [adSpend, setAdSpend] = React.useState(65);
+  const [salesTeam, setSalesTeam] = React.useState(4);
+
+  // Simple calculation for the demo
+  const projectedProfit = React.useMemo(() => {
+    const base = 250000;
+    const adReturn = adSpend * 2000; // arbitrary multiplier
+    const salesReturn = salesTeam * 15000;
+    return base + adReturn + salesReturn;
+  }, [adSpend, salesTeam]);
 
   const handleAuth = (mode: 'login' | 'signup') => {
     if (user) {
       navigate('/dashboard');
     } else {
-      if (mode === 'signup') {
-        navigate('/pricing');
-      } else {
-        setAuthMode(mode);
-        setIsAuthModalOpen(true);
-      }
+      setAuthMode(mode);
+      setIsAuthModalOpen(true);
     }
   };
-  const [rev, setRev] = React.useState(50000);
-  const [costs, setCosts] = React.useState(35000);
-  const [growth, setGrowth] = React.useState(10);
-
-  const projectedProfit = Math.round((rev * (1 + growth / 100)) - costs);
-  const projectedMargin = ((projectedProfit / (rev * (1 + growth / 100))) * 100).toFixed(1);
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0b0e14]/80 backdrop-blur-md border-b border-white/5 px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
-          <div className="w-10 h-10 bg-noble-blue rounded-xl flex items-center justify-center">
-            <Globe className="w-6 h-6 text-white" />
-          </div>
-          <span className="font-['Montserrat'] font-extrabold text-xl tracking-tight hidden sm:block uppercase">Noble World</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-          <button onClick={() => navigate('/features')} className="hover:text-white transition-colors">Features</button>
-          <button onClick={() => navigate('/pricing')} className="hover:text-white transition-colors">Pricing</button>
-          <button onClick={() => navigate('/story')} className="hover:text-white transition-colors">Company</button>
-        </div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => handleAuth('login')} className="text-sm font-medium hover:text-white transition-colors">Login</button>
-          <button onClick={() => handleAuth('signup')} className="bg-noble-blue hover:bg-noble-blue/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-noble-blue/20">Launch Engine</button>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative pt-48 pb-20 px-8 overflow-hidden gradient-hero">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="relative z-10 space-y-8 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-noble-blue text-sm font-bold uppercase tracking-wider">
-              <Zap className="w-4 h-4 fill-current" /> Empowering Next-Gen Founders
-            </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold font-['Montserrat'] leading-[1.1] tracking-tight">Master Your Business <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-cyan-300">Financial Intelligence</span></h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">Join 500+ high-growth companies using Noble World to stop guessing and start scaling with AI-driven certainty.</p>
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-              <button onClick={() => handleAuth('signup')} className="w-full sm:w-auto px-10 py-5 bg-noble-blue text-white rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-2xl flex items-center justify-center gap-2">Get Started Now <ArrowRight size={20} /></button>
-              <button onClick={() => navigate('/features')} className="w-full sm:w-auto px-10 py-5 bg-slate-800 text-white rounded-2xl font-bold text-lg hover:bg-slate-700 transition-all border border-slate-700">View Features</button>
-            </div>
-          </div>
-
-          {/* Simulator Card */}
-          <div className="relative z-10 animate-float hidden lg:block">
-            <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
-              <h3 className="text-2xl font-bold font-display mb-10">Profit Simulator</h3>
-              <div className="space-y-10">
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm"><span className="text-slate-400">Monthly Revenue</span><span className="font-bold">${rev.toLocaleString()}</span></div>
-                  <input type="range" min="10000" max="200000" step="5000" value={rev} onChange={(e) => setRev(parseInt(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-noble-blue" />
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm"><span className="text-slate-400">Monthly Costs</span><span className="font-bold">${costs.toLocaleString()}</span></div>
-                  <input type="range" min="5000" max="150000" step="5000" value={costs} onChange={(e) => setCosts(parseInt(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500" />
-                </div>
+    <div className="bg-background-dark text-slate-200 font-display overflow-x-hidden selection:bg-primary/30 selection:text-white min-h-screen flex flex-col">
+      {/* Top Navigation */}
+      <header className="sticky top-0 z-50 w-full glass-panel border-b-0 border-b-[#283339]/50 transition-all duration-300">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+              <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                <span className="material-symbols-outlined text-[20px]">diamond</span>
               </div>
-              <div className="mt-12 grid grid-cols-2 gap-4">
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-white/5">
-                  <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Projected Profit</p>
-                  <p className="text-3xl font-extrabold text-white">${projectedProfit.toLocaleString()}</p>
-                </div>
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-white/5">
-                  <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Net Margin</p>
-                  <p className="text-3xl font-extrabold text-noble-blue">{projectedMargin}%</p>
-                </div>
-              </div>
+              <span className="text-white text-lg font-bold tracking-tight">Noble Clarity</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-24 px-8 border-t border-slate-900 bg-[#0b0e14]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold font-display mb-4">Complete Financial Clarity</h2>
-            <p className="text-slate-400 text-lg">Everything you need to understand, plan, and grow your business.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-noble-blue/30 transition-all group">
-              <div className="w-12 h-12 bg-noble-blue/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <BarChart className="w-6 h-6 text-noble-blue" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">Live P&L Dashboard</h3>
-              <p className="text-slate-400 leading-relaxed">Visualize your revenue, expenses, and margins in real-time. No more waiting for end-of-month reports.</p>
-            </div>
-            <div className="p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-noble-blue/30 transition-all group">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-6 h-6 text-purple-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">Scenario Planner</h3>
-              <p className="text-slate-400 leading-relaxed">Simulate "What If" scenarios. See how hiring, price changes, or a recession impacts your runway instantly.</p>
-            </div>
-            <div className="p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-noble-blue/30 transition-all group">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Bot className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">AI Financial Coach</h3>
-              <p className="text-slate-400 leading-relaxed">Get 24/7 strategic advice powered by Google Gemini. Ask complex questions and get plain-English answers.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dynamic Success Stories Section */}
-      <section id="reviews" className="py-32 px-8 border-t border-slate-900 bg-slate-950/50">
-        <div className="max-w-7xl mx-auto text-center space-y-4 mb-20">
-          <h2 className="text-4xl md:text-5xl font-extrabold font-display">Client Success Stories</h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">Genuine feedback from the entrepreneurs and financial leaders using Noble World.</p>
-        </div>
-
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {reviews.map((review) => (
-            <div key={review.id} className="bg-slate-900 border border-slate-800 p-8 rounded-3xl relative flex flex-col hover:border-noble-blue/30 transition-all group">
-              <QuoteSVG className="absolute top-8 right-8 w-10 h-10 text-slate-800 group-hover:text-noble-blue/10 transition-colors" />
-              <div className="flex gap-1 mb-6">
-                {[1, 2, 3, 4, 5].map(star => (
-                  <Star
-                    key={star}
-                    className={`w-4 h-4 ${star <= review.rating ? 'text-amber-400 fill-current' : 'text-slate-700'}`}
-                  />
-                ))}
-              </div>
-              <p className="text-slate-300 leading-relaxed flex-1 italic mb-8">"{review.comment}"</p>
-              <div className="flex items-center gap-4 pt-6 border-t border-slate-800">
-                <img src={review.authorAvatar} alt="" className="w-12 h-12 rounded-full border border-slate-700 object-cover" />
-                <div>
-                  <p className="font-bold text-white text-sm">{review.authorName}</p>
-                  <p className="text-slate-500 text-[10px] uppercase tracking-wider font-bold">{review.authorRole}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-20 px-8 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 text-sm text-slate-500">
-          <div className="col-span-2 space-y-6">
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-8">
+              <button onClick={() => navigate('/features')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Product</button>
+              <button onClick={() => navigate('/story')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Solutions</button>
+              <button onClick={() => navigate('/api-docs')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Resources</button>
+              <button onClick={() => navigate('/pricing')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Pricing</button>
+            </nav>
+            {/* Actions */}
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-noble-blue rounded-lg flex items-center justify-center text-white font-bold"><Globe className="w-4 h-4" /></div>
-              <span className="font-bold text-white tracking-tight uppercase">Noble World</span>
+              {user ? (
+                <button onClick={() => navigate('/dashboard')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                  <span>Dashboard</span>
+                </button>
+              ) : (
+                <>
+                  <button onClick={() => handleAuth('login')} className="hidden sm:flex text-slate-300 hover:text-white text-sm font-medium px-3 py-2 transition-colors">Log In</button>
+                  <button onClick={() => handleAuth('signup')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                    <span>Start Analysis</span>
+                  </button>
+                </>
+              )}
             </div>
-            <p className="max-w-xs leading-relaxed">Creating Brand's Visibility through financial intelligence.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-white mb-6 uppercase text-[10px] tracking-widest">Platform</h4>
-            <ul className="space-y-4">
-              <li><button onClick={() => navigate('/features')} className="hover:text-white">Analysis</button></li>
-              <li><button onClick={() => navigate('/pricing')} className="hover:text-white">Pricing</button></li>
-              <li><button onClick={() => navigate('/api-docs')} className="hover:text-white">API Docs</button></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-white mb-6 uppercase text-[10px] tracking-widest">Company</h4>
-            <ul className="space-y-4">
-              <li><button onClick={() => navigate('/story')} className="hover:text-white">Our Story</button></li>
-              <li><button onClick={() => navigate('/security')} className="hover:text-white">Security</button></li>
-              <li><button onClick={() => navigate('/privacy')} className="hover:text-white">Privacy Policy</button></li>
-              <li><button onClick={() => navigate('/terms')} className="hover:text-white">Terms</button></li>
-            </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-900 text-center text-[10px]">
-          &copy; {new Date().getFullYear()} The Noble’s Technology Services. All rights reserved.
-        </div>
-      </footer>
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        defaultMode={authMode}
-      />
+      </header>
+
+      <main className="flex flex-col w-full relative flex-grow">
+        {/* Hero Section */}
+        <section className="relative pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-hero-glow pointer-events-none"></div>
+          <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Hero Content */}
+              <div className="flex flex-col gap-6 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit">
+                  <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                  <span className="text-xs font-medium text-primary uppercase tracking-wider">New: Gemini 1.5 Integration</span>
+                </div>
+                <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
+                  Financial <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Intelligence</span>,<br /> Refined.
+                </h1>
+                <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
+                  Predictive clarity for the modern enterprise. Unlock the power of AI-driven financial modeling with crystalline precision.
+                </p>
+                <div className="flex flex-wrap gap-4 pt-4">
+                  <button onClick={() => user ? navigate('/dashboard') : handleAuth('signup')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/25 hover:scale-105 hover:shadow-primary/40">
+                    <span>Start Your Analysis</span>
+                    <span className="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
+                  </button>
+                  <button className="flex items-center justify-center rounded-lg h-12 px-6 bg-transparent border border-white/20 hover:bg-white/5 text-white text-base font-bold transition-all hover:scale-105">
+                    <span className="material-symbols-outlined mr-2 text-[20px] text-primary">play_circle</span>
+                    <span>Watch Demo</span>
+                  </button>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-slate-500 pt-2">
+                  <div className="flex -space-x-2">
+                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-gray-700 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrLKMqARhpdtRfcncw3DCTLw0IpH7mQI6Pzkui58wHhovDQKy4d0xV6UGkR3iF5vwykBxA8wMNKDUX-ocwkvAGepP3cB-tNqOtLRT8QsYjZmDWbl5HVGOp3UJJfTW3UVaWp65Vz1OzAWDOjW7-hkmBwLlNB0S9DjMAXyyWrH_ABW4pdxLW4Y-x_69DUgFzlC1GGylOTDvGKg3KKRjEysPt_B3iuYs9iKYajzeB235AJ4-dRpqdQps-ilANk0xtfRKVtNY18hCi1ZQ')" }}></div>
+                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-gray-700 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2TpbkXB1vybRTuX2_VRlO7LtiYyEIEmdBoYIKzbaoprmYP_0h99w7YfuiDmGFOCOJM6zgIOVWxZGWrthdISw0BCtJs1BRclHFIIvbImGj-gYinld9GJfwok3cf3DqBXoWAmaWt9OyJ3Er2rPB8D2ljylmSX-PzkD6rCzo2wO5IEQ_mfeKAsnnyOYlIP8zqBOg-GMPX0YNZQ-4_uMhc0INzqi_8SD4slLUCHb2cB243HZEonBwJLIrMaJuEsM5bKBAA5-rC91Z_sc')" }}></div>
+                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-gray-700 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtG1DiFedMlUSAvLYBvYdmGYR7Mu1j5HXrDKwDYwu__tq0S27Z0KJKERFgjViKJgCmqjjnDxtjvYjON7r5ooZrsaHKvKX9wLZxiQlgx-l_e8xzmY7SwX9ijWjfvy58EIrGnnNqblwivg5CjfIf5e-MxtMPGZh1drrHvvMrkYtvRHe1yJuqU9AHkSd65C1gcvUkJKHQrliX0D_8EdDXTqMayTAB4pjgzzMyomieqg8Hiel6uuc_vAHtt8UNqMkhCbi99RFFCrruez8')" }}></div>
+                  </div>
+                  <p>Trusted by 500+ CFOs</p>
+                </div>
+              </div>
+
+              {/* Hero Visual (Glassmorphic Dashboard) */}
+              <div className="relative lg:h-[500px] flex items-center justify-center perspective-[1000px]">
+                {/* Abstract Background Blobs */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-purple-500/10 rounded-full blur-[60px]"></div>
+
+                {/* Main Dashboard Card */}
+                <div className="relative w-full max-w-md glass-card rounded-xl p-6 transform rotate-y-[-5deg] rotate-x-[5deg] transition-transform hover:rotate-0 duration-500">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded bg-primary/20 flex items-center justify-center text-primary">
+                        <span className="material-symbols-outlined text-sm">analytics</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">Q3 Projection</div>
+                        <div className="text-xs text-slate-400">Updated 2m ago</div>
+                      </div>
+                    </div>
+                    <span className="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold">+24.5%</span>
+                  </div>
+
+                  {/* Chart Area (Simulated) */}
+                  <div className="relative h-48 w-full mb-6">
+                    <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 50">
+                      {/* Grid lines */}
+                      <line x1="0" y1="10" x2="100" y2="10" stroke="#283339" strokeWidth="0.5" />
+                      <line x1="0" y1="25" x2="100" y2="25" stroke="#283339" strokeWidth="0.5" />
+                      <line x1="0" y1="40" x2="100" y2="40" stroke="#283339" strokeWidth="0.5" />
+
+                      {/* Area Path */}
+                      <path d="M0 45 C 20 40, 40 45, 60 25 S 80 10, 100 5 L 100 50 L 0 50 Z" fill="url(#gradientHero)" fillOpacity="0.3" />
+
+                      {/* Line Path */}
+                      <path d="M0 45 C 20 40, 40 45, 60 25 S 80 10, 100 5" fill="none" stroke="#0da6f2" strokeWidth="1.5" strokeLinecap="round" />
+
+                      <defs>
+                        <linearGradient id="gradientHero" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stopColor="#0da6f2" />
+                          <stop offset="100%" stopColor="transparent" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+
+                    {/* Floating Tooltip */}
+                    <div className="absolute top-[10%] right-[10%] bg-slate-800 border border-white/10 p-3 rounded-lg shadow-xl max-w-[140px]">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="material-symbols-outlined text-primary text-xs">auto_awesome</span>
+                        <span className="text-[10px] uppercase font-bold text-slate-400">AI Insight</span>
+                      </div>
+                      <p className="text-xs text-white leading-snug">Recurring revenue velocity indicates a breakout month.</p>
+                    </div>
+                  </div>
+
+                  {/* Metrics Row */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 rounded-lg bg-white/5 border border-white/5">
+                      <p className="text-xs text-slate-400 mb-1">Net MRR</p>
+                      <p className="text-lg font-bold text-white">$482.5k</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white/5 border border-white/5">
+                      <p className="text-xs text-slate-400 mb-1">Burn Rate</p>
+                      <p className="text-lg font-bold text-white">0.8x</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof / Logos */}
+        <section className="border-y border-white/5 bg-[#0e1214] py-8">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-sm text-slate-500 mb-6 font-medium">TRUSTED BY FORWARD-THINKING FINANCE TEAMS</p>
+            <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale transition-all duration-500 hover:grayscale-0 hover:opacity-100">
+              {/* Using text for logos to avoid external image dependencies */}
+              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">change_history</span> Vertex</div>
+              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">all_inclusive</span> Infinite</div>
+              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">pentagon</span> Prism</div>
+              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">hexagon</span> Hive</div>
+              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">diamond</span> Noble</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Growth Engine Features (Bento Grid) */}
+        <section className="py-24 bg-background-dark relative">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Growth Engine</h2>
+              <p className="text-slate-400 max-w-2xl text-lg">Powerful tools designed to accelerate decision making. From AI-driven coaching to intricate scenario planning.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
+              {/* Card 1: AI Coach */}
+              <div className="group glass-card rounded-2xl p-6 lg:col-span-1 flex flex-col justify-between hover:border-primary/30 transition-all duration-300">
+                <div>
+                  <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
+                    <span className="material-symbols-outlined">psychology</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">AI Financial Coach</h3>
+                  <p className="text-sm text-slate-400">Real-time chat interface for instant financial queries and audit trails.</p>
+                </div>
+                {/* Chat UI Mockup */}
+                <div className="mt-6 flex flex-col gap-3">
+                  <div className="self-end bg-primary/20 text-primary-dark rounded-l-xl rounded-tr-xl p-3 text-xs max-w-[85%] border border-primary/10">
+                    How does increasing ad spend by 15% affect Q4 runway?
+                  </div>
+                  <div className="self-start bg-slate-800 text-slate-300 rounded-r-xl rounded-tl-xl p-3 text-xs max-w-[85%] border border-white/5 relative">
+                    <div className="absolute -left-1 top-3 w-1 h-3 bg-purple-500 rounded-full"></div>
+                    Based on current burn, a 15% increase reduces runway by 18 days but potentially increases MRR by 8% based on historical ROAS.
+                    <div className="flex gap-1 mt-2">
+                      <span className="block w-8 h-1 bg-purple-500/50 rounded-full animate-pulse"></span>
+                      <span className="block w-4 h-1 bg-purple-500/30 rounded-full animate-pulse delay-75"></span>
+                      <span className="block w-2 h-1 bg-purple-500/10 rounded-full animate-pulse delay-150"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Scenario Planner */}
+              <div className="group glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col hover:border-primary/30 transition-all duration-300">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center text-primary mb-4">
+                      <span className="material-symbols-outlined">tune</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-1">Scenario Planning</h3>
+                    <p className="text-sm text-slate-400">Interactive slider to project profit based on ad spend scaling.</p>
+                  </div>
+                  <button className="text-xs font-bold text-primary border border-primary/20 px-3 py-1 rounded hover:bg-primary/10 transition-colors">
+                    Export Model
+                  </button>
+                </div>
+
+                {/* Interactive UI */}
+                <div className="flex flex-col md:flex-row gap-8 items-center h-full justify-center">
+                  <div className="w-full md:w-1/2 flex flex-col gap-6">
+                    <div>
+                      <label className="flex justify-between text-sm text-slate-300 mb-2 font-medium">
+                        <span>Ad Spend Allocation</span>
+                        <span className="text-primary font-bold">${Math.round(adSpend * (200000 / 100) / 1000)}k</span>
+                      </label>
+                      <input
+                        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={adSpend}
+                        onChange={(e) => setAdSpend(parseInt(e.target.value))}
+                      />
+                    </div>
+                    <div>
+                      <label className="flex justify-between text-sm text-slate-300 mb-2 font-medium">
+                        <span>Sales Team Expansion</span>
+                        <span className="text-primary font-bold">{salesTeam} Heads</span>
+                      </label>
+                      <input
+                        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                        type="range"
+                        min="0"
+                        max="10"
+                        value={salesTeam}
+                        onChange={(e) => setSalesTeam(parseInt(e.target.value))}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-background-dark rounded-xl p-5 border border-white/5 flex flex-col items-center justify-center text-center">
+                    <span className="text-slate-400 text-xs uppercase tracking-widest font-bold mb-2">Projected Profit</span>
+                    <span className="text-4xl lg:text-5xl font-extrabold text-white mb-2">${projectedProfit.toLocaleString()}</span>
+                    <span className="inline-flex items-center text-green-400 text-sm font-bold bg-green-400/10 px-2 py-1 rounded">
+                      <span className="material-symbols-outlined text-sm mr-1">trending_up</span> +12.4% vs Baseline
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Unified Data */}
+              <div className="group glass-card rounded-2xl p-6 lg:col-span-1 flex flex-col justify-between hover:border-primary/30 transition-all duration-300">
+                <div>
+                  <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+                    <span className="material-symbols-outlined">hub</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">Unified Data</h3>
+                  <p className="text-sm text-slate-400">Consolidate multiple streams into a single source of truth.</p>
+                </div>
+                {/* Visual Representation */}
+                <div className="relative h-48 w-full mt-4 flex items-center justify-center">
+                  {/* Center Hub */}
+                  <div className="relative z-10 w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-lg shadow-primary/20">
+                    <span className="material-symbols-outlined text-white text-3xl">database</span>
+                  </div>
+                  {/* Satellites */}
+                  <div className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center animate-bounce duration-[2000ms]">
+                    <span className="material-symbols-outlined text-slate-400 text-sm">payments</span>
+                  </div>
+                  <div className="absolute bottom-4 right-8 w-10 h-10 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center animate-bounce duration-[2500ms]">
+                    <span className="material-symbols-outlined text-slate-400 text-sm">group</span>
+                  </div>
+                  <div className="absolute bottom-12 left-8 w-10 h-10 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center animate-bounce duration-[3000ms]">
+                    <span className="material-symbols-outlined text-slate-400 text-sm">ads_click</span>
+                  </div>
+                  {/* Connectors (SVG) */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    <line x1="25%" y1="20%" x2="50%" y2="50%" stroke="#283339" strokeWidth="2" strokeDasharray="4 4" />
+                    <line x1="75%" y1="80%" x2="50%" y2="50%" stroke="#283339" strokeWidth="2" strokeDasharray="4 4" />
+                    <line x1="25%" y1="70%" x2="50%" y2="50%" stroke="#283339" strokeWidth="2" strokeDasharray="4 4" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Card 4: Security (Small) */}
+              <div className="group glass-card rounded-2xl p-6 lg:col-span-2 flex items-center gap-6 hover:border-primary/30 transition-all duration-300">
+                <div className="h-12 w-12 shrink-0 rounded-full bg-slate-700/50 flex items-center justify-center text-slate-300">
+                  <span className="material-symbols-outlined">lock</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Bank-Grade Security</h3>
+                  <p className="text-sm text-slate-400">SOC2 Type II Certified. End-to-end encryption for all financial data.</p>
+                </div>
+                <div className="ml-auto hidden sm:block">
+                  <span className="px-3 py-1 rounded border border-green-500/30 text-green-400 text-xs font-bold bg-green-500/5">SECURE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Data Visualization Suite */}
+        <section className="py-24 bg-[#0e1214] border-t border-white/5">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2">Real-time Visibility</h2>
+                <p className="text-slate-400">Monitor key performance indicators with vector precision.</p>
+              </div>
+              <button onClick={() => navigate('/dashboard')} className="text-primary text-sm font-bold flex items-center hover:text-white transition-colors">
+                View Full Dashboard <span className="material-symbols-outlined ml-1 text-sm">arrow_forward</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Chart 1: Revenue (Area) */}
+              <div className="glass-panel p-6 rounded-xl border border-white/5">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-white font-bold text-sm">Revenue Flow</h4>
+                  <span className="text-slate-500 text-xs">Last 30 days</span>
+                </div>
+                <div className="h-40 w-full relative">
+                  <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 200 100">
+                    <defs>
+                      <linearGradient id="chart1" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#0da6f2" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#0da6f2" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M0 80 C 40 70, 60 90, 100 50 S 160 30, 200 10 L 200 100 L 0 100 Z" fill="url(#chart1)" />
+                    <path d="M0 80 C 40 70, 60 90, 100 50 S 160 30, 200 10" fill="none" stroke="#0da6f2" strokeWidth="2" />
+                  </svg>
+                </div>
+                <div className="flex items-center gap-2 mt-4">
+                  <span className="text-2xl font-bold text-white">$2.4M</span>
+                  <span className="text-xs text-green-400 font-medium">+12%</span>
+                </div>
+              </div>
+
+              {/* Chart 2: Ad ROI (Radial Bar) */}
+              <div className="glass-panel p-6 rounded-xl border border-white/5 flex flex-col">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-white font-bold text-sm">Ad Spend ROI</h4>
+                  <span className="text-slate-500 text-xs">Campaign A</span>
+                </div>
+                <div className="flex-1 flex items-center justify-center relative">
+                  <svg className="w-32 h-32 transform -rotate-90">
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#1a2328" strokeWidth="12" />
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#8b5cf6" strokeWidth="12" strokeDasharray="351" strokeDashoffset="80" strokeLinecap="round" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center flex-col">
+                    <span className="text-2xl font-bold text-white">4.2x</span>
+                    <span className="text-[10px] text-slate-400 uppercase">ROAS</span>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-4 text-xs text-slate-400">
+                  <span>Target: 3.0x</span>
+                  <span className="text-purple-400">Exceeding</span>
+                </div>
+              </div>
+
+              {/* Chart 3: Financial Goals (Progress Ring/Bars) */}
+              <div className="glass-panel p-6 rounded-xl border border-white/5">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-white font-bold text-sm">Q4 Goals</h4>
+                  <span className="text-slate-500 text-xs">82% Complete</span>
+                </div>
+                <div className="flex flex-col gap-6 justify-center h-full pb-4">
+                  {/* Goal 1 */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2">
+                      <span className="text-slate-300">ARR Growth</span>
+                      <span className="text-white font-bold">88%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary w-[88%] rounded-full"></div>
+                    </div>
+                  </div>
+                  {/* Goal 2 */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2">
+                      <span className="text-slate-300">Churn Reduction</span>
+                      <span className="text-white font-bold">65%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-orange-400 w-[65%] rounded-full"></div>
+                    </div>
+                  </div>
+                  {/* Goal 3 */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2">
+                      <span className="text-slate-300">Cash Flow Positive</span>
+                      <span className="text-white font-bold">92%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-green-400 w-[92%] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-24 bg-background-dark relative overflow-hidden">
+          {/* Decorate */}
+          <div className="absolute top-0 right-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-white mb-12 text-center">Growth Stories</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Testimonial 1 */}
+              <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative">
+                <div className="absolute top-8 right-8 text-primary opacity-20">
+                  <span className="material-symbols-outlined text-6xl">format_quote</span>
+                </div>
+                <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"Noble Clarity Engine gave us the confidence to scale our ad spend by 400%. The predictive models were accurate within a 2% margin of error."</p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqUH46wT5oOXwv1HncED8rYFJJ3Jqj871BycfLUW7C5GxoV8b9VBPJQfREdEzeSgyt_OS2H1nh9TxvbBQzO0Ky1UHhP1m0f19Cm5xR3z8MafT10XJ2a87N31F5w1YuZd_zhwEi7J03rOUAB1vpSiyhEj2T8akZ1BuxPp8MnSXBo3_jBnDf__BxFNwUtu7AmEBRELXKZp4My2nLPNYBtw5q47srWlwE5pDU9bXnvdQsZ4jc6ZmCIEFmM3K4UsGmhImt-S0eDDfRV4c')" }}></div>
+                  <div>
+                    <h5 className="text-white font-bold text-sm">Elena Rodriguez</h5>
+                    <p className="text-xs text-slate-500">CFO, TechFlow Inc.</p>
+                  </div>
+                  <div className="ml-auto bg-green-500/10 border border-green-500/20 px-3 py-1 rounded">
+                    <span className="text-green-400 text-xs font-bold">+30% Efficiency</span>
+                  </div>
+                </div>
+              </div>
+              {/* Testimonial 2 */}
+              <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative">
+                <div className="absolute top-8 right-8 text-primary opacity-20">
+                  <span className="material-symbols-outlined text-6xl">format_quote</span>
+                </div>
+                <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"The unified dashboard replaced five different tools we were using. It's not just about data visualization; it's about actual financial intelligence."</p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6wMtZWK51bmsIEhCDvt83t9XYERNsqYsXUENNgsZNWw5eOHMX74sHjL5exqxHssXQDxtokaQgU8GZuV-4k41LwtkN58KeYA9urtTL2bQd3bhtFXSj6ieX5dmSaPvJXtHFminnh0YKEIo1OjWLbWPD3H-1WNHMlZ5CJs-Y2yOjoFW8EklKit1nMKYOncMst_71irtD76O4dGZMwXsbUw7p5LwEoFkFLO-74NqbBMQnIEuXOXlzs6XfYIcQwaOu5tV1NFyln0LF2Vo')" }}></div>
+                  <div>
+                    <h5 className="text-white font-bold text-sm">David Chen</h5>
+                    <p className="text-xs text-slate-500">Founder, ScaleUp</p>
+                  </div>
+                  <div className="ml-auto bg-green-500/10 border border-green-500/20 px-3 py-1 rounded">
+                    <span className="text-green-400 text-xs font-bold">3x Revenue</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer & Developer API */}
+        <footer className="bg-[#05080a] border-t border-white/5 pt-16 pb-8">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-16 mb-16">
+              {/* Brand & Links */}
+              <div className="flex flex-col gap-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="material-symbols-outlined text-primary text-2xl">diamond</span>
+                    <span className="text-white text-xl font-bold">Noble Clarity</span>
+                  </div>
+                  <p className="text-slate-500 max-w-sm">The financial operating system for the next generation of enterprise.</p>
+                </div>
+                <div className="grid grid-cols-3 gap-8 text-sm">
+                  <div className="flex flex-col gap-3">
+                    <span className="text-white font-bold">Product</span>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Features</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Pricing</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Changelog</a>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <span className="text-white font-bold">Company</span>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">About</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Careers</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Contact</a>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <span className="text-white font-bold">Legal</span>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Privacy</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Terms</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Security</a>
+                  </div>
+                </div>
+              </div>
+              {/* Developer API Preview */}
+              <div className="bg-[#0f1519] rounded-xl border border-white/5 overflow-hidden flex flex-col">
+                <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></span>
+                    <span className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></span>
+                    <span className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono text-slate-500">API Access</span>
+                    <div className="w-8 h-4 bg-primary rounded-full relative cursor-pointer">
+                      <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 overflow-x-auto custom-scrollbar">
+                  <pre className="text-xs font-mono leading-relaxed">
+                    <span className="text-purple-400">const</span>{' '}<span className="text-blue-400">noble</span>{' '}<span className="text-slate-300">=</span>{' '}<span className="text-purple-400">require</span>(<span className="text-green-400">'noble-clarity-sdk'</span>);{'\n'}
+                    {'\n'}
+                    <span className="text-slate-500">// Initialize with Gemini 1.5 Flash Proxy</span>{'\n'}
+                    <span className="text-purple-400">const</span>{' '}<span className="text-blue-400">client</span>{' '}<span className="text-slate-300">=</span>{' '}<span className="text-purple-400">new</span>{' '}<span className="text-yellow-200">NobleClient</span>({'{'}{'\n'}
+                    {'  '}apiKey:{' '}<span className="text-green-400">process.env.NOBLE_API_KEY</span>,{'\n'}
+                    {'  '}model:{' '}<span className="text-green-400">'gemini-1.5-flash'</span>{'\n'}
+                    {'}'});{'\n'}
+                    {'\n'}
+                    <span className="text-slate-500">// Fetch Predictive Model</span>{'\n'}
+                    <span className="text-purple-400">async function</span>{' '}<span className="text-blue-400">getForecast</span>(){' {'}{'\n'}
+                    {'  '}<span className="text-purple-400">const</span>{' '}<span className="text-blue-400">report</span>{' '}<span className="text-slate-300">=</span>{' '}<span className="text-purple-400">await</span>{' '}<span className="text-blue-400">client</span>.<span className="text-yellow-200">predict</span>({'{'}{'\n'}
+                    {'    '}metric:{' '}<span className="text-green-400">'MRR'</span>,{'\n'}
+                    {'    '}horizon:{' '}<span className="text-green-400">'Q4'</span>,{'\n'}
+                    {'    '}confidence:{' '}<span className="text-orange-400">0.95</span>{'\n'}
+                    {'  }'});{'\n'}
+                    {'  '}{'\n'}
+                    {'  '}<span className="text-slate-300">console</span>.<span className="text-yellow-200">log</span>(<span className="text-blue-400">report</span>.json());{'\n'}
+                    {'}'}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-slate-600 text-sm">© 2024 Noble Clarity Inc. All rights reserved.</p>
+              <div className="flex gap-4">
+                <a className="text-slate-500 hover:text-white transition-colors" href="#"><span className="material-symbols-outlined text-xl">share</span></a>
+                <a className="text-slate-500 hover:text-white transition-colors" href="#"><span className="material-symbols-outlined text-xl">mail</span></a>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          defaultMode={authMode}
+        />
     </div>
   );
 };
-
-const QuoteSVG = ({ className }: { className: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H14.017C13.4647 8 13.017 8.44772 13.017 9V15C13.017 17.7614 15.2556 20 18.017 20H18.017V21H14.017ZM4.017 21L4.017 18C4.017 16.8954 4.91243 16 6.017 16H9.017C9.56928 16 10.017 15.5523 10.017 15V9C10.017 8.44772 9.56928 8 9.017 8H4.017C3.46472 8 3.017 8.44772 3.017 9V15C3.017 17.7614 5.25558 20 8.017 20H8.017V21H4.017Z" />
-  </svg>
-);
 
 export default LandingPage;
