@@ -571,12 +571,13 @@ const LandingPage: React.FunctionComponent = () => {
             </div>
           </div>
         </footer>
+      </main>
 
-        <AuthModal
-          isOpen={isAuthModalOpen}
-          onClose={() => setIsAuthModalOpen(false)}
-          defaultMode={authMode}
-        />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        defaultMode={authMode}
+      />
     </div>
   );
 };
