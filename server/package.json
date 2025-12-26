@@ -10,6 +10,7 @@
         "dotenv": "^17.2.3",
         "@google/genai": "^1.34.0",
         "openai": "^6.15.0",
-        "nodemailer": "^7.0.11"
+        "nodemailer": "^7.0.11",
+        "serverless-http": "^3.2.0"
     }
 }
