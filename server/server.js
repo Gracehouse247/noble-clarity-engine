@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import OpenAI from 'openai';
 import nodemailer from 'nodemailer';
 
@@ -34,21 +34,16 @@ app.post(apiPath('/gemini'), async (req, res) => {
     if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
 
     try {
-        const ai = new GoogleGenAI(key);
-        const model = ai.getGenerativeModel({
+        const ai = new GoogleGenAI({ apiKey: key });
+        const result = await ai.models.generateContent({
             model: "gemini-1.5-flash",
-            systemInstruction: {
-                role: 'system',
-                parts: [{ text: systemInstruction }]
+            contents: prompt,
+            config: {
+                systemInstruction: systemInstruction
             }
         });
 
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.7 }
-        });
-
-        res.json({ content: result.response.text() });
+        res.json({ content: result.text });
     } catch (error) {
         console.error('Gemini Proxy Error:', error);
         res.status(500).json({ error: error.message });
@@ -85,11 +80,12 @@ app.post(apiPath('/tts'), async (req, res) => {
     if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
 
     try {
-        const ai = new GoogleGenAI(key);
-        const result = await ai.getGenerativeModel({ model: "gemini-1.5-flash" }).generateContent({
+        const ai = new GoogleGenAI({ apiKey: key });
+        const result = await ai.models.generateContent({
+            model: "gemini-1.5-flash",
             contents: [{ parts: [{ text: text }] }],
-            generationConfig: {
-                responseModalities: [Modality.AUDIO],
+            config: {
+                responseModalities: ['AUDIO'],
                 speechConfig: {
                     voiceConfig: {
                         prebuiltVoiceConfig: { voiceName: 'Kore' },
@@ -98,7 +94,7 @@ app.post(apiPath('/tts'), async (req, res) => {
             },
         });
 
-        const base64Audio = result.response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        const base64Audio = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         res.json({ audio: base64Audio });
     } catch (error) {
         console.error('TTS Proxy Error:', error);

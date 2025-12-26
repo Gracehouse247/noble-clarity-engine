@@ -146,7 +146,7 @@ const ApiDocsPage: React.FunctionComponent = () => {
               <div className="p-2 bg-noble-blue/20 rounded-lg"><Terminal size={20} className="text-noble-blue" /></div>
               <div>
                 <h4 className="text-sm font-bold text-white mb-1">Base Endpoint</h4>
-                <code className="text-noble-blue font-mono text-sm">https://api.nobleworld.app/v1</code>
+                <code className="text-noble-blue font-mono text-sm">https://clarity.noblemart.com.ng/api</code>
               </div>
             </div>
           </Section>
@@ -155,8 +155,8 @@ const ApiDocsPage: React.FunctionComponent = () => {
             <p>
               Access to the Noble World API is managed via API Keys. These keys must be sent in the <code>Authorization</code> header as a Bearer token.
             </p>
-            <CodeBlock language="http" code={`GET /v1/profiles HTTP/1.1
-Host: api.nobleworld.app
+            <CodeBlock language="http" code={`POST /api/gemini HTTP/1.1
+Host: clarity.noblemart.com.ng
 Authorization: Bearer NOBLE_API_KEY_HERE
 Content-Type: application/json`} />
             <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex gap-3 mt-6">
@@ -197,7 +197,7 @@ Content-Type: application/json`} />
                   <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded uppercase">Get</span>
                   <code className="text-slate-200 text-xs">/profiles</code>
                 </div>
-                <CodeBlock language="javascript" code={`const response = await fetch('https://api.nobleworld.app/v1/profiles', {
+                <CodeBlock language="javascript" code={`const response = await fetch('https://clarity.noblemart.com.ng/api/gemini', {
   headers: { 'Authorization': 'Bearer ' + API_KEY }
 });
 const data = await response.json();`} />

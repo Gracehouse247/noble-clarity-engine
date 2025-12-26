@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { FinancialData, AIProvider } from "../types";
 import { INDUSTRY_BENCHMARKS } from '../constants';
 
@@ -68,27 +68,15 @@ async function callGemini(prompt: string, systemInstruction: string, apiKey: str
         return data.content;
     }
 
-    const genAI = new GoogleGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const contents = history.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-    }));
-    contents.push({ role: 'user', parts: [{ text: prompt }] });
-
-    const result = await model.generateContent({
-        contents,
-        generationConfig: {
-            temperature: 0.7,
-        },
-        systemInstruction: {
-            role: 'system',
-            parts: [{ text: systemInstruction }]
+    const result = await genAI.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: prompt,
+        config: {
+            systemInstruction: systemInstruction
         }
     });
 
-    return result.response.text();
+    return result.text;
 }
 
 /**
@@ -179,10 +167,10 @@ export async function generateSpeech(text: string, apiKey?: string): Promise<str
 
         const ai = new GoogleGenAI({ apiKey: apiKey || '' });
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-preview-tts",
+            model: "gemini-1.5-flash",
             contents: [{ parts: [{ text: text }] }],
             config: {
-                responseModalities: [Modality.AUDIO],
+                responseModalities: ['AUDIO'],
                 speechConfig: {
                     voiceConfig: {
                         prebuiltVoiceConfig: { voiceName: 'Kore' },
