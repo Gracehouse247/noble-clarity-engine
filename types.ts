@@ -29,6 +29,8 @@ export interface BusinessProfile {
   name: string;
   industry: string;
   currency: string;
+  businessSize?: string;
+  foundingDate?: string;
 }
 
 export interface ProfileData {
@@ -79,6 +81,11 @@ export interface UserProfile {
   currency: string;
   plan: 'starter' | 'growth' | 'enterprise';
   preferredProvider: AIProvider;
+  notifications?: {
+    marketAlerts: boolean;
+    weeklyDigest: boolean;
+    productUpdates: boolean;
+  };
 }
 
 export interface Notification {

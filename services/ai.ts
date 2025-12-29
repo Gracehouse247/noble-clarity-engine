@@ -1,5 +1,4 @@
-
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { FinancialData, AIProvider } from "../types";
 import { INDUSTRY_BENCHMARKS } from '../constants';
 
@@ -68,15 +67,10 @@ async function callGemini(prompt: string, systemInstruction: string, apiKey: str
         return data.content;
     }
 
-    const result = await genAI.models.generateContent({
-        model: "gemini-1.5-flash",
-        contents: prompt,
-        config: {
-            systemInstruction: systemInstruction
-        }
-    });
-
-    return result.text;
+    const genAI = new GoogleGenerativeAI(apiKey || '');
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+    const result = await model.generateContent(prompt);
+    return result.response.text();
 }
 
 /**
@@ -165,11 +159,13 @@ export async function generateSpeech(text: string, apiKey?: string): Promise<str
             return data.audio || null;
         }
 
-        const ai = new GoogleGenAI({ apiKey: apiKey || '' });
-        const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
-            contents: [{ parts: [{ text: text }] }],
-            config: {
+        const ai = new GoogleGenerativeAI(apiKey || '');
+        const model = ai.getGenerativeModel({
+            model: "gemini-2.0-flash-exp",
+        });
+        const response = await model.generateContent({
+            contents: [{ role: "user", parts: [{ text: text }] }],
+            generationConfig: {
                 responseModalities: ['AUDIO'],
                 speechConfig: {
                     voiceConfig: {
@@ -177,9 +173,9 @@ export async function generateSpeech(text: string, apiKey?: string): Promise<str
                     },
                 },
             },
-        });
+        } as any);
 
-        return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
+        return response.response?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
     } catch (error) {
         console.error("Gemini TTS Error:", error);
         return null;

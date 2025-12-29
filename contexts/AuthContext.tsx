@@ -13,6 +13,7 @@ interface AuthContextType {
     user: User | null;
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
+    sendPasswordResetEmail: (email: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -41,6 +42,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const sendPasswordResetEmail = async (email: string) => {
+        try {
+            const { sendPasswordResetEmail: firebaseSendResetEmail } = await import('firebase/auth');
+            await firebaseSendResetEmail(auth, email);
+        } catch (error) {
+            console.error("Error sending password reset email", error);
+            throw error;
+        }
+    };
+
     const logout = async () => {
         try {
             await firebaseSignOut(auth);
@@ -51,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
+        <AuthContext.Provider value={{ user, loading, signInWithGoogle, sendPasswordResetEmail, logout }}>
             {!loading && children}
         </AuthContext.Provider>
     );

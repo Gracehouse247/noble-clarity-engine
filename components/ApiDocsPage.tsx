@@ -1,62 +1,17 @@
 
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Code2,
-  Terminal,
-  Key,
-  Globe,
-  ShieldCheck,
-  Cpu,
-  Webhook,
-  Copy,
-  Check,
-  Zap,
-  BookOpen,
-  Layers,
-  Database
-} from 'lucide-react';
-
-const CodeBlock = ({ code, language = 'javascript' }: { code: string, language?: string }) => {
-  const [copied, setCopied] = React.useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <div className="relative group rounded-xl overflow-hidden bg-slate-950 border border-slate-800 my-4 shadow-2xl">
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{language}</span>
-        <button onClick={handleCopy} className="text-slate-500 hover:text-white transition-colors">
-          {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-        </button>
-      </div>
-      <pre className="p-4 text-xs font-mono text-slate-300 overflow-x-auto leading-relaxed">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-};
-
-const Section = ({ id, title, children }: { id: string; title: string; children?: React.ReactNode }) => (
-  <section id={id} className="py-12 border-b border-slate-800/50 last:border-0 scroll-mt-24">
-    <h2 className="text-2xl font-bold font-['Montserrat'] text-white mb-6 flex items-center gap-3">
-      {title}
-    </h2>
-    <div className="prose prose-invert max-w-none text-slate-400 text-sm leading-relaxed">
-      {children}
-    </div>
-  </section>
-);
 
 const ApiDocsPage: React.FunctionComponent = () => {
   const navigate = useNavigate();
+  const handleNav = (path: string) => navigate(path);
+
+  // State for interactivity
+  const [activeSection, setActiveSection] = React.useState('endpoints');
+  const [codeTab, setCodeTab] = React.useState<'nodejs' | 'json'>('nodejs');
 
   const scrollToSection = (id: string) => {
+    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -64,256 +19,287 @@ const ApiDocsPage: React.FunctionComponent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] text-white font-sans selection:bg-noble-blue/30">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0b0e14]/80 backdrop-blur-xl border-b border-white/5 px-4 md:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 bg-noble-blue rounded-xl flex items-center justify-center shadow-lg shadow-noble-blue/20">
-            <Globe className="w-6 h-6 text-white" />
+    <div className="bg-[#101522] text-[#9da4b9] font-display flex h-screen w-full overflow-hidden">
+      {/* SideNavBar */}
+      <aside className="flex flex-col w-72 bg-[#101522] border-r border-white/5 p-4 shrink-0 overflow-y-auto custom-scrollbar">
+        <div className="flex items-center gap-2.5 px-3 py-2 cursor-pointer mb-6" onClick={() => handleNav('/')}>
+          <div className="size-6 text-[#0f3bbd]">
+            <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
+              <path clipRule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fillRule="evenodd"></path>
+            </svg>
           </div>
-          <span className="font-['Montserrat'] font-extrabold text-xl tracking-tight uppercase">API DOCUMENTATION</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back to Platform</span>
-          </button>
-          <button
-            onClick={() => navigate('/pricing')}
-            className="bg-noble-blue hover:bg-noble-blue/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg"
-          >
-            Launch Console
-          </button>
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 flex flex-col lg:flex-row gap-12">
-        {/* Sidebar Nav */}
-        <aside className="lg:w-64 shrink-0 hidden lg:block sticky top-32 h-fit">
-          <div className="space-y-1">
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.1em] mb-4 px-3">Introduction</p>
-            {[
-              { id: 'welcome', label: 'Welcome', icon: BookOpen },
-              { id: 'auth', label: 'Authentication', icon: Key },
-              { id: 'rate-limits', label: 'Rate Limits', icon: Zap },
-            ].map(item => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all group text-left"
-              >
-                <item.icon size={18} className="text-slate-500 group-hover:text-noble-blue transition-colors" /> {item.label}
-              </button>
-            ))}
-            <div className="pt-8">
-              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.1em] mb-4 px-3">Endpoints</p>
-              {[
-                { id: 'profiles', label: 'Business Profiles', icon: Layers },
-                { id: 'financials', label: 'Financial Data', icon: Database },
-                { id: 'analysis', label: 'AI Analysis', icon: Cpu },
-                { id: 'webhooks', label: 'Webhooks', icon: Webhook },
-              ].map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all group text-left"
-                >
-                  <item.icon size={18} className="text-slate-500 group-hover:text-noble-blue transition-colors" /> {item.label}
-                </button>
-              ))}
-            </div>
+          <div>
+            <h1 className="text-white text-base font-bold leading-normal">Noble Clarity Engine</h1>
+            <p className="text-[#9da4b9] text-sm font-normal leading-normal">API Documentation</p>
           </div>
-        </aside>
+        </div>
 
-        {/* Content Area */}
-        <main className="flex-1 min-w-0">
-          <Section id="welcome" title="Welcome to Noble World API">
-            <p className="text-lg text-slate-300 mb-6">
-              The Noble World API allows you to programmatically access your financial data, manage business entities, and trigger AI-powered strategic analysis directly from your own applications or internal ERP systems.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-                <Globe className="text-noble-blue mb-3" size={24} />
-                <h4 className="font-bold text-white mb-1 text-sm">RESTful Architecture</h4>
-                <p className="text-xs">Predictable, resource-oriented URLs using standard HTTP response codes.</p>
+        {/* Search */}
+        <div className="px-1 py-3 mb-6">
+          <label className="flex flex-col min-w-40 h-10 w-full">
+            <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-[#1e2330] hover:bg-[#252b3b] transition-colors border border-white/5">
+              <div className="text-[#9da4b9] flex items-center justify-center pl-3">
+                <span className="material-symbols-outlined text-[20px]">search</span>
               </div>
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-                <ShieldCheck className="text-emerald-400 mb-3" size={24} />
-                <h4 className="font-bold text-white mb-1 text-sm">Enterprise Security</h4>
-                <p className="text-xs">End-to-end TLS 1.3 encryption and scoped API key permissions.</p>
-              </div>
+              <input className="flex w-full min-w-0 flex-1 bg-transparent text-white focus:outline-none placeholder:text-[#9da4b9] px-3 text-sm" placeholder="Search docs..." />
             </div>
-            <div className="p-4 bg-noble-blue/10 border border-noble-blue/20 rounded-xl flex gap-4 items-start">
-              <div className="p-2 bg-noble-blue/20 rounded-lg"><Terminal size={20} className="text-noble-blue" /></div>
-              <div>
-                <h4 className="text-sm font-bold text-white mb-1">Base Endpoint</h4>
-                <code className="text-noble-blue font-mono text-sm">https://clarity.noblemart.com.ng/api</code>
-              </div>
-            </div>
-          </Section>
+          </label>
+        </div>
 
-          <Section id="auth" title="Authentication">
-            <p>
-              Access to the Noble World API is managed via API Keys. These keys must be sent in the <code>Authorization</code> header as a Bearer token.
-            </p>
-            <CodeBlock language="http" code={`POST /api/gemini HTTP/1.1
-Host: clarity.noblemart.com.ng
-Authorization: Bearer NOBLE_API_KEY_HERE
-Content-Type: application/json`} />
-            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex gap-3 mt-6">
-              <Key className="text-amber-500 shrink-0" size={20} />
-              <p className="text-xs text-amber-200">
-                <strong>Warning:</strong> Keep your API keys secret. Do not share them in publicly accessible areas such as GitHub, client-side code, or documentation. Enterprise users can rotate keys via the Developer Dashboard.
+        <nav className="flex flex-col gap-1">
+          <NavItem
+            icon="bookmark"
+            label="Introduction"
+            active={activeSection === 'introduction'}
+            onClick={() => scrollToSection('introduction')}
+          />
+          <NavItem
+            icon="key"
+            label="Authentication"
+            active={activeSection === 'authentication'}
+            onClick={() => scrollToSection('authentication')}
+          />
+          <NavItem
+            icon="code"
+            label="Endpoints"
+            active={activeSection === 'endpoints'}
+            onClick={() => scrollToSection('endpoints')}
+            customIconStyle={{ fontVariationSettings: "'FILL' 1" }}
+          />
+          <NavItem
+            icon="database"
+            label="Data Models"
+            active={activeSection === 'datamodels'}
+            onClick={() => scrollToSection('datamodels')}
+          />
+          <NavItem
+            icon="send"
+            label="Webhooks"
+            active={activeSection === 'webhooks'}
+            onClick={() => scrollToSection('webhooks')}
+          />
+          <NavItem
+            icon="error"
+            label="Error Codes"
+            active={activeSection === 'errorcodes'}
+            onClick={() => scrollToSection('errorcodes')}
+          />
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth">
+        <div className="grid grid-cols-12 gap-8 px-12 py-10 max-w-[1600px] mx-auto">
+          {/* Center Content Column */}
+          <div className="col-span-12 lg:col-span-7 pb-20">
+
+            {/* SECTION: Introduction (Placeholder height for scroll demo) */}
+            <section id="introduction" className="scroll-mt-10 mb-20 border-b border-white/5 pb-10">
+              <div className="flex flex-wrap gap-2 pb-4">
+                <span className="text-[#9da4b9] text-sm">API</span>
+                <span className="text-[#9da4b9] text-sm">/</span>
+                <span className="text-white text-sm font-medium">Introduction</span>
+              </div>
+              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Introduction</h1>
+              <p className="text-base leading-relaxed mb-4">
+                Welcome to the Noble Clarity Engine API. Our API allows you to access financial intelligence predictions, analyze business data, and integrate our analysis engine into your own applications.
               </p>
-            </div>
-          </Section>
+            </section>
 
-          <Section id="rate-limits" title="Rate Limits">
-            <p>
-              Our API implements rate limiting to ensure platform stability. Limits are based on your plan:
-            </p>
-            <div className="overflow-x-auto my-6">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-800">
-                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Plan</th>
-                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Limit</th>
-                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Window</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/50">
-                  <tr><td className="py-3 px-4 text-white">Starter</td><td className="py-3 px-4">60 requests</td><td className="py-3 px-4">per minute</td></tr>
-                  <tr><td className="py-3 px-4 text-white font-bold">Growth</td><td className="py-3 px-4">300 requests</td><td className="py-3 px-4">per minute</td></tr>
-                  <tr><td className="py-3 px-4 text-purple-400 font-bold">Enterprise</td><td className="py-3 px-4">Custom</td><td className="py-3 px-4">Tailored</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </Section>
+            {/* SECTION: Authentication */}
+            <section id="authentication" className="scroll-mt-10 mb-20 border-b border-white/5 pb-10">
+              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Authentication</h1>
+              <p className="text-base leading-relaxed mb-4">
+                All API requests require an API key. You can pass your API key in the authorization header or as a query parameter.
+              </p>
+              <div className="bg-[#1e2330] p-4 rounded-lg border border-white/5">
+                <code className="text-white">Authorization: Bearer YOUR_API_KEY</code>
+              </div>
+            </section>
 
-          <Section id="profiles" title="Business Profiles">
-            <p>Retrieve a list of all your managed business entities or create new ones.</p>
-            <div className="space-y-6">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded uppercase">Get</span>
-                  <code className="text-slate-200 text-xs">/profiles</code>
+            {/* SECTION: Endpoints (The main view from screenshot) */}
+            <section id="endpoints" className="scroll-mt-10 mb-20">
+              <div className="flex flex-wrap gap-2 pb-4">
+                <span className="text-[#9da4b9] hover:text-white transition-colors cursor-pointer text-sm">API</span>
+                <span className="text-[#9da4b9] text-sm">/</span>
+                <span className="text-[#9da4b9] hover:text-white transition-colors cursor-pointer text-sm">Endpoints</span>
+                <span className="text-[#9da4b9] text-sm">/</span>
+                <span className="text-white text-sm font-medium">Get Prediction</span>
+              </div>
+
+              <h1 className="text-white text-[32px] font-bold leading-tight text-left pb-3">Get Prediction</h1>
+
+              <div className="flex items-center gap-3 mt-2 mb-6">
+                <span className="inline-flex items-center px-3 py-1 text-xs font-bold tracking-wide text-green-300 bg-green-900/40 rounded-full uppercase">GET</span>
+                <code className="text-sm text-gray-300 bg-white/5 px-3 py-1 rounded-md font-mono">/v1/predictions/{'{predictionId}'}</code>
+              </div>
+
+              <p className="mt-4 text-base leading-relaxed text-[#9da4b9]">
+                This endpoint retrieves a specific financial prediction by its unique identifier. The prediction object contains the predicted value, confidence score, and the input parameters used for the prediction.
+              </p>
+
+              <h2 className="text-white text-2xl font-bold mt-12 mb-6">Path Parameters</h2>
+              <div className="overflow-hidden border border-white/10 rounded-lg bg-[#151a25]">
+                <table className="min-w-full divide-y divide-white/10">
+                  <thead className="bg-white/5">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-[#9da4b9] uppercase tracking-wider">Parameter</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-[#9da4b9] uppercase tracking-wider">Type</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-[#9da4b9] uppercase tracking-wider">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/10">
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-mono">
+                        <span className="bg-white/10 px-2 py-1 rounded">predictionId</span>
+                        <span className="text-red-400 ml-2 text-xs uppercase font-bold">*required</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-[#9da4b9]">string</td>
+                      <td className="px-6 py-4 text-sm text-[#9da4b9] leading-relaxed">The unique identifier for the prediction.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* SECTION: Data Models */}
+            <section id="datamodels" className="scroll-mt-10 mb-20 border-b border-white/5 pb-10">
+              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Data Models</h1>
+              <p className="text-base leading-relaxed mb-4">
+                Understanding the core data structures is key to effective integration. This section details the User, Prediction, and Transaction objects.
+              </p>
+            </section>
+
+            {/* SECTION: Webhooks */}
+            <section id="webhooks" className="scroll-mt-10 mb-20 border-b border-white/5 pb-10">
+              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Webhooks</h1>
+              <p className="text-base leading-relaxed mb-4">
+                Subscribe to real-time events. Webhooks allow your system to receive notifications when a prediction is complete or a threshold is breached.
+              </p>
+            </section>
+
+            {/* SECTION: Error Codes */}
+            <section id="errorcodes" className="scroll-mt-10 mb-20 pb-10">
+              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Error Codes</h1>
+              <p className="text-base leading-relaxed mb-4">
+                Standard HTTP response codes are used to indicate the success or failure of direct API requests.
+              </p>
+            </section>
+
+          </div>
+
+          {/* Right Code Column */}
+          <div className="col-span-12 lg:col-span-5 relative">
+            <div className="sticky top-10 flex flex-col gap-6">
+
+              {/* Request Block */}
+              <div className="bg-[#1e2330] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                <div className="flex border-b border-white/10 bg-[#151a25]">
+                  <button
+                    onClick={() => setCodeTab('nodejs')}
+                    className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 ${codeTab === 'nodejs' ? 'border-[#0f3bbd] text-white bg-[#0f3bbd]/10' : 'border-transparent text-[#9da4b9] hover:text-white'}`}
+                  >
+                    Node.js
+                  </button>
+                  <button
+                    onClick={() => setCodeTab('json')}
+                    className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 ${codeTab === 'json' ? 'border-[#0f3bbd] text-white bg-[#0f3bbd]/10' : 'border-transparent text-[#9da4b9] hover:text-white'}`}
+                  >
+                    JSON
+                  </button>
                 </div>
-                <CodeBlock language="javascript" code={`const response = await fetch('https://clarity.noblemart.com.ng/api/gemini', {
-  headers: { 'Authorization': 'Bearer ' + API_KEY }
-});
-const data = await response.json();`} />
-              </div>
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="px-2 py-1 bg-noble-blue/20 text-noble-blue text-[10px] font-bold rounded uppercase">Post</span>
-                  <code className="text-slate-200 text-xs">/profiles</code>
+                <div className="p-5 font-mono text-sm relative group bg-[#0d1117]">
+                  <button
+                    className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 p-2 rounded-md transition-all opacity-0 group-hover:opacity-100"
+                    onClick={() => {
+                      const text = codeTab === 'nodejs'
+                        ? `const nobleClarity = require('noble-clarity-engine');\nnobleClarity.authenticate({ apiKey: 'YOUR_API_KEY' });`
+                        : `{ "apiKey": "YOUR_API_KEY" }`;
+                      navigator.clipboard.writeText(text);
+                    }}
+                  >
+                    <span className="material-symbols-outlined text-white text-[18px]">content_copy</span>
+                  </button>
+
+                  {codeTab === 'nodejs' ? (
+                    <div className="space-y-1">
+                      <div className="text-[#9da4b9]">const nobleClarity = <span className="text-[#7dd3fc]">require</span>(<span className="text-[#fbbf24]">'noble-clarity-engine'</span>);</div>
+                      <br />
+                      <div className="text-[#9da4b9]">nobleClarity.<span className="text-[#7dd3fc]">authenticate</span>({'{'}</div>
+                      <div className="text-[#9da4b9] pl-4">apiKey: <span className="text-[#fbbf24]">'YOUR_API_KEY'</span></div>
+                      <div className="text-[#9da4b9]">{'}'});</div>
+                      <br />
+                      <div className="text-[#9da4b9]">const predictionId = <span className="text-[#fbbf24]">'pred_1a2b3c4d5e'</span>;</div>
+                      <br />
+                      <div className="text-[#9da4b9]">nobleClarity.predictions.<span className="text-[#7dd3fc]">get</span>(predictionId)</div>
+                      <div className="text-[#9da4b9] pl-4">.<span className="text-[#7dd3fc]">then</span>(prediction ={'>'} {'{'}</div>
+                      <div className="text-[#9da4b9] pl-8">console.<span className="text-[#7dd3fc]">log</span>(prediction);</div>
+                      <div className="text-[#9da4b9] pl-4">{'}'});</div>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <div className="text-[#9da4b9]">// Example JSON Payload</div>
+                      <div className="text-[#9da4b9]">{'{'}</div>
+                      <div className="text-[#9da4b9] pl-4"><span className="text-[#7dd3fc]">"method"</span>: <span className="text-[#fbbf24]">"GET"</span>,</div>
+                      <div className="text-[#9da4b9] pl-4"><span className="text-[#7dd3fc]">"url"</span>: <span className="text-[#fbbf24]">"https://api.noble.com/v1/predictions/pred_123"</span>,</div>
+                      <div className="text-[#9da4b9] pl-4"><span className="text-[#7dd3fc]">"headers"</span>: {'{'}</div>
+                      <div className="text-[#9da4b9] pl-8"><span className="text-[#7dd3fc]">"Authorization"</span>: <span className="text-[#fbbf24]">"Bearer KEY"</span></div>
+                      <div className="text-[#9da4b9] pl-4">{'}'}</div>
+                      <div className="text-[#9da4b9]">{'}'}</div>
+                    </div>
+                  )}
                 </div>
-                <CodeBlock language="json" code={`{
-  "name": "Global Ventures Ltd",
-  "industry": "Fintech"
-}`} />
               </div>
-            </div>
-          </Section>
 
-          <Section id="financials" title="Financial Data">
-            <p>Push financial snapshots into the engine to update dashboards and trigger analysis.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="px-2 py-1 bg-noble-blue/20 text-noble-blue text-[10px] font-bold rounded uppercase">Post</span>
-              <code className="text-slate-200 text-xs">/financials/{'{profile_id}'}</code>
-            </div>
-            <CodeBlock language="json" code={`{
-  "period": "Q1 2025",
-  "revenue": 500000,
-  "cogs": 200000,
-  "operatingExpenses": 150000,
-  "currentAssets": 120000,
-  "currentLiabilities": 60000,
-  "marketingSpend": 15000,
-  "leadsGenerated": 1200,
-  "conversions": 80
-}`} />
-          </Section>
-
-          <Section id="analysis" title="AI Analysis">
-            <p>Programmatically request strategic insights generated by our Gemini-tuned financial models.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="px-2 py-1 bg-noble-blue/20 text-noble-blue text-[10px] font-bold rounded uppercase">Post</span>
-              <code className="text-slate-200 text-xs">/analysis/generate</code>
-            </div>
-            <CodeBlock code={`{
-  "profile_id": "profile_12345",
-  "focus_area": "liquidity",
-  "detailed": true
-}`} />
-            <p className="mt-4 text-xs italic">Response will contain markdown-formatted insights identical to the in-app AI Coach.</p>
-          </Section>
-
-          <Section id="webhooks" title="Webhooks">
-            <p>Enterprise users can configure webhook endpoints to receive real-time JSON payloads when specific events occur.</p>
-            <div className="bg-slate-950 p-6 rounded-xl border border-slate-800">
-              <ul className="space-y-4 text-xs">
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-noble-blue"></span> <code>snapshot.created</code> — Sent when a new data entry is finalized.</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-noble-blue"></span> <code>goal.achieved</code> — Sent when a financial target is met.</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-noble-blue"></span> <code>health.alert</code> — Sent if health score drops below threshold.</li>
-              </ul>
-            </div>
-          </Section>
-
-          {/* Docs Footer */}
-          <div className="mt-20 pt-12 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-sm text-slate-500">Need direct integration support?</div>
-            <a href="mailto:info@noblesworld.com.ng" className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-bold transition-all border border-slate-700">
-              Contact API Support Team
-            </a>
-          </div>
-        </main>
-      </div>
-
-      {/* Main Footer */}
-      <footer className="py-20 px-8 border-t border-slate-800 bg-[#0b0e14]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-1 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-noble-blue rounded-lg flex items-center justify-center">
-                <span className="font-bold text-white text-xs">N</span>
+              {/* Response Block */}
+              <div className="bg-[#1e2330] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 bg-[#151a25]">
+                  <h3 className="text-sm font-semibold text-white">Response</h3>
+                  <div className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">
+                    200 OK
+                  </div>
+                </div>
+                <div className="p-5 font-mono text-sm bg-[#0d1117] text-[#9da4b9]">
+                  <div className="space-y-1">
+                    <div>{'{'}</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"id"</span>: <span className="text-[#fbbf24]">"pred_1a2b3c4d5e"</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"object"</span>: <span className="text-[#fbbf24]">"prediction"</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"created"</span>: <span className="text-[#34d399]">1678886400</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"model"</span>: <span className="text-[#fbbf24]">"nce-finance-v2"</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"value"</span>: <span className="text-[#34d399]">1250.75</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"currency"</span>: <span className="text-[#fbbf24]">"USD"</span>,</div>
+                    <div className="pl-4"><span className="text-[#7dd3fc]">"confidence_score"</span>: <span className="text-[#34d399]">0.92</span></div>
+                    <div>{'}'}</div>
+                  </div>
+                </div>
               </div>
-              <span className="font-['Montserrat'] font-bold text-sm tracking-tight">NOBLE WORLD</span>
+
             </div>
-            <p className="text-slate-500 text-xs leading-relaxed">
-              Advancing business intelligence through strategic AI and financial transparency.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-white uppercase text-[10px] tracking-widest">Developers</h4>
-            <ul className="space-y-4 text-xs text-slate-500">
-              <li><button onClick={() => scrollToSection('welcome')} className="text-white hover:text-noble-blue">Documentation</button></li>
-              <li><a href="#" className="hover:text-white">API Reference</a></li>
-              <li><a href="#" className="hover:text-white">System Status</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-white uppercase text-[10px] tracking-widest">Platform</h4>
-            <ul className="space-y-4 text-xs text-slate-500">
-              <li><button onClick={() => navigate('/features')} className="hover:text-white">Features</button></li>
-              <li><button onClick={() => navigate('/pricing')} className="hover:text-white">Pricing</button></li>
-              <li><button onClick={() => navigate('/security')} className="hover:text-white">Security</button></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-white uppercase text-[10px] tracking-widest">Company</h4>
-            <ul className="space-y-4 text-xs text-slate-500">
-              <li><button onClick={() => navigate('/story')} className="hover:text-white">Our Story</button></li>
-              <li><button onClick={() => navigate('/privacy')} className="hover:text-white">Privacy Policy</button></li>
-              <li><button onClick={() => navigate('/terms')} className="hover:text-white">Terms</button></li>
-            </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-900 text-center text-slate-600 text-[10px]">
-          &copy; {new Date().getFullYear()} Noble World. All rights reserved. Professional Use Only.
-        </div>
-      </footer>
+      </main>
     </div>
   );
 };
+
+// NavItem Component Helper
+const NavItem = ({ icon, label, active, onClick, customIconStyle }: any) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center gap-3 px-3 py-2 transition-all duration-200 rounded-lg w-full text-left group ${active
+        ? 'bg-[#0f3bbd] text-white shadow-lg shadow-blue-900/20'
+        : 'text-[#9da4b9] hover:text-white hover:bg-white/5'
+      }`}
+  >
+    <span
+      className={`material-symbols-outlined text-[20px] ${active ? 'text-white' : 'text-[#9da4b9] group-hover:text-white'}`}
+      style={customIconStyle}
+    >
+      {icon}
+    </span>
+    <p className="text-sm font-medium leading-normal">{label}</p>
+  </button>
+);
 
 export default ApiDocsPage;

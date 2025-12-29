@@ -8,14 +8,12 @@ import {
   ArrowLeft,
   Check,
   Zap,
-  Shield,
-  Globe,
-  Bot,
-  Rocket,
   Building2,
   X as XIcon,
   CreditCard,
-  CheckCircle2
+  CheckCircle2,
+  Globe,
+  Rocket
 } from 'lucide-react';
 import { useUser, useNotifications } from '../contexts/NobleContext';
 
@@ -30,6 +28,11 @@ const PricingPage: React.FunctionComponent = () => {
   const [selectedSignupPlan, setSelectedSignupPlan] = React.useState<'starter' | 'growth' | 'enterprise'>('starter');
   const [billingCycle, setBillingCycle] = React.useState<'monthly' | 'yearly'>('monthly');
   const [currency, setCurrency] = React.useState<'USD' | 'NGN'>('USD');
+
+
+  // Derive onboarding state directly to avoid useEffect delay
+  const params = new URLSearchParams(window.location.search);
+  const isOnboarding = params.get('onboarding') === 'true';
 
   // NGN Pricing Constants
   const NGN_GROWTH_MONTHLY = 25000;
@@ -78,7 +81,7 @@ const PricingPage: React.FunctionComponent = () => {
       msg: `Welcome to the ${paymentPlan.charAt(0).toUpperCase() + paymentPlan.slice(1)} Plan. Access unlocked. Ref: ${reference.reference}`,
       type: 'success'
     });
-    navigate('/dashboard');
+    navigate(isOnboarding ? '/onboarding' : '/dashboard');
   };
 
   const onClose = () => {
@@ -98,7 +101,6 @@ const PricingPage: React.FunctionComponent = () => {
       setPaymentPlan(normalizedPlan);
 
       if (currency === 'NGN') {
-        // Direct call to ensure it's a user-initiated event
         // @ts-ignore
         initializePayment(onSuccess, onClose);
       } else {
@@ -108,16 +110,28 @@ const PricingPage: React.FunctionComponent = () => {
           msg: `Welcome to ${planName} Plan (USD Simulated).`,
           type: 'success'
         });
-        navigate('/dashboard');
+        navigate(isOnboarding ? '/onboarding' : '/dashboard');
       }
     } else if (normalizedPlan === 'starter') {
-      navigate('/dashboard');
+      // If onboarding, allow "Continue with Free Plan" to proceed to onboarding
+      if (isOnboarding) {
+        navigate('/onboarding');
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 
-  const isCurrentPlan = (planName: string) => user && userProfile.plan === planName.toLowerCase();
+  const isCurrentPlan = (planName: string) => {
+    if (isOnboarding) return false; // Allow selecting current plan if onboarding
+    return user && userProfile.plan === planName.toLowerCase();
+  };
 
   const getButtonText = (planName: string, baseText: string) => {
+    if (isOnboarding) {
+      if (planName === 'Starter') return "Continue with Free Plan";
+      return "Upgrade to " + planName;
+    }
     if (!user) return `Get Started with ${planName}`;
     if (isCurrentPlan(planName)) return "Active Plan";
     return baseText;
@@ -233,7 +247,7 @@ const PricingPage: React.FunctionComponent = () => {
             onClick={() => navigate('/dashboard')}
             className="bg-noble-blue hover:bg-noble-blue/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-noble-blue/20"
           >
-            Launch App
+            Get Started Now
           </button>
         </div>
       </nav>
@@ -243,8 +257,17 @@ const PricingPage: React.FunctionComponent = () => {
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-noble-blue/10 rounded-full blur-[120px] opacity-30 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
           <h1 className="text-4xl md:text-6xl font-extrabold font-['Montserrat'] leading-tight">
-            Plans for Every Stage of <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-purple-400">Financial Growth</span>
+            {isOnboarding ? (
+              <>
+                Choose your plan to <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-purple-400">Complete Registration</span>
+              </>
+            ) : (
+              <>
+                Plans for Every Stage of <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-purple-400">Financial Growth</span>
+              </>
+            )}
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Whether you're just starting out or managing a portfolio of companies,

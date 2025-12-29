@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from 'openai';
 import nodemailer from 'nodemailer';
 
@@ -17,7 +17,15 @@ const PORT = process.env.PORT || 3001;
 // Root / Health check routes
 app.get('/', (req, res) => {
     res.set('Content-Type', 'text/html');
-    res.send('<h1>Noble Clarity Engine API is Running</h1><p>Status: Active</p>');
+    res.send(`
+        <div style="font-family: sans-serif; padding: 40px; text-align: center;">
+            <h1 style="color: #293D9B;">Noble Clarity Engine API is Running</h1>
+            <p>Status: <span style="color: #10B981; font-weight: bold;">Active</span></p>
+            <hr style="margin: 20px auto; width: 200px; border: 0; border-top: 1px solid #eee;">
+            <p>To view the dashboard, please visit:</p>
+            <a href="http://localhost:3000" style="display: inline-block; padding: 12px 24px; background: #293D9B; color: white; text-decoration: none; rounded: 8px; font-weight: bold;">Launch Noble Clarity Dashboard</a>
+        </div>
+    `);
 });
 
 app.get('/api', (req, res) => {
@@ -34,16 +42,13 @@ app.post(apiPath('/gemini'), async (req, res) => {
     if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
 
     try {
-        const ai = new GoogleGenAI({ apiKey: key });
-        const result = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
-            contents: prompt,
-            config: {
-                systemInstruction: systemInstruction
-            }
+        const ai = new GoogleGenerativeAI(key);
+        const model = ai.getGenerativeModel({
+            model: "gemini-2.0-flash-exp",
+            systemInstruction: systemInstruction
         });
-
-        res.json({ content: result.text });
+        const result = await model.generateContent(prompt);
+        res.json({ content: result.response.text() });
     } catch (error) {
         console.error('Gemini Proxy Error:', error);
         res.status(500).json({ error: error.message });
@@ -80,21 +85,24 @@ app.post(apiPath('/tts'), async (req, res) => {
     if (!key) return res.status(400).json({ error: 'Gemini API Key missing' });
 
     try {
-        const ai = new GoogleGenAI({ apiKey: key });
-        const result = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
-            contents: [{ parts: [{ text: text }] }],
-            config: {
+        const ai = new GoogleGenerativeAI(key);
+        const model = ai.getGenerativeModel({
+            model: "gemini-2.0-flash-exp",
+        });
+        const result = await model.generateContent({
+            contents: [{ role: "user", parts: [{ text: text }] }],
+            generationConfig: {
+                // Speech config/modalities might need specific SDK support check, but following typical pattern
                 responseModalities: ['AUDIO'],
                 speechConfig: {
                     voiceConfig: {
                         prebuiltVoiceConfig: { voiceName: 'Kore' },
                     },
                 },
-            },
+            }
         });
 
-        const base64Audio = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        const base64Audio = result.response?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         res.json({ audio: base64Audio });
     } catch (error) {
         console.error('TTS Proxy Error:', error);

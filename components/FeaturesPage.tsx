@@ -431,7 +431,7 @@ const FeaturesPage: React.FunctionComponent = () => {
             onClick={() => navigate('/pricing')}
             className="bg-noble-blue hover:bg-noble-blue/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-noble-blue/20 hover:shadow-noble-blue/40 transform hover:-translate-y-0.5"
           >
-            Launch Engine
+            Get Started Now
           </button>
         </div>
       </nav>
@@ -458,7 +458,7 @@ const FeaturesPage: React.FunctionComponent = () => {
               Explore Features <ChevronDown className="w-4 h-4" />
             </button>
             <button onClick={() => navigate('/pricing')} className="px-8 py-4 bg-noble-blue text-white rounded-xl font-bold hover:bg-noble-blue/90 transition-all shadow-lg shadow-noble-blue/25 flex items-center gap-2">
-              Start Engine Now <ChevronRight className="w-4 h-4" />
+              Get Started Now <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>

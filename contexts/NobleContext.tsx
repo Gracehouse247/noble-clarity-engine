@@ -70,8 +70,8 @@ const UserContext = React.createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }> = ({ children }) => {
   const [userProfile, setUserProfile] = React.useState<UserProfile>(() => {
-    // Initial local state, should be hydrated from AuthContext or Firestore ideally
-    // allowing temporary local state for now, but will sync
+    const saved = localStorage.getItem(STORAGE_KEYS.USER_PROFILE);
+    if (saved) return JSON.parse(saved);
     return {
       name: 'Noble User',
       email: '',
@@ -79,7 +79,12 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
       avatarUrl: 'https://ui-avatars.com/api/?name=Noble+User',
       currency: 'USD',
       plan: 'starter',
-      preferredProvider: 'gemini'
+      preferredProvider: 'gemini',
+      notifications: {
+        marketAlerts: true,
+        weeklyDigest: true,
+        productUpdates: false
+      }
     };
   });
 
@@ -94,7 +99,7 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
     const user = auth.currentUser;
     if (user) {
       try {
-        await updateDoc(doc(db, 'users', user.uid), profile);
+        await updateDoc(doc(db, 'users', user.uid), profile as any);
       } catch (e) {
         console.error("Error updating profile in Firestore", e);
       }
@@ -218,7 +223,7 @@ export const BusinessProvider: React.FunctionComponent<{ children: React.ReactNo
       setProfilesData(JSON.parse(savedProfilesData));
     } else {
       const firstId = `profile_${Date.now()}`;
-      const firstProfile = { id: firstId, name: 'Main Business', industry: 'Technology', currency: 'USD' };
+      const firstProfile = { id: firstId, name: 'Main Business', industry: 'Technology', currency: 'USD', businessSize: '1-10 Employees', foundingDate: new Date().toISOString().split('T')[0] };
       setProfiles([firstProfile]);
       setActiveProfileId(firstId);
       setProfilesData({ [firstId]: { current: INITIAL_DATA, history: [INITIAL_DATA], goals: [] } });

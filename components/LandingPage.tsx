@@ -32,6 +32,16 @@ const LandingPage: React.FunctionComponent = () => {
     }
   };
 
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('signup') === 'true') {
+      setAuthMode('signup');
+      setIsAuthModalOpen(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   return (
     <div className="bg-background-dark text-slate-200 font-display overflow-x-hidden selection:bg-primary/30 selection:text-white min-h-screen flex flex-col">
       {/* Top Navigation */}
@@ -60,9 +70,9 @@ const LandingPage: React.FunctionComponent = () => {
                 </button>
               ) : (
                 <>
-                  <button onClick={() => handleAuth('login')} className="hidden sm:flex text-slate-300 hover:text-white text-sm font-medium px-3 py-2 transition-colors">Log In</button>
-                  <button onClick={() => handleAuth('signup')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
-                    <span>Start Analysis</span>
+                  <button onClick={() => navigate('/login')} className="hidden sm:flex text-slate-300 hover:text-white text-sm font-medium px-3 py-2 transition-colors">Log In</button>
+                  <button onClick={() => navigate('/pricing')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                    <span>Get Started Now</span>
                   </button>
                 </>
               )}
@@ -84,22 +94,22 @@ const LandingPage: React.FunctionComponent = () => {
               <div className="flex flex-col gap-6 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit">
                   <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-                  <span className="text-xs font-medium text-primary uppercase tracking-wider">New: Gemini 1.5 Integration</span>
+                  <span className="text-xs font-medium text-primary uppercase tracking-wider">EMPOWERING NEXT-GEN FOUNDERS</span>
                 </div>
-                <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
+                <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight animate-fade-in-up delay-100">
                   Financial <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Intelligence</span>,<br /> Refined.
                 </h1>
-                <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
-                  Predictive clarity for the modern enterprise. Unlock the power of AI-driven financial modeling with crystalline precision.
+                <p className="text-lg text-slate-400 leading-relaxed max-w-lg animate-fade-in-up delay-200">
+                  Predictive clarity for the modern enterprise. Unlock the power of AI-driven financial analysis with crystalline precision.
                 </p>
-                <div className="flex flex-wrap gap-4 pt-4">
-                  <button onClick={() => user ? navigate('/dashboard') : handleAuth('signup')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/25 hover:scale-105 hover:shadow-primary/40">
-                    <span>Start Your Analysis</span>
+                <div className="flex flex-wrap gap-4 pt-4 animate-fade-in-up delay-300">
+                  <button onClick={() => user ? navigate('/dashboard') : navigate('/pricing')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/25 hover:scale-105 hover:shadow-primary/40">
+                    <span>Get Started Now</span>
                     <span className="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
                   </button>
-                  <button className="flex items-center justify-center rounded-lg h-12 px-6 bg-transparent border border-white/20 hover:bg-white/5 text-white text-base font-bold transition-all hover:scale-105">
-                    <span className="material-symbols-outlined mr-2 text-[20px] text-primary">play_circle</span>
-                    <span>Watch Demo</span>
+                  <button onClick={() => navigate('/features')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-transparent border border-white/20 hover:bg-white/5 text-white text-base font-bold transition-all hover:scale-105">
+                    <span className="material-symbols-outlined mr-2 text-[20px] text-primary">visibility</span>
+                    <span>View Features</span>
                   </button>
                 </div>
                 <div className="flex items-center gap-4 text-xs text-slate-500 pt-2">
@@ -118,7 +128,7 @@ const LandingPage: React.FunctionComponent = () => {
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-purple-500/10 rounded-full blur-[60px]"></div>
 
                 {/* Main Dashboard Card */}
-                <div className="relative w-full max-w-md glass-card rounded-xl p-6 transform rotate-y-[-5deg] rotate-x-[5deg] transition-transform hover:rotate-0 duration-500">
+                <div className="relative w-full max-w-md glass-card rounded-xl p-6 transform rotate-y-[-5deg] rotate-x-[5deg] transition-transform hover:rotate-0 duration-500 animate-float">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
                     <div className="flex items-center gap-3">
@@ -186,13 +196,69 @@ const LandingPage: React.FunctionComponent = () => {
         <section className="border-y border-white/5 bg-[#0e1214] py-8">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
             <p className="text-center text-sm text-slate-500 mb-6 font-medium">TRUSTED BY FORWARD-THINKING FINANCE TEAMS</p>
-            <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale transition-all duration-500 hover:grayscale-0 hover:opacity-100">
-              {/* Using text for logos to avoid external image dependencies */}
-              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">change_history</span> Vertex</div>
-              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">all_inclusive</span> Infinite</div>
-              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">pentagon</span> Prism</div>
-              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">hexagon</span> Hive</div>
-              <div className="flex items-center gap-2 text-white font-bold text-xl"><span className="material-symbols-outlined">diamond</span> Noble</div>
+
+            <div className="carousel-container space-y-4">
+              {/* Row 1: Forward Scroll */}
+              <div className="carousel-track">
+                {[
+                  'HeyLisa_logo.png', 'aiden.png', 'alaba.png', 'ameerah.png', 'bodyfit.png',
+                  'ceejees.png', 'ducex.png', 'evnnews.png', 'fabekeries.png', 'happsel.png',
+                  'jolabride.png', 'mystaff.png', 'naal.png', 'noblehair.png', 'noblemart.png',
+                  'opuforty.png'
+                ].map((logo, index) => (
+                  <div key={index} className="carousel-item">
+                    <img
+                      src={`/trusted/${logo}`}
+                      alt={`Partner Logo ${index + 1}`}
+                    />
+                  </div>
+                ))}
+                {/* Duplicate Row 1 */}
+                {[
+                  'HeyLisa_logo.png', 'aiden.png', 'alaba.png', 'ameerah.png', 'bodyfit.png',
+                  'ceejees.png', 'ducex.png', 'evnnews.png', 'fabekeries.png', 'happsel.png',
+                  'jolabride.png', 'mystaff.png', 'naal.png', 'noblehair.png', 'noblemart.png',
+                  'opuforty.png'
+                ].map((logo, index) => (
+                  <div key={`dup1-${index}`} className="carousel-item">
+                    <img
+                      src={`/trusted/${logo}`}
+                      alt={`Partner Logo ${index + 1}-dup`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Row 2: Reverse Scroll */}
+              <div className="carousel-track reverse">
+                {[
+                  'pandon.png', 'perculairradio.png', 'praisemix.png', 'ptlnews.png', 'pureinsights.png',
+                  'rapidbox.png', 'sijams.png', 'surebricks.png', 'thinkbeauty.png', 'tomfab.png',
+                  'tradoconnect.png', 'wavecrest.png', 'wecas.png', 'wheels.png', 'yohako.png',
+                  'zidanuel.png'
+                ].map((logo, index) => (
+                  <div key={index} className="carousel-item">
+                    <img
+                      src={`/trusted/${logo}`}
+                      alt={`Partner Logo ${index + 17}`}
+                    />
+                  </div>
+                ))}
+                {/* Duplicate Row 2 */}
+                {[
+                  'pandon.png', 'perculairradio.png', 'praisemix.png', 'ptlnews.png', 'pureinsights.png',
+                  'rapidbox.png', 'sijams.png', 'surebricks.png', 'thinkbeauty.png', 'tomfab.png',
+                  'tradoconnect.png', 'wavecrest.png', 'wecas.png', 'wheels.png', 'yohako.png',
+                  'zidanuel.png'
+                ].map((logo, index) => (
+                  <div key={`dup2-${index}`} className="carousel-item">
+                    <img
+                      src={`/trusted/${logo}`}
+                      alt={`Partner Logo ${index + 17}-dup`}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -505,21 +571,21 @@ const LandingPage: React.FunctionComponent = () => {
                 <div className="grid grid-cols-3 gap-8 text-sm">
                   <div className="flex flex-col gap-3">
                     <span className="text-white font-bold">Product</span>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Features</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Pricing</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Changelog</a>
+                    <button onClick={() => navigate('/features')} className="text-slate-500 hover:text-primary transition-colors text-left">Features</button>
+                    <button onClick={() => navigate('/pricing')} className="text-slate-500 hover:text-primary transition-colors text-left">Pricing</button>
+                    <button onClick={() => navigate('/changelog')} className="text-slate-500 hover:text-primary transition-colors text-left">Changelog</button>
                   </div>
                   <div className="flex flex-col gap-3">
                     <span className="text-white font-bold">Company</span>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">About</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Careers</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Contact</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/about-us/" target="_blank" rel="noopener noreferrer">About</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/book-consultation/" target="_blank" rel="noopener noreferrer">Consult Us</a>
+                    <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/contact-us/" target="_blank" rel="noopener noreferrer">Contact</a>
                   </div>
                   <div className="flex flex-col gap-3">
                     <span className="text-white font-bold">Legal</span>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Privacy</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Terms</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="#">Security</a>
+                    <button onClick={() => navigate('/privacy')} className="text-slate-500 hover:text-primary transition-colors text-left">Privacy</button>
+                    <button onClick={() => navigate('/terms')} className="text-slate-500 hover:text-primary transition-colors text-left">Terms</button>
+                    <button onClick={() => navigate('/security')} className="text-slate-500 hover:text-primary transition-colors text-left">Security</button>
                   </div>
                 </div>
               </div>
@@ -542,10 +608,10 @@ const LandingPage: React.FunctionComponent = () => {
                   <pre className="text-xs font-mono leading-relaxed">
                     <span className="text-purple-400">const</span>{' '}<span className="text-blue-400">noble</span>{' '}<span className="text-slate-300">=</span>{' '}<span className="text-purple-400">require</span>(<span className="text-green-400">'noble-clarity-sdk'</span>);{'\n'}
                     {'\n'}
-                    <span className="text-slate-500">// Initialize with Gemini 1.5 Flash Proxy</span>{'\n'}
+                    <span className="text-slate-500">// Initialize with Gemini 3.0 Flash Proxy</span>{'\n'}
                     <span className="text-purple-400">const</span>{' '}<span className="text-blue-400">client</span>{' '}<span className="text-slate-300">=</span>{' '}<span className="text-purple-400">new</span>{' '}<span className="text-yellow-200">NobleClient</span>({'{'}{'\n'}
                     {'  '}apiKey:{' '}<span className="text-green-400">process.env.NOBLE_API_KEY</span>,{'\n'}
-                    {'  '}model:{' '}<span className="text-green-400">'gemini-1.5-flash'</span>{'\n'}
+                    {'  '}model:{' '}<span className="text-green-400">'gemini-3.0-flash'</span>{'\n'}
                     {'}'});{'\n'}
                     {'\n'}
                     <span className="text-slate-500">// Fetch Predictive Model</span>{'\n'}

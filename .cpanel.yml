@@ -1,6 +1,0 @@
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/noblemar/public_html/clarity/
-    - /bin/cp -R * $DEPLOYPATH
-    - export BACKENDPATH=/home/noblemar/noble-server/
-    - /bin/cp -R server/* $BACKENDPATH

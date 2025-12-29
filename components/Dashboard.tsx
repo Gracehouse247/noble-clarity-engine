@@ -59,6 +59,7 @@ import ReportModal from './ReportModal';
 import BusinessProfileModal from './BusinessProfileModal';
 import ConsolidationView from './ConsolidationView';
 import ReviewModal from './ReviewModal';
+import BusinessProfile from './BusinessProfile';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -97,6 +98,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
     if (path.includes('social')) return TabType.SOCIAL;
     if (path.includes('email')) return TabType.EMAIL;
     if (path.includes('consolidation')) return TabType.CONSOLIDATION;
+    if (path.includes('profile')) return 'Profile & Benchmarking' as TabType;
     return TabType.OVERVIEW;
   };
 
@@ -154,6 +156,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
 
   const menuItems = [
     { id: TabType.OVERVIEW, icon: LayoutDashboard, label: 'Overview', path: 'overview' },
+    { id: 'Business Profile', icon: Building2, label: 'Profile & Benchmarking', path: 'profile' },
     { id: TabType.GOALS, icon: Target, label: 'Financial Goals', path: 'goals' },
     { id: TabType.SCENARIO, icon: TrendingUp, label: 'Scenario Planner', path: 'scenario' },
     { id: TabType.CASHFLOW, icon: Wallet, label: 'Cash Flow', path: 'cashflow' },
@@ -168,7 +171,6 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
 
   return (
     <div className="flex h-screen bg-[#0b0e14] text-slate-200 overflow-hidden font-sans">
-
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-64 border-r border-slate-800 bg-slate-950/50 backdrop-blur-xl z-20">
         <div className="p-6 flex items-center gap-3">
@@ -230,7 +232,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div className="flex items-center justify-between">
-            <button onClick={() => setIsSettingsOpen(true)} className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg">
+            <button onClick={() => navigate('/settings')} className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg">
               <Settings className="w-5 h-5" />
             </button>
             <button onClick={onLogout} className="flex px-3 py-2 text-slate-400 hover:text-white hover:bg-rose-500/10 rounded-lg gap-2 transition-colors group w-full">
@@ -260,7 +262,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
               <FileText className="w-3 h-3" /> Report
             </button>
             <div className="flex items-center gap-3 pl-4 border-l border-slate-800">
-              <img src={userProfile.avatarUrl} alt="User" className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 overflow-hidden cursor-pointer hover:border-noble-blue transition-colors" onClick={() => setIsSettingsOpen(true)} />
+              <img src={userProfile.avatarUrl} alt="User" className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 overflow-hidden cursor-pointer hover:border-noble-blue transition-colors" onClick={() => navigate('/settings')} />
             </div>
           </div>
         </header>
@@ -269,6 +271,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
           {activeProfileData ? (
             <Routes>
               <Route path="overview" element={<Overview profileName={activeProfile?.name || ''} data={activeProfileData.current} history={activeProfileData.history} keys={apiKeys} provider={userProfile.preferredProvider} onClearHistory={clearHistory} onDeleteSnapshot={deleteSnapshot} onLoadSnapshot={loadSnapshot} onAddNotification={addNotification} />} />
+              <Route path="profile" element={<BusinessProfile />} />
               <Route path="goals" element={<FinancialGoals currentData={activeProfileData.current} goals={activeProfileData.goals} onAddGoal={(g) => updateGoals([...activeProfileData.goals, g])} onDeleteGoal={(id) => updateGoals(activeProfileData.goals.filter(g => g.id !== id))} />} />
               <Route path="scenario" element={<ScenarioPlanner initialData={activeProfileData.current} />} />
               <Route path="cashflow" element={<CashFlow currentData={activeProfileData.current} history={activeProfileData.history} />} />
