@@ -64,6 +64,7 @@ interface UserContextType {
   reviews: Review[];
   submitReview: (review: Omit<Review, 'id' | 'date'>) => void;
   logout: () => void;
+  refreshProfile: () => Promise<void>;
 }
 
 const UserContext = React.createContext<UserContextType | undefined>(undefined);
@@ -186,6 +187,26 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
     setApiKeys({ google: '', openai: '' });
   }, []);
 
+  const refreshProfile = React.useCallback(async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUserProfile(prev => ({
+            ...prev,
+            ...data,
+            email: user.email || data.email || prev.email,
+            name: data.name || user.displayName || prev.name
+          }));
+        }
+      } catch (e) {
+        console.error("Error refreshing profile", e);
+      }
+    }
+  }, []);
+
   return (
     <UserContext.Provider value={{
       userProfile,
@@ -195,7 +216,8 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
       updateApiKeys,
       reviews,
       submitReview,
-      logout
+      logout,
+      refreshProfile
     }}>
       {children}
     </UserContext.Provider>

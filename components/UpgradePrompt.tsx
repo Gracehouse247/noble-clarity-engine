@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Zap } from 'lucide-react';
+import { Lock, Zap, RefreshCw } from 'lucide-react';
+import { useUser, useNotifications } from '../contexts/NobleContext';
 
 interface UpgradePromptProps {
     feature: string;
@@ -14,6 +15,16 @@ const UpgradePrompt: React.FC<UpgradePromptProps> = ({
     plan = 'growth'
 }) => {
     const navigate = useNavigate();
+    const { userProfile, refreshProfile } = useUser();
+    const { addNotification } = useNotifications();
+    const [isSyncing, setIsSyncing] = React.useState(false);
+
+    const handleSync = async () => {
+        setIsSyncing(true);
+        await refreshProfile();
+        setIsSyncing(false);
+        addNotification({ title: 'Profile Synced', msg: 'Your plan status has been updated.', type: 'info' });
+    };
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center animate-fade-in min-h-[400px]">
@@ -48,6 +59,18 @@ const UpgradePrompt: React.FC<UpgradePromptProps> = ({
                     className="px-6 py-3 text-slate-400 font-bold hover:text-white transition-colors"
                 >
                     Go Back
+                </button>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-slate-800/50 w-full max-w-xs flex flex-col gap-2 items-center">
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Detected Plan: <span className="text-white">{userProfile.plan}</span></p>
+                <button
+                    onClick={handleSync}
+                    disabled={isSyncing}
+                    className="text-xs text-slate-400 hover:text-noble-blue transition-colors flex items-center gap-1.5"
+                >
+                    <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
+                    {isSyncing ? 'Syncing...' : 'Already upgraded? Sync Profile'}
                 </button>
             </div>
         </div>
