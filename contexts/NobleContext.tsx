@@ -3,7 +3,7 @@ import * as React from 'react';
 import { BusinessProfile, ProfileData, FinancialData, FinancialGoal, UserProfile, Notification, Review } from '../types';
 import { INITIAL_DATA, BLANK_FINANCIAL_DATA, INITIAL_REVIEWS, STORAGE_KEYS } from '../constants';
 import { db, auth } from '../firebaseConfig';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, onSnapshot } from 'firebase/firestore';
 
 interface NotificationContextType {
   notifications: Notification[];
@@ -113,14 +113,16 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
     return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
   });
 
-  // Fetch profile from Firestore on auth change
+  // Real-time sync with Firestore
   React.useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    let unsubscribeDoc: () => void;
+
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
-        try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
-            const data = userDoc.data();
+        // Subscribe to user document
+        unsubscribeDoc = onSnapshot(doc(db, 'users', user.uid), (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
             setUserProfile(prev => ({
               ...prev,
               ...data,
@@ -128,12 +130,34 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
               name: data.name || user.displayName || prev.name
             }));
           }
-        } catch (e) {
-          console.error("Error fetching user profile from Firestore:", e);
-        }
+        }, (error) => {
+          console.error("Error syncing user profile:", error);
+        });
+      } else {
+        // User logged out - Clean up and reset profile
+        if (unsubscribeDoc) unsubscribeDoc();
+        setUserProfile({
+          name: 'Noble User',
+          email: '',
+          role: 'Founder',
+          avatarUrl: 'https://ui-avatars.com/api/?name=Noble+User',
+          currency: 'USD',
+          plan: 'starter',
+          preferredProvider: 'gemini',
+          notifications: {
+            marketAlerts: true,
+            weeklyDigest: true,
+            productUpdates: false
+          }
+        });
+        localStorage.removeItem(STORAGE_KEYS.USER_PROFILE);
       }
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeDoc) unsubscribeDoc();
+    };
   }, []);
 
   React.useEffect(() => {
