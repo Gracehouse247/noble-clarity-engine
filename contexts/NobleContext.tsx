@@ -112,6 +112,29 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
     return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
   });
 
+  // Fetch profile from Firestore on auth change
+  React.useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserProfile(prev => ({
+              ...prev,
+              ...data,
+              email: user.email || data.email || prev.email,
+              name: data.name || user.displayName || prev.name
+            }));
+          }
+        } catch (e) {
+          console.error("Error fetching user profile from Firestore:", e);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   React.useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(userProfile));
   }, [userProfile]);
