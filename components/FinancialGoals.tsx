@@ -45,7 +45,17 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   const [newGoalTarget, setNewGoalTarget] = React.useState<number>(100000);
   const [newGoalDeadline, setNewGoalDeadline] = React.useState('');
 
+  // UI State
+  const [activeTab, setActiveTab] = React.useState<'active' | 'completed'>('active');
+  const [showAiSuggestion, setShowAiSuggestion] = React.useState(true);
+
   const kpis = calculateKPIs(currentData);
+
+  // Filter goals based on tab
+  const filteredGoals = goals.filter(g => {
+    if (activeTab === 'active') return !g.achieved;
+    return g.achieved;
+  });
 
   const getActualValue = (metric: GoalMetric) => {
     switch (metric) {
@@ -105,96 +115,112 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col w-full max-w-5xl mx-auto flex-1">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-2xl font-bold font-['Montserrat'] text-white">Financial Goals</h3>
-          <p className="text-slate-400 text-sm">Track your progress against key performance milestones.</p>
-        </div>
+      <div className="flex flex-wrap justify-between items-center gap-4 py-8">
+        <h1 className="text-white text-4xl sm:text-5xl font-black leading-tight tracking-[-0.033em] min-w-72 font-['Montserrat']">
+          Financial Goals
+        </h1>
         <button
           onClick={() => {
             if (allowAdd) {
               setIsModalOpen(true);
             } else {
               if (confirm("Goal limit reached. Upgrade to Growth for unlimited goals. Upgrade now?")) {
-                // Ideally use navigate here, but for simplicity:
                 window.location.href = '/pricing';
               }
             }
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg ${allowAdd
-              ? 'bg-noble-blue hover:bg-noble-blue/90 text-white shadow-noble-blue/20'
-              : 'bg-slate-800 text-slate-500 cursor-not-allowed'
-            }`}
-          title={!allowAdd ? "Upgrade to add more goals" : "Add New Goal"}
+          className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-noble-blue text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-all shadow-lg shadow-noble-blue/20 ${!allowAdd ? 'opacity-70 grayscale' : ''}`}
+          title={!allowAdd ? "Upgrade to add more goals" : "Set New Goal"}
         >
-          {!allowAdd && <Target className="w-4 h-4 mr-1" />}
-          {allowAdd ? <><Plus className="w-4 h-4" /> New Goal</> : 'Limit Reached'}
+          {allowAdd ? (
+            <>
+              <Plus className="mr-2 text-xl" />
+              <span className="truncate">Set New Goal</span>
+            </>
+          ) : (
+            <>
+              <Target className="mr-2 text-xl" />
+              <span className="truncate">Limit Reached</span>
+            </>
+          )}
         </button>
       </div>
 
-      {/* Goals Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {goals.map((goal) => {
+      {/* Tabs */}
+      <div className="flex px-0 sm:px-4 py-3">
+        <div className="flex h-12 flex-1 items-center justify-center rounded-lg bg-white/5 p-1.5 border border-white/5">
+          <label className={`flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 transition-all ${activeTab === 'active' ? 'bg-[#0b0e14] shadow-lg text-white' : 'text-slate-400 hover:text-slate-300'}`}>
+            <span className="truncate font-medium text-sm">Active Goals</span>
+            <input
+              checked={activeTab === 'active'}
+              onChange={() => setActiveTab('active')}
+              className="invisible w-0"
+              name="goal_tabs"
+              type="radio"
+              value="active"
+            />
+          </label>
+          <label className={`flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 transition-all ${activeTab === 'completed' ? 'bg-[#0b0e14] shadow-lg text-white' : 'text-slate-400 hover:text-slate-300'}`}>
+            <span className="truncate font-medium text-sm">Completed Goals</span>
+            <input
+              checked={activeTab === 'completed'}
+              onChange={() => setActiveTab('completed')}
+              className="invisible w-0"
+              name="goal_tabs"
+              type="radio"
+              value="completed"
+            />
+          </label>
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 py-6">
+        {filteredGoals.map((goal) => {
           const actual = getActualValue(goal.metric);
           const progress = Math.min((actual / goal.targetValue) * 100, 100);
-          const isAchieved = goal.achieved || progress >= 100;
           const Icon = getMetricIcon(goal.metric);
 
           return (
-            <div key={goal.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group hover:border-noble-blue/30 transition-all">
-              <button
-                onClick={() => onDeleteGoal(goal.id)}
-                aria-label={`Delete goal: ${goal.name}`}
-                className="absolute top-4 right-4 text-slate-600 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2.5 rounded-xl ${isAchieved ? 'bg-emerald-500/10 text-emerald-400' : 'bg-noble-blue/10 text-noble-blue'}`}>
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-white font-bold text-sm line-clamp-1">{goal.name}</h4>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                    <Calendar className="w-3 h-3" />
-                    <span>{goal.deadline}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">{getMetricLabel(goal.metric)}</p>
-                    <p className="text-2xl font-bold text-white font-['Montserrat']">
-                      {formatValue(actual, goal.metric)}
-                      <span className="text-slate-500 text-sm font-normal ml-1">/ {formatValue(goal.targetValue, goal.metric)}</span>
-                    </p>
-                  </div>
-                  {isAchieved && (
-                    <div className="relative w-6 h-6">
-                      <Trophy className="w-6 h-6 text-yellow-400" />
-                      <Sparkles style={{ '--delay': '0s' } as React.CSSProperties} className="absolute top-0 left-0 w-3 h-3 text-yellow-300 animate-sparkle-burst" />
-                      <Sparkles style={{ '--delay': '0.2s' } as React.CSSProperties} className="absolute -top-1 right-1 w-2 h-2 text-amber-300 animate-sparkle-burst" />
-                      <Sparkles style={{ '--delay': '0.4s' } as React.CSSProperties} className="absolute bottom-1 -left-1 w-2 h-2 text-yellow-400 animate-sparkle-burst" />
-                      <Sparkles style={{ '--delay': '0.6s' } as React.CSSProperties} className="absolute -bottom-1 right-0 w-2 h-2 text-amber-400 animate-sparkle-burst" />
+            <div key={goal.id} className="p-0.5 rounded-xl bg-white/10 shadow-lg relative group">
+              <div className="flex flex-col items-stretch justify-start rounded-lg bg-[#18232e] bg-opacity-80 backdrop-blur-sm p-6 h-full border border-white/5 hover:border-noble-blue/30 transition-all">
+                <div className="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-4">
+                  <div className="flex justify-between items-start">
+                    <p className="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-['Montserrat'] line-clamp-1" title={goal.name}>{goal.name}</p>
+                    <div className="flex items-center gap-2 text-slate-400">
+                      {/* Using Delete as the primary action for now to match old functionality */}
+                      <button
+                        onClick={() => onDeleteGoal(goal.id)}
+                        className="p-1 rounded-full hover:bg-white/10 hover:text-rose-400 transition-colors"
+                        title="Delete Goal"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
                     </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className={isAchieved ? 'text-emerald-400' : 'text-noble-blue'}>{progress.toFixed(0)}% Complete</span>
-                    <span className="text-slate-500">{isAchieved ? 'Target Met' : 'In Progress'}</span>
                   </div>
-                  <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ease-out origin-left ${isAchieved ? 'bg-emerald-500' : 'bg-noble-blue'} ${progress > 85 && !isAchieved ? 'animate-pulse-bar' : ''}`}
-                      style={{ width: `${progress}%` }}
-                    ></div>
+
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between items-baseline text-sm">
+                      <span className="text-slate-400 font-medium">{getMetricLabel(goal.metric)}</span>
+                      <span className="text-white font-bold">{formatValue(actual, goal.metric)} / {formatValue(goal.targetValue, goal.metric)}</span>
+                    </div>
+                    <div className="w-full bg-black/20 rounded-full h-2.5 overflow-hidden">
+                      <div className="bg-noble-blue h-2.5 rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-end gap-3 justify-between mt-auto">
+                    <div className="flex flex-col gap-1">
+                      <p className="text-slate-400 text-sm font-medium leading-normal flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5" /> Target: {goal.deadline}
+                      </p>
+                    </div>
+                    {/* Placeholder View Details - could open modal in future */}
+                    <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-noble-blue/10 hover:bg-noble-blue/20 text-noble-blue text-sm font-bold leading-normal transition-colors border border-noble-blue/20">
+                      <span className="truncate">View Details</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -202,18 +228,65 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
           );
         })}
 
-        {goals.length === 0 && (
-          <div className="col-span-full py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-800 rounded-2xl">
-            <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4">
-              <Target className="w-8 h-8 text-slate-600" />
+        {/* AI Suggestion Card - Only show in Active tab */}
+        {activeTab === 'active' && showAiSuggestion && (
+          <div className="p-0.5 rounded-xl bg-gradient-to-br from-purple-500/50 to-noble-blue/50 shadow-lg group animate-in fade-in zoom-in-95 duration-500">
+            <div className="flex flex-col items-stretch justify-start rounded-lg bg-[#18232e] bg-opacity-90 backdrop-blur-sm p-6 h-full">
+              <div className="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-6 h-6 text-purple-400 fill-purple-400/20 animate-pulse" />
+                    <p className="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-['Montserrat']">AI Goal Suggestion</p>
+                  </div>
+                  <button onClick={() => setShowAiSuggestion(false)} className="p-1 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-slate-300 leading-relaxed">
+                  Based on your current margin of <span className="text-white font-bold">{kpis.netProfitMargin.toFixed(1)}%</span>, considering setting a goal to improve efficiency.
+                </p>
+                <div className="flex items-center gap-3 justify-end mt-auto pt-2">
+                  <button onClick={() => setShowAiSuggestion(false)} className="px-4 h-9 text-slate-400 hover:text-white text-sm font-bold transition-colors">
+                    Dismiss
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (allowAdd) {
+                        setNewGoalName("Optimize Net Margin");
+                        setNewGoalMetric('netMargin');
+                        setNewGoalTarget(Math.ceil(kpis.netProfitMargin + 5));
+                        setIsModalOpen(true);
+                      } else {
+                        // same upgrade logic
+                        if (confirm("Goal limit reached. Upgrade to Growth. Upgrade now?")) {
+                          window.location.href = '/pricing';
+                        }
+                      }
+                    }}
+                    className="flex items-center justify-center px-4 h-9 bg-purple-500 hover:bg-purple-600 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-purple-500/20"
+                  >
+                    Accept Suggestion
+                  </button>
+                </div>
+              </div>
             </div>
-            <h3 className="text-lg font-bold text-white">No Goals Set</h3>
-            <p className="text-slate-400 max-w-sm mt-2 mb-6">Start setting financial targets to track your business growth effectively.</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {filteredGoals.length === 0 && !showAiSuggestion && (
+          <div className="col-span-full py-16 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
+            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
+              <Target className="w-8 h-8 text-slate-500" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">No {activeTab} goals found</h3>
+            <p className="text-slate-400 max-w-sm mb-6">Create a new goal to start tracking your financial milestones.</p>
             <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
+              onClick={() => allowAdd && setIsModalOpen(true)}
+              disabled={!allowAdd}
+              className="px-6 py-2 bg-noble-blue text-white rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create First Goal
+              Create Goal
             </button>
           </div>
         )}
