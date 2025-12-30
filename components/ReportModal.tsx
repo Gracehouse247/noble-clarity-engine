@@ -38,6 +38,7 @@ const ReportModal: React.FunctionComponent<ReportModalProps> = ({ isOpen, onClos
 
   // White Label Check
   const isEnterprise = userProfile.plan === 'enterprise';
+  const isStarter = userProfile.plan === 'starter';
 
   const kpis = calculateKPIs(data);
   const benchmark = INDUSTRY_BENCHMARKS[data.industry || 'Technology'];
@@ -186,11 +187,12 @@ const ReportModal: React.FunctionComponent<ReportModalProps> = ({ isOpen, onClos
           <div className="flex gap-3">
             <button
               onClick={handleExportPDF}
-              disabled={loading}
-              className={`flex items-center gap-2 px-6 py-2 bg-noble-blue hover:bg-noble-blue/90 text-white rounded-xl font-bold text-sm shadow-lg shadow-noble-blue/20 transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading || isStarter}
+              title={isStarter ? "Upgrade to Growth to export PDF reports" : "Download PDF Report"}
+              className={`flex items-center gap-2 px-6 py-2 bg-noble-blue hover:bg-noble-blue/90 text-white rounded-xl font-bold text-sm shadow-lg shadow-noble-blue/20 transition-all ${loading || isStarter ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Printer className="w-4 h-4" />}
-              Save as PDF
+              {isStarter ? "Upgrade to Export" : "Save as PDF"}
             </button>
             <button onClick={onClose} aria-label="Close preview" className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
               <X className="w-5 h-5" />

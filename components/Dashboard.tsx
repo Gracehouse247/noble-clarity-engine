@@ -60,6 +60,7 @@ import BusinessProfileModal from './BusinessProfileModal';
 import ConsolidationView from './ConsolidationView';
 import ReviewModal from './ReviewModal';
 import BusinessProfile from './BusinessProfile';
+import UpgradePrompt from './UpgradePrompt';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -221,13 +222,34 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
           </button>
 
           <div
-            onClick={() => setIsAICoachOpen(true)}
-            className="cursor-pointer bg-gradient-to-br from-noble-deep to-noble-blue rounded-xl p-4 mb-4 relative overflow-hidden group hover:shadow-lg transition-all"
+            onClick={() => {
+              if (userProfile.plan === 'starter') {
+                if (confirm("AI Financial Coach is a Growth plan feature. Upgrade now?")) {
+                  navigate('/pricing');
+                }
+              } else {
+                setIsAICoachOpen(true);
+              }
+            }}
+            className={`cursor-pointer bg-gradient-to-br from-noble-deep to-noble-blue rounded-xl p-4 mb-4 relative overflow-hidden group hover:shadow-lg transition-all ${userProfile.plan === 'starter' ? 'opacity-70 grayscale-[0.5]' : ''}`}
           >
+            {userProfile.plan === 'starter' && (
+              <div className="absolute top-2 right-2 z-10">
+                <Lock className="w-4 h-4 text-white/80" />
+              </div>
+            )}
             <p className="text-[10px] font-bold text-white/90 uppercase mb-1">AI Financial Coach</p>
             <p className="text-[10px] text-white/60 mb-3">Powered by {userProfile.preferredProvider === 'gemini' ? 'Google Gemini' : 'OpenAI GPT'}.</p>
             <div className="flex items-center gap-2 text-white text-xs font-bold">
-              <Bot className="w-4 h-4" /> <span>Click to Chat</span>
+              {userProfile.plan === 'starter' ? (
+                <>
+                  <Sparkles className="w-4 h-4" /> <span>Upgrade to Chat</span>
+                </>
+              ) : (
+                <>
+                  <Bot className="w-4 h-4" /> <span>Click to Chat</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -272,12 +294,12 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
             <Routes>
               <Route path="overview" element={<Overview profileName={activeProfile?.name || ''} data={activeProfileData.current} history={activeProfileData.history} keys={apiKeys} provider={userProfile.preferredProvider} onClearHistory={clearHistory} onDeleteSnapshot={deleteSnapshot} onLoadSnapshot={loadSnapshot} onAddNotification={addNotification} />} />
               <Route path="profile" element={<BusinessProfile />} />
-              <Route path="goals" element={<FinancialGoals currentData={activeProfileData.current} goals={activeProfileData.goals} onAddGoal={(g) => updateGoals([...activeProfileData.goals, g])} onDeleteGoal={(id) => updateGoals(activeProfileData.goals.filter(g => g.id !== id))} />} />
-              <Route path="scenario" element={<ScenarioPlanner initialData={activeProfileData.current} />} />
-              <Route path="cashflow" element={<CashFlow currentData={activeProfileData.current} history={activeProfileData.history} />} />
-              <Route path="marketing" element={<MarketingROI currentData={activeProfileData.current} history={activeProfileData.history} keys={apiKeys} provider={userProfile.preferredProvider} />} />
-              <Route path="social" element={<SocialMediaROI keys={apiKeys} provider={userProfile.preferredProvider} />} />
-              <Route path="email" element={<EmailMarketingROI keys={apiKeys} provider={userProfile.preferredProvider} />} />
+              <Route path="goals" element={<FinancialGoals currentData={activeProfileData.current} goals={activeProfileData.goals} onAddGoal={(g) => updateGoals([...activeProfileData.goals, g])} onDeleteGoal={(id) => updateGoals(activeProfileData.goals.filter(g => g.id !== id))} allowAdd={userProfile.plan !== 'starter' || activeProfileData.goals.length < 3} />} />
+              <Route path="scenario" element={userProfile.plan !== 'starter' ? <ScenarioPlanner initialData={activeProfileData.current} /> : <UpgradePrompt feature="Scenario Planner" description="Model different future outcomes, stress test your business, and plan for growth or recession scenarios." />} />
+              <Route path="cashflow" element={userProfile.plan !== 'starter' ? <CashFlow currentData={activeProfileData.current} history={activeProfileData.history} /> : <UpgradePrompt feature="Cash Flow Forecasting" description="Visualize your runway, burn rate, and future cash position to avoid surprises." />} />
+              <Route path="marketing" element={userProfile.plan !== 'starter' ? <MarketingROI currentData={activeProfileData.current} history={activeProfileData.history} keys={apiKeys} provider={userProfile.preferredProvider} /> : <UpgradePrompt feature="Marketing ROI" description="Track campaign performance and calculate your exact return on ad spend." />} />
+              <Route path="social" element={userProfile.plan !== 'starter' ? <SocialMediaROI keys={apiKeys} provider={userProfile.preferredProvider} /> : <UpgradePrompt feature="Social Media ROI" description="Analyze the financial impact of your social media engagement." />} />
+              <Route path="email" element={userProfile.plan !== 'starter' ? <EmailMarketingROI keys={apiKeys} provider={userProfile.preferredProvider} /> : <UpgradePrompt feature="Email Marketing ROI" description="Measure the revenue generated from your email campaigns." />} />
               <Route path="consolidation" element={<ConsolidationView />} />
               <Route path="*" element={<Navigate to="overview" replace />} />
             </Routes>

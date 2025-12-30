@@ -3,13 +3,13 @@ import * as React from 'react';
 import { FinancialData, FinancialGoal, GoalMetric } from '../types';
 import { calculateKPIs, CURRENCY_SYMBOLS } from '../constants';
 import { useUser } from '../contexts/NobleContext';
-import { 
-  Target, 
-  Plus, 
-  Trash2, 
-  Calendar, 
-  TrendingUp, 
-  CheckCircle2, 
+import {
+  Target,
+  Plus,
+  Trash2,
+  Calendar,
+  TrendingUp,
+  CheckCircle2,
   AlertCircle,
   DollarSign,
   Percent,
@@ -25,18 +25,20 @@ interface FinancialGoalsProps {
   goals: FinancialGoal[];
   onAddGoal: (goal: FinancialGoal) => void;
   onDeleteGoal: (id: string) => void;
+  allowAdd?: boolean;
 }
 
-const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({ 
-  currentData, 
-  goals, 
-  onAddGoal, 
-  onDeleteGoal 
+const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
+  currentData,
+  goals,
+  onAddGoal,
+  onDeleteGoal,
+  allowAdd = true
 }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const { userProfile } = useUser();
   const symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
-  
+
   // New Goal Form State
   const [newGoalName, setNewGoalName] = React.useState('');
   const [newGoalMetric, setNewGoalMetric] = React.useState<GoalMetric>('revenue');
@@ -110,11 +112,25 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
           <h3 className="text-2xl font-bold font-['Montserrat'] text-white">Financial Goals</h3>
           <p className="text-slate-400 text-sm">Track your progress against key performance milestones.</p>
         </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-noble-blue hover:bg-noble-blue/90 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-noble-blue/20"
+        <button
+          onClick={() => {
+            if (allowAdd) {
+              setIsModalOpen(true);
+            } else {
+              if (confirm("Goal limit reached. Upgrade to Growth for unlimited goals. Upgrade now?")) {
+                // Ideally use navigate here, but for simplicity:
+                window.location.href = '/pricing';
+              }
+            }
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg ${allowAdd
+              ? 'bg-noble-blue hover:bg-noble-blue/90 text-white shadow-noble-blue/20'
+              : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+            }`}
+          title={!allowAdd ? "Upgrade to add more goals" : "Add New Goal"}
         >
-          <Plus className="w-4 h-4" /> New Goal
+          {!allowAdd && <Target className="w-4 h-4 mr-1" />}
+          {allowAdd ? <><Plus className="w-4 h-4" /> New Goal</> : 'Limit Reached'}
         </button>
       </div>
 
@@ -128,7 +144,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
 
           return (
             <div key={goal.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group hover:border-noble-blue/30 transition-all">
-              <button 
+              <button
                 onClick={() => onDeleteGoal(goal.id)}
                 aria-label={`Delete goal: ${goal.name}`}
                 className="absolute top-4 right-4 text-slate-600 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
@@ -161,10 +177,10 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                   {isAchieved && (
                     <div className="relative w-6 h-6">
                       <Trophy className="w-6 h-6 text-yellow-400" />
-                      <Sparkles style={{'--delay': '0s'} as React.CSSProperties} className="absolute top-0 left-0 w-3 h-3 text-yellow-300 animate-sparkle-burst" />
-                      <Sparkles style={{'--delay': '0.2s'} as React.CSSProperties} className="absolute -top-1 right-1 w-2 h-2 text-amber-300 animate-sparkle-burst" />
-                      <Sparkles style={{'--delay': '0.4s'} as React.CSSProperties} className="absolute bottom-1 -left-1 w-2 h-2 text-yellow-400 animate-sparkle-burst" />
-                      <Sparkles style={{'--delay': '0.6s'} as React.CSSProperties} className="absolute -bottom-1 right-0 w-2 h-2 text-amber-400 animate-sparkle-burst" />
+                      <Sparkles style={{ '--delay': '0s' } as React.CSSProperties} className="absolute top-0 left-0 w-3 h-3 text-yellow-300 animate-sparkle-burst" />
+                      <Sparkles style={{ '--delay': '0.2s' } as React.CSSProperties} className="absolute -top-1 right-1 w-2 h-2 text-amber-300 animate-sparkle-burst" />
+                      <Sparkles style={{ '--delay': '0.4s' } as React.CSSProperties} className="absolute bottom-1 -left-1 w-2 h-2 text-yellow-400 animate-sparkle-burst" />
+                      <Sparkles style={{ '--delay': '0.6s' } as React.CSSProperties} className="absolute -bottom-1 right-0 w-2 h-2 text-amber-400 animate-sparkle-burst" />
                     </div>
                   )}
                 </div>
@@ -175,7 +191,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                     <span className="text-slate-500">{isAchieved ? 'Target Met' : 'In Progress'}</span>
                   </div>
                   <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full rounded-full transition-all duration-500 ease-out origin-left ${isAchieved ? 'bg-emerald-500' : 'bg-noble-blue'} ${progress > 85 && !isAchieved ? 'animate-pulse-bar' : ''}`}
                       style={{ width: `${progress}%` }}
                     ></div>
@@ -193,7 +209,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
             </div>
             <h3 className="text-lg font-bold text-white">No Goals Set</h3>
             <p className="text-slate-400 max-w-sm mt-2 mb-6">Start setting financial targets to track your business growth effectively.</p>
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
               className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
             >
@@ -213,12 +229,12 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <form onSubmit={handleCreateGoal} className="p-6 space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-slate-400 uppercase">Goal Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   placeholder="e.g. Q4 Revenue Target"
                   value={newGoalName}
@@ -229,7 +245,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
 
               <div className="space-y-1">
                 <label className="text-xs font-medium text-slate-400 uppercase">Metric</label>
-                <select 
+                <select
                   value={newGoalMetric}
                   onChange={(e) => setNewGoalMetric(e.target.value as GoalMetric)}
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white focus:outline-none focus:border-noble-blue focus:ring-1 focus:ring-noble-blue"
@@ -245,8 +261,8 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-slate-400 uppercase">Target Value</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     required
                     value={newGoalTarget}
                     onChange={(e) => setNewGoalTarget(parseFloat(e.target.value))}
@@ -255,8 +271,8 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-slate-400 uppercase">Deadline</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     required
                     value={newGoalDeadline}
                     onChange={(e) => setNewGoalDeadline(e.target.value)}
@@ -265,7 +281,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                 </div>
               </div>
 
-              <button 
+              <button
                 type="submit"
                 className="w-full mt-4 bg-noble-blue hover:bg-noble-blue/90 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-noble-blue/20"
               >
