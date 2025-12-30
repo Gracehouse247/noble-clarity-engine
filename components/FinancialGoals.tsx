@@ -52,18 +52,6 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   const [activeTab, setActiveTab] = React.useState<'active' | 'completed'>('active');
   const [showAiSuggestion, setShowAiSuggestion] = React.useState(true);
 
-  const kpis = calculateKPIs(currentData);
-
-  // Filter goals based on tab
-  const filteredGoals = goals.filter(g => {
-    const actual = getActualValue(g.metric);
-    const progress = (actual / g.targetValue);
-    const isCompleted = g.achieved || progress >= 1;
-
-    if (activeTab === 'active') return !isCompleted;
-    return isCompleted;
-  });
-
   const getActualValue = (metric: GoalMetric) => {
     switch (metric) {
       case 'revenue': return currentData.revenue;
@@ -102,6 +90,18 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
     if (metric === 'leadsGenerated') return Math.round(val).toString();
     return `${symbol}${val.toLocaleString()}`;
   };
+
+  const kpis = calculateKPIs(currentData);
+
+  // Filter goals based on tab
+  const filteredGoals = goals.filter(g => {
+    const actual = getActualValue(g.metric);
+    const progress = (actual / g.targetValue);
+    const isCompleted = g.achieved || progress >= 1;
+
+    if (activeTab === 'active') return !isCompleted;
+    return isCompleted;
+  });
 
   const handleCreateOrUpdateGoal = (e: React.FormEvent) => {
     e.preventDefault();
