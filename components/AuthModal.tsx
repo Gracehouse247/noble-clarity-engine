@@ -196,10 +196,10 @@ const AuthModal: React.FunctionComponent<AuthModalProps> = ({
                         uid: user.uid,
                         email: user.email,
                         name: user.displayName || 'Noble User',
-                        plan: 'starter',
+                        plan: selectedPlan,
                         createdAt: new Date().toISOString(),
                         role: 'owner',
-                        billingCycle: 'monthly'
+                        billingCycle: billingCycle
                     });
                 }
             }
