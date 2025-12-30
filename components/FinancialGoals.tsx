@@ -24,6 +24,7 @@ interface FinancialGoalsProps {
   currentData: FinancialData;
   goals: FinancialGoal[];
   onAddGoal: (goal: FinancialGoal) => void;
+  onUpdateGoal: (goal: FinancialGoal) => void;
   onDeleteGoal: (id: string) => void;
   allowAdd?: boolean;
 }
@@ -32,10 +33,12 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   currentData,
   goals,
   onAddGoal,
+  onUpdateGoal,
   onDeleteGoal,
   allowAdd = true
 }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editingGoal, setEditingGoal] = React.useState<FinancialGoal | null>(null);
   const { userProfile } = useUser();
   const symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
 
@@ -53,8 +56,12 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
 
   // Filter goals based on tab
   const filteredGoals = goals.filter(g => {
-    if (activeTab === 'active') return !g.achieved;
-    return g.achieved;
+    const actual = getActualValue(g.metric);
+    const progress = (actual / g.targetValue);
+    const isCompleted = g.achieved || progress >= 1;
+
+    if (activeTab === 'active') return !isCompleted;
+    return isCompleted;
   });
 
   const getActualValue = (metric: GoalMetric) => {
@@ -96,22 +103,72 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
     return `${symbol}${val.toLocaleString()}`;
   };
 
-  const handleCreateGoal = (e: React.FormEvent) => {
+  const handleCreateOrUpdateGoal = (e: React.FormEvent) => {
     e.preventDefault();
-    const newGoal: FinancialGoal = {
-      id: Date.now().toString(),
-      name: newGoalName,
-      metric: newGoalMetric,
-      targetValue: newGoalTarget,
-      deadline: newGoalDeadline || 'Ongoing'
-    };
-    onAddGoal(newGoal);
-    setIsModalOpen(false);
-    // Reset form
+
+    if (editingGoal) {
+      const updatedGoal: FinancialGoal = {
+        ...editingGoal,
+        name: newGoalName,
+        metric: newGoalMetric,
+        targetValue: newGoalTarget,
+        deadline: newGoalDeadline || 'Ongoing'
+      };
+      onUpdateGoal(updatedGoal);
+    } else {
+      const newGoal: FinancialGoal = {
+        id: Date.now().toString(),
+        name: newGoalName,
+        metric: newGoalMetric,
+        targetValue: newGoalTarget,
+        deadline: newGoalDeadline || 'Ongoing',
+        achieved: false
+      };
+      onAddGoal(newGoal);
+    }
+
+    closeModal();
+  };
+
+  const openNewGoalModal = () => {
+    setEditingGoal(null);
     setNewGoalName('');
     setNewGoalMetric('revenue');
     setNewGoalTarget(100000);
     setNewGoalDeadline('');
+
+    if (allowAdd) {
+      setIsModalOpen(true);
+    } else {
+      if (confirm("Goal limit reached. Upgrade to Growth for unlimited goals. Upgrade now?")) {
+        window.location.href = '/pricing';
+      }
+    }
+  };
+
+  const openEditModal = (goal: FinancialGoal) => {
+    setEditingGoal(goal);
+    setNewGoalName(goal.name);
+    setNewGoalMetric(goal.metric);
+    setNewGoalTarget(goal.targetValue);
+    setNewGoalDeadline(goal.deadline);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditingGoal(null);
+    setNewGoalName('');
+    setNewGoalMetric('revenue');
+    setNewGoalTarget(100000);
+    setNewGoalDeadline('');
+  };
+
+  const toggleGoalStatus = (goal: FinancialGoal) => {
+    onUpdateGoal({
+      ...goal,
+      achieved: !goal.achieved
+    });
   };
 
   return (
@@ -122,15 +179,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
           Financial Goals
         </h1>
         <button
-          onClick={() => {
-            if (allowAdd) {
-              setIsModalOpen(true);
-            } else {
-              if (confirm("Goal limit reached. Upgrade to Growth for unlimited goals. Upgrade now?")) {
-                window.location.href = '/pricing';
-              }
-            }
-          }}
+          onClick={openNewGoalModal}
           className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-noble-blue text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-all shadow-lg shadow-noble-blue/20 ${!allowAdd ? 'opacity-70 grayscale' : ''}`}
           title={!allowAdd ? "Upgrade to add more goals" : "Set New Goal"}
         >
@@ -190,7 +239,13 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                   <div className="flex justify-between items-start">
                     <p className="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-['Montserrat'] line-clamp-1" title={goal.name}>{goal.name}</p>
                     <div className="flex items-center gap-2 text-slate-400">
-                      {/* Using Delete as the primary action for now to match old functionality */}
+                      <button
+                        onClick={() => openEditModal(goal)}
+                        className="p-1 rounded-full hover:bg-white/10 hover:text-white transition-colors"
+                        title="Edit Goal"
+                      >
+                        <div className="w-5 h-5 flex items-center justify-center font-bold text-xs border border-current rounded-md">/</div>
+                      </button>
                       <button
                         onClick={() => onDeleteGoal(goal.id)}
                         className="p-1 rounded-full hover:bg-white/10 hover:text-rose-400 transition-colors"
@@ -218,8 +273,19 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                       </p>
                     </div>
                     {/* Placeholder View Details - could open modal in future */}
-                    <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-noble-blue/10 hover:bg-noble-blue/20 text-noble-blue text-sm font-bold leading-normal transition-colors border border-noble-blue/20">
+                    <button
+                      onClick={() => openEditModal(goal)}
+                      className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-noble-blue/10 hover:bg-noble-blue/20 text-noble-blue text-sm font-bold leading-normal transition-colors border border-noble-blue/20"
+                    >
                       <span className="truncate">View Details</span>
+                    </button>
+
+                    <button
+                      onClick={() => toggleGoalStatus(goal)}
+                      className={`flex items-center justify-center p-2 rounded-lg transition-colors ${goal.achieved ? 'text-emerald-400 hover:text-emerald-300' : 'text-slate-500 hover:text-white'}`}
+                      title={goal.achieved ? "Mark as In Progress" : "Mark as Complete"}
+                    >
+                      {goal.achieved ? <CheckCircle2 className="w-5 h-5" /> : <div className="w-5 h-5 rounded-full border-2 border-slate-600" />}
                     </button>
                   </div>
                 </div>
@@ -282,7 +348,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
             <h3 className="text-lg font-bold text-white mb-2">No {activeTab} goals found</h3>
             <p className="text-slate-400 max-w-sm mb-6">Create a new goal to start tracking your financial milestones.</p>
             <button
-              onClick={() => allowAdd && setIsModalOpen(true)}
+              onClick={openNewGoalModal}
               disabled={!allowAdd}
               className="px-6 py-2 bg-noble-blue text-white rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -297,13 +363,13 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
             <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-              <h3 className="text-lg font-bold text-white">Set New Goal</h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Close modal" className="text-slate-500 hover:text-white">
+              <h3 className="text-lg font-bold text-white">{editingGoal ? 'Edit Goal' : 'Set New Goal'}</h3>
+              <button onClick={closeModal} aria-label="Close modal" className="text-slate-500 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateGoal} className="p-6 space-y-4">
+            <form onSubmit={handleCreateOrUpdateGoal} className="p-6 space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-slate-400 uppercase">Goal Name</label>
                 <input
@@ -358,7 +424,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                 type="submit"
                 className="w-full mt-4 bg-noble-blue hover:bg-noble-blue/90 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-noble-blue/20"
               >
-                Create Goal
+                {editingGoal ? 'Update Goal' : 'Create Goal'}
               </button>
             </form>
           </div>
