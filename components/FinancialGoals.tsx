@@ -3,6 +3,8 @@ import * as React from 'react';
 import { FinancialData, FinancialGoal, GoalMetric } from '../types';
 import { calculateKPIs, CURRENCY_SYMBOLS } from '../constants';
 import { useUser } from '../contexts/NobleContext';
+import { useAuth } from '../contexts/AuthContext';
+import { getGoalSuggestion } from '../services/ai';
 import {
   Target,
   Plus,
@@ -51,6 +53,28 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   // UI State
   const [activeTab, setActiveTab] = React.useState<'active' | 'completed'>('active');
   const [showAiSuggestion, setShowAiSuggestion] = React.useState(true);
+  const [aiSuggestion, setAiSuggestion] = React.useState<{ name: string; metric: GoalMetric; targetValue: number; reasoning: string } | null>(null);
+  const [loadingSuggestion, setLoadingSuggestion] = React.useState(false);
+  const { apiKeys } = useUser();
+  const { user } = useAuth();
+  const preferredProvider = userProfile.preferredProvider || 'gemini';
+
+  React.useEffect(() => {
+    const loadSuggestion = async () => {
+      if (activeTab === 'active' && showAiSuggestion && !aiSuggestion) {
+        setLoadingSuggestion(true);
+        try {
+          const suggestion = await getGoalSuggestion(currentData, apiKeys, preferredProvider);
+          if (suggestion) setAiSuggestion(suggestion);
+        } catch (err) {
+          console.error("Failed to load AI suggestion:", err);
+        } finally {
+          setLoadingSuggestion(false);
+        }
+      }
+    };
+    loadSuggestion();
+  }, [currentData, activeTab, showAiSuggestion, apiKeys, preferredProvider, aiSuggestion]);
 
   const getActualValue = (metric: GoalMetric) => {
     switch (metric) {
@@ -297,39 +321,63 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
         {/* AI Suggestion Card - Only show in Active tab */}
         {activeTab === 'active' && showAiSuggestion && (
           <div className="p-0.5 rounded-xl bg-gradient-to-br from-purple-500/50 to-noble-blue/50 shadow-lg group animate-in fade-in zoom-in-95 duration-500">
-            <div className="flex flex-col items-stretch justify-start rounded-lg bg-[#18232e] bg-opacity-90 backdrop-blur-sm p-6 h-full">
+            <div className="flex flex-col items-stretch justify-start rounded-lg bg-[#18232e] bg-opacity-90 backdrop-blur-sm p-6 h-full border border-white/5">
               <div className="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-4">
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-3">
                     <Sparkles className="w-6 h-6 text-purple-400 fill-purple-400/20 animate-pulse" />
-                    <p className="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-['Montserrat']">AI Goal Suggestion</p>
+                    <p className="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-['Montserrat']">AI Intelligence Hint</p>
                   </div>
                   <button onClick={() => setShowAiSuggestion(false)} className="p-1 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <p className="text-slate-300 leading-relaxed">
-                  Based on your current margin of <span className="text-white font-bold">{kpis.netProfitMargin.toFixed(1)}%</span>, considering setting a goal to improve efficiency.
-                </p>
+
+                {loadingSuggestion ? (
+                  <div className="py-4 space-y-3">
+                    <div className="h-4 bg-slate-800 rounded w-3/4 animate-pulse"></div>
+                    <div className="h-4 bg-slate-800 rounded w-1/2 animate-pulse"></div>
+                  </div>
+                ) : aiSuggestion ? (
+                  <>
+                    <p className="text-slate-300 leading-relaxed text-sm">
+                      {aiSuggestion.reasoning}
+                    </p>
+                    <div className="flex items-center gap-2 py-2 px-3 bg-white/5 rounded-lg border border-white/5">
+                      <div className="p-1.5 bg-purple-500/20 rounded-md">
+                        <Target className="w-4 h-4 text-purple-400" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Suggested Target</span>
+                        <span className="text-white font-bold text-sm">{formatValue(aiSuggestion.targetValue, aiSuggestion.metric)} {getMetricLabel(aiSuggestion.metric)}</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-slate-300 leading-relaxed text-sm">
+                    Based on your current margin of <span className="text-white font-bold">{kpis.netProfitMargin.toFixed(1)}%</span>, setting a goal to improve efficiency could maximize ROI.
+                  </p>
+                )}
+
                 <div className="flex items-center gap-3 justify-end mt-auto pt-2">
                   <button onClick={() => setShowAiSuggestion(false)} className="px-4 h-9 text-slate-400 hover:text-white text-sm font-bold transition-colors">
                     Dismiss
                   </button>
                   <button
+                    disabled={loadingSuggestion}
                     onClick={() => {
                       if (allowAdd) {
-                        setNewGoalName("Optimize Net Margin");
-                        setNewGoalMetric('netMargin');
-                        setNewGoalTarget(Math.ceil(kpis.netProfitMargin + 5));
+                        setNewGoalName(aiSuggestion?.name || "Optimize Net Margin");
+                        setNewGoalMetric(aiSuggestion?.metric || 'netMargin');
+                        setNewGoalTarget(aiSuggestion?.targetValue || Math.ceil(kpis.netProfitMargin + 5));
                         setIsModalOpen(true);
                       } else {
-                        // same upgrade logic
                         if (confirm("Goal limit reached. Upgrade to Growth. Upgrade now?")) {
                           window.location.href = '/pricing';
                         }
                       }
                     }}
-                    className="flex items-center justify-center px-4 h-9 bg-purple-500 hover:bg-purple-600 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-purple-500/20"
+                    className="flex items-center justify-center px-4 h-9 bg-purple-500 hover:bg-purple-600 disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-purple-500/20"
                   >
                     Accept Suggestion
                   </button>

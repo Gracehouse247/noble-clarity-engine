@@ -27,7 +27,7 @@ import {
 } from 'recharts';
 
 const ConsolidationView: React.FunctionComponent = () => {
-  const { profiles, activeProfileId, switchProfile } = useBusiness();
+  const { profiles, activeProfileId, switchProfile, profilesData } = useBusiness();
   const [aggregatedData, setAggregatedData] = React.useState<any>(null);
   const { userProfile } = useUser();
   const [baseCurrency, setBaseCurrency] = React.useState(userProfile.currency || 'USD');
@@ -51,10 +51,7 @@ const ConsolidationView: React.FunctionComponent = () => {
 
   React.useEffect(() => {
     try {
-      const allDataStr = localStorage.getItem('nobleClarityProfilesData');
-      if (allDataStr) {
-        const allData = JSON.parse(allDataStr);
-
+      if (Object.keys(profilesData).length > 0) {
         let totalRevenue = 0;
         let totalNetIncome = 0;
         let totalCash = 0;
@@ -63,7 +60,7 @@ const ConsolidationView: React.FunctionComponent = () => {
         let hasMixedCurrencies = false;
 
         profiles.forEach(p => {
-          const pData = allData[p.id]?.current;
+          const pData = profilesData[p.id]?.current;
           if (p.currency !== baseCurrency) hasMixedCurrencies = true;
 
           if (pData) {
@@ -100,7 +97,7 @@ const ConsolidationView: React.FunctionComponent = () => {
     } catch (e) {
       console.error("Consolidation Error", e);
     }
-  }, [profiles, baseCurrency]);
+  }, [profiles, baseCurrency, profilesData]);
 
   if (!aggregatedData) return <div className="p-8 text-slate-400">Loading Consolidated View...</div>;
 

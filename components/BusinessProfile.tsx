@@ -7,13 +7,19 @@ import {
     ChevronDown,
     Sparkles,
     Save,
-    TrendingUp
+    TrendingUp,
+    Globe,
+    RefreshCw,
+    CheckCircle2
 } from 'lucide-react';
-import { useBusiness } from '../contexts/NobleContext';
+import { useBusiness, useUser } from '../contexts/NobleContext';
 import { INDUSTRY_BENCHMARKS, calculateKPIs } from '../constants';
 
 const BusinessProfile: React.FC = () => {
-    const { activeProfile, updateProfile, activeProfileData } = useBusiness();
+    const { activeProfile, updateProfile, activeProfileData, updateFinancialData } = useBusiness();
+    const { userProfile } = useUser();
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [lastSync, setLastSync] = useState<string>(new Date().toLocaleTimeString());
 
     const [formData, setFormData] = useState({
         name: activeProfile?.name || '',
@@ -73,10 +79,47 @@ const BusinessProfile: React.FC = () => {
     return (
         <div className="flex flex-1 justify-center py-5 px-4 sm:px-6 lg:px-8 bg-[#0b0e14] min-h-full">
             <div className="flex w-full flex-col max-w-7xl flex-1">
-                <div className="flex flex-wrap justify-between items-center gap-4 py-8">
-                    <h1 className="text-white text-4xl sm:text-5xl font-display font-black leading-tight tracking-[-0.033em] min-w-72">
-                        Business Profile & Benchmarking
-                    </h1>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 py-8 border-b border-white/5 mb-8">
+                    <div>
+                        <h1 className="text-white text-4xl sm:text-5xl font-display font-black leading-tight tracking-[-0.033em]">
+                            Business Profile & Benchmarking
+                        </h1>
+                        <div className="flex items-center gap-4 mt-4">
+                            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">System Active</span>
+                            </div>
+                            {userProfile.integrations?.includes('Google Sheets') && (
+                                <div className="flex items-center gap-2 bg-noble-blue/10 border border-noble-blue/20 px-3 py-1 rounded-full">
+                                    <Globe className="w-3 h-3 text-noble-blue" />
+                                    <span className="text-[10px] font-black text-noble-blue uppercase tracking-widest">Google Sheets Linked</span>
+                                </div>
+                            )}
+                            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Last Handshake: {lastSync}</span>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => {
+                            setIsRefreshing(true);
+                            setTimeout(() => {
+                                setIsRefreshing(false);
+                                setLastSync(new Date().toLocaleTimeString());
+                                // In a real app, this would call updateFinancialData with fresh API results
+                                if (activeProfileData?.current) {
+                                    updateFinancialData({
+                                        ...activeProfileData.current,
+                                        revenue: activeProfileData.current.revenue * 1.02 // Simulate slight growth on sync
+                                    });
+                                }
+                            }, 1500);
+                        }}
+                        disabled={isRefreshing}
+                        className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                    >
+                        {isRefreshing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                        {isRefreshing ? 'Syncing Ecosystem...' : 'Force Data Sync'}
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">

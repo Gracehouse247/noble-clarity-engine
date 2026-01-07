@@ -4,7 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noble World | Creating Brand's Visibility</title>
+  <title>Noble Clarity Engine | Financial Intelligence Platform</title>
+  <meta name="description"
+    content="Noble Clarity Engine: The most powerful financial data analytics platform for modern founders. Unlock predictive business insights with crystalline precision.">
+  <meta name="keywords"
+    content="financial intelligence, predictive analytics, business growth engine, financial dashboard">
   <link rel="icon" type="image/png" href="/favicon.png">
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
   <script src="https://checkout.flutterwave.com/v3.js"></script>
@@ -110,6 +114,7 @@
 
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
+      appearance: none;
       height: 20px;
       width: 20px;
       border-radius: 50%;
@@ -276,6 +281,22 @@
       100% {
         transform: translateX(0);
       }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .animate-blink {
+      animation: blink 1s ease-in-out infinite;
     }
   </style>
 </head>

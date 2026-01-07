@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticating...</title>
+    <script>
+        // Extract token from URL hash (e.g. #access_token=...&...)
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        const error = params.get('error');
+
+        // Post message back to opening window
+        if (window.opener) {
+            if (accessToken) {
+                window.opener.postMessage({
+                    status: 'success',
+                    provider: 'google-sheets',
+                    token: accessToken
+                }, '*');
+            } else if (error) {
+                window.opener.postMessage({ status: 'error', provider: 'google-sheets', error }, '*');
+            }
+            // Close self
+            window.close();
+        } else {
+            console.error('No opener window found. Cannot pass token.');
+            document.write('Authentication window lost its parent. Please close this window and try again.');
+        }
+    </script>
+</head>
+
+<body>
+    <p>Authenticating...</p>
+</body>
+
+</html>

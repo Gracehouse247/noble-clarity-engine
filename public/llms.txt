@@ -1,0 +1,14 @@
+# Noble Clarity Engine
+Predictive Financial Intelligence for the next-gen founders.
+
+## Core Pages
+- [Home](https://clarity.noblesworld.com.ng/) - Financial data analytics platforms.
+- [Features](https://clarity.noblesworld.com.ng/#/features) - Predictive analytics for small business.
+- [Pricing](https://clarity.noblesworld.com.ng/#/pricing) - Best budgeting apps for small business.
+- [API Docs](https://clarity.noblesworld.com.ng/#/api-docs) - Financial Intelligence API & SDK.
+
+## Key Concepts
+- **Scenario Planning**: Monte Carlo-style simulation for business decisions.
+- **AI Coach**: Gemini 1.5 Flash powered financial strategic advisor.
+- **Runway & Burn Rate**: Precise survival metrics for startups.
+- **Marketing ROI**: Connecting ad spend directly to P&L results.

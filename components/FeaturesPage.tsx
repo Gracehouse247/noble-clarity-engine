@@ -24,6 +24,7 @@ import {
   ChevronDown,
   Globe // Added Globe
 } from 'lucide-react';
+import Navbar from './Navbar';
 
 // --- UI Mockup Components (Realistic "Screenshots") ---
 
@@ -410,31 +411,7 @@ const FeaturesPage: React.FunctionComponent = () => {
 
   return (
     <div className="min-h-screen bg-[#0b0e14] text-white font-sans overflow-x-hidden selection:bg-noble-blue/30 selection:text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0b0e14]/80 backdrop-blur-xl border-b border-white/5 px-4 md:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 bg-noble-blue rounded-xl flex items-center justify-center shadow-lg shadow-noble-blue/20 group-hover:scale-105 transition-transform">
-            <Globe className="w-6 h-6 text-white" />
-          </div>
-          <span className="font-['Montserrat'] font-extrabold text-xl tracking-tight hidden sm:block">NOBLE WORLD</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-          <button onClick={() => navigate('/features')} className="text-white">Features</button>
-          <button onClick={() => navigate('/pricing')} className="hover:text-white transition-colors">Pricing</button>
-          <button onClick={() => navigate('/story')} className="hover:text-white transition-colors">Company</button>
-        </div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
-          </button>
-          <button
-            onClick={() => navigate('/pricing')}
-            className="bg-noble-blue hover:bg-noble-blue/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-noble-blue/20 hover:shadow-noble-blue/40 transform hover:-translate-y-0.5"
-          >
-            Get Started Now
-          </button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-48 pb-32 px-6 relative overflow-hidden">
@@ -447,11 +424,12 @@ const FeaturesPage: React.FunctionComponent = () => {
             <Zap className="w-3 h-3 fill-current" /> The Power Suite
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold font-['Montserrat'] mb-8 leading-tight animate-slide-up">
-            Every Tool You Need to <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue via-cyan-300 to-white">Dominate Your Market</span>
+            <span className="block text-noble-blue text-sm uppercase tracking-widest mb-4">The Premium Business Growth Engine</span>
+            Every Tool to <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue via-cyan-300 to-white">Optimize Your Market ROI</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed font-light mb-12 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Noble World isn't just a dashboard. It is a comprehensive financial operating system designed to give you an unfair advantage in clarity, forecasting, and execution.
+            Noble World is the leading <strong>predictive analytics for small business</strong> and enterprise. A comprehensive financial operating system designed to give you an unfair advantage in clarity, forecasting, and execution.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <button onClick={() => document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' })} className="px-8 py-4 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-700 transition-all border border-slate-700 flex items-center gap-2">

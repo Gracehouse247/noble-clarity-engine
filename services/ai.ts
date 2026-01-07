@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { FinancialData, AIProvider } from "../types";
-import { INDUSTRY_BENCHMARKS } from '../constants';
+import { INDUSTRY_BENCHMARKS, calculateKPIs } from '../constants';
 
 const PROXY_URL = (import.meta as any).env.VITE_PROXY_URL || '';
 
@@ -9,22 +9,59 @@ const PROXY_URL = (import.meta as any).env.VITE_PROXY_URL || '';
  */
 const handleApiError = (error: any, provider: AIProvider): string => {
     console.error(`${provider} API Error:`, error);
-    if (error.message?.includes('401') || error.message?.includes('API key') || error.message?.includes('INVALID')) {
-        return `🛑 ${provider.toUpperCase()} Error: Invalid or expired API Key. Please verify your credentials in Settings.`;
+
+    const msg = error.message?.toLowerCase() || '';
+
+    if (msg.includes('401') || msg.includes('api key') || msg.includes('invalid') || msg.includes('unauthorized')) {
+        return `🛑 ${provider.toUpperCase()} Auth Error: Your API key appears to be invalid or expired. Please update it in the Settings page to restore service.`;
     }
-    return `The Noble World AI encountered a temporary connection issue. Please verify your internet connection or try switching AI providers in Settings.`;
+
+    if (msg.includes('429') || msg.includes('quota') || msg.includes('limit') || msg.includes('exhausted')) {
+        return `⚠️ ${provider.toUpperCase()} Quota Limit: Your current API quota has been reached. Try switching to the other AI provider in Settings or upgrade your API plan with ${provider === 'gemini' ? 'Google' : 'OpenAI'}.`;
+    }
+
+    if (msg.includes('timeout') || msg.includes('deadline') || msg.includes('connection')) {
+        return `📡 Connection Issue: The Noble AI is having trouble reaching ${provider === 'gemini' ? 'Google' : 'OpenAI'} servers. Please check your internet connection and try again in a few moments.`;
+    }
+
+    if (msg.includes('500') || msg.includes('internal server error')) {
+        return `🛠️ Server Error: The ${provider.toUpperCase()} service is currently experiencing internal issues. Switching providers in Settings might resolve this.`;
+    }
+
+    return `The Noble World AI encountered a temporary issue: "${error.message || 'Unknown Error'}". Please verify your configuration in Settings or try a different AI provider.`;
 };
 
 async function callOpenAI(prompt: string, systemInstruction: string, apiKey: string, history: { role: 'user' | 'assistant', content: string }[] = []) {
     if (PROXY_URL) {
-        const response = await fetch(`${PROXY_URL}/openai`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, systemInstruction, apiKey, history })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Proxy call failed');
-        return data.content;
+        // Normalize Proxy URL: remove trailing slash if exists
+        const root = PROXY_URL.endsWith('/') ? PROXY_URL.slice(0, -1) : PROXY_URL;
+        const targetUrl = `${root}/openai`;
+
+        console.log("🚀 AI Proxy Handshake:", targetUrl);
+
+        try {
+            const response = await fetch(targetUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, systemInstruction, apiKey, history })
+            });
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text();
+                console.error("❌ Non-JSON Response received:", text.substring(0, 100));
+                throw new Error(`Proxy error: Received ${response.status} (${response.statusText}). The server is responding with HTML instead of API data. This usually happens if the backend isn't mapped correctly to ${targetUrl}.`);
+            }
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || `Proxy call failed with status ${response.status}`);
+            return data.content;
+        } catch (fetchErr: any) {
+            if (fetchErr.message.includes('Failed to fetch')) {
+                throw new Error(`Network Error: Cannot reach the backend at ${targetUrl}. Is the Node.js server running and reachable?`);
+            }
+            throw fetchErr;
+        }
     }
 
     const messages = [
@@ -57,18 +94,39 @@ async function callOpenAI(prompt: string, systemInstruction: string, apiKey: str
 
 async function callGemini(prompt: string, systemInstruction: string, apiKey: string, history: { role: 'user' | 'assistant', content: string }[] = []) {
     if (PROXY_URL) {
-        const response = await fetch(`${PROXY_URL}/gemini`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, systemInstruction, apiKey, history })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Proxy call failed');
-        return data.content;
+        // Normalize Proxy URL: remove trailing slash if exists
+        const root = PROXY_URL.endsWith('/') ? PROXY_URL.slice(0, -1) : PROXY_URL;
+        const targetUrl = `${root}/gemini`;
+
+        console.log("🚀 AI Proxy Handshake:", targetUrl);
+
+        try {
+            const response = await fetch(targetUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, systemInstruction, apiKey, history })
+            });
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text();
+                console.error("❌ Non-JSON Response received:", text.substring(0, 100));
+                throw new Error(`Proxy error: Received ${response.status} (${response.statusText}). The server is responding with HTML instead of API data. This usually happens if the backend isn't mapped correctly to ${targetUrl}.`);
+            }
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || `Proxy call failed with status ${response.status}`);
+            return data.content;
+        } catch (fetchErr: any) {
+            if (fetchErr.message.includes('Failed to fetch')) {
+                throw new Error(`Network Error: Cannot reach the backend at ${targetUrl}. Is the Node.js server running and reachable?`);
+            }
+            throw fetchErr;
+        }
     }
 
     const genAI = new GoogleGenerativeAI(apiKey || '');
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     return result.response.text();
 }
@@ -83,7 +141,10 @@ export async function getFinancialInsights(
     provider: AIProvider = 'gemini',
     history: { role: 'user' | 'assistant', content: string }[] = []
 ) {
-    const apiKey = provider === 'gemini' ? keys?.google : keys?.openai;
+    const userKey = provider === 'gemini' ? keys?.google : keys?.openai;
+    const systemKey = provider === 'gemini' ? (import.meta as any).env.VITE_GOOGLE_AI_KEY : (import.meta as any).env.VITE_OPENAI_API_KEY;
+    const apiKey = userKey || systemKey;
+
     const otherProvider = provider === 'gemini' ? 'OpenAI' : 'Gemini';
     const hasOtherKey = provider === 'gemini' ? !!keys?.openai : !!keys?.google;
 
@@ -117,6 +178,45 @@ export async function getFinancialInsights(
 }
 
 /**
+ * Generates dynamic financial goal suggestions.
+ */
+export async function getGoalSuggestion(
+    data: FinancialData,
+    keys?: { google: string; openai: string },
+    provider: AIProvider = 'gemini'
+) {
+    const userKey = provider === 'gemini' ? keys?.google : keys?.openai;
+    const systemKey = provider === 'gemini' ? (import.meta as any).env.VITE_GOOGLE_AI_KEY : (import.meta as any).env.VITE_OPENAI_API_KEY;
+    const apiKey = userKey || systemKey;
+
+    if (!apiKey && !PROXY_URL) return null;
+
+    const industry = data.industry || 'Technology';
+    const benchmarks = INDUSTRY_BENCHMARKS[industry];
+    const kpis = calculateKPIs(data);
+
+    const systemInstruction = `You are the Noble AI Strategic Architect. Analyze the provided financial data and suggest ONE high-impact goal. Return ONLY a JSON object with: { "name": string, "metric": "revenue"|"netProfit"|"netMargin"|"currentAssets"|"leadsGenerated", "targetValue": number, "reasoning": string }. Base the targetValue on a 5-15% improvement over current metrics or alignment with benchmarks.`;
+
+    const prompt = `Industry: ${industry}. Revenue: $${data.revenue}. Net Margin: ${kpis.netProfitMargin}%. Benchmarks: Margin ${benchmarks?.netProfitMargin}%. Provide a suggestion.`;
+
+    try {
+        const result = provider === 'gemini'
+            ? await callGemini(prompt, systemInstruction, apiKey || '')
+            : await callOpenAI(prompt, systemInstruction, apiKey || '');
+
+        // Attempt to parse JSON from AI response
+        const jsonMatch = result.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            return JSON.parse(jsonMatch[0]);
+        }
+        return null;
+    } catch (error) {
+        console.error("Goal Suggestion Error:", error);
+        return null;
+    }
+}
+
+/**
  * Generates marketing-specific insights.
  */
 export async function getMarketingInsights(
@@ -124,7 +224,10 @@ export async function getMarketingInsights(
     keys?: { google: string; openai: string },
     provider: AIProvider = 'gemini'
 ) {
-    const apiKey = provider === 'gemini' ? keys?.google : keys?.openai;
+    const userKey = provider === 'gemini' ? keys?.google : keys?.openai;
+    const systemKey = provider === 'gemini' ? (import.meta as any).env.VITE_GOOGLE_AI_KEY : (import.meta as any).env.VITE_OPENAI_API_KEY;
+    const apiKey = userKey || systemKey;
+
     if (!apiKey && !PROXY_URL) return `⚠️ ${provider.toUpperCase()} Key missing.`;
 
     const systemInstruction = `You are the Noble World Marketing Strategist. Analyze marketing ROI and provide 3 actionable growth tips for a ${data.industry} business.`;
@@ -143,7 +246,9 @@ export async function getMarketingInsights(
  * Text-to-Speech generation using Gemini.
  */
 export async function generateSpeech(text: string, apiKey?: string): Promise<string | null> {
-    if (!apiKey && !PROXY_URL) {
+    const finalKey = apiKey || (import.meta as any).env.VITE_GOOGLE_AI_KEY;
+
+    if (!finalKey && !PROXY_URL) {
         console.error("TTS Error: No API Key found.");
         return null;
     }
@@ -161,7 +266,7 @@ export async function generateSpeech(text: string, apiKey?: string): Promise<str
 
         const ai = new GoogleGenerativeAI(apiKey || '');
         const model = ai.getGenerativeModel({
-            model: "gemini-2.0-flash-exp",
+            model: "gemini-1.5-flash",
         });
         const response = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: text }] }],

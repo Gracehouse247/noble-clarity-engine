@@ -212,10 +212,44 @@ const MarketingROI: React.FunctionComponent<MarketingROIProps> = ({ currentData,
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-slate-800">
         <div>
-          <h2 className="text-3xl font-bold font-['Montserrat'] text-white">Advanced ROI Calculator</h2>
-          <p className="text-slate-400 text-sm mt-1">Model campaign profitability, LTV, and breakeven points.</p>
+          <h2 className="text-3xl font-bold font-['Montserrat'] text-white">Marketing Intelligence</h2>
+          <p className="text-slate-400 text-sm mt-1">Unified view of your campaign performance and ROI across all platforms.</p>
         </div>
-        <div className="flex gap-3 no-print">
+        <div className="flex flex-wrap gap-3 no-print">
+          {/* Integration Selector */}
+          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1">
+            <Layers className="w-4 h-4 text-noble-blue" />
+            <span className="text-[10px] font-bold text-slate-500 uppercase">Source:</span>
+            <select
+              className="bg-transparent border-none text-white text-xs font-bold outline-none cursor-pointer"
+              onChange={async (e) => {
+                const val = e.target.value;
+                if (val === 'manual') {
+                  addNotification({ title: 'Manual Mode', msg: 'Switched to manual data entry.', type: 'info' });
+                  return;
+                }
+
+                // Simulate fetching from integration
+                addNotification({ title: 'Syncing Data', msg: `Fetching live metrics from ${val}...`, type: 'info' });
+                setTimeout(() => {
+                  if (val === 'Meta Ads') {
+                    setInputs(prev => ({ ...prev, adSpend: 4500, visitorToLead: 5.8 }));
+                  } else if (val === 'Google Ads') {
+                    setInputs(prev => ({ ...prev, adSpend: 3200, visitorToLead: 4.2 }));
+                  } else if (val === 'TikTok Ads') {
+                    setInputs(prev => ({ ...prev, adSpend: 2800, visitorToLead: 7.5 }));
+                  }
+                  addNotification({ title: 'Sync Complete', msg: `Campaign data from ${val} imported.`, type: 'success' });
+                }, 1500);
+              }}
+            >
+              <option value="manual">Manual Entry</option>
+              {userProfile.integrations?.includes('Meta Ads') && <option value="Meta Ads">Meta Ads (Live)</option>}
+              {userProfile.integrations?.includes('Google Ads') && <option value="Google Ads">Google Ads (Live)</option>}
+              {userProfile.integrations?.includes('TikTok Ads') && <option value="TikTok Ads">TikTok Ads (Live)</option>}
+            </select>
+          </div>
+
           <select
             className="bg-slate-900 border border-slate-800 text-slate-300 text-sm rounded-lg px-3 py-2 outline-none focus:border-noble-blue"
             value={industry}
@@ -482,6 +516,62 @@ const MarketingROI: React.FunctionComponent<MarketingROIProps> = ({ currentData,
                   <Line type="monotone" dataKey="roi" stroke="#00AEEF" strokeWidth={3} dot={{ r: 4, fill: '#0b0e14', strokeWidth: 2 }} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Social Media ROI Section */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2">
+              <Share2 className="w-4 h-4 text-pink-500" /> Social Engagement ROI
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Engagement Rate (%)</label>
+                  <div className="flex items-center gap-3">
+                    <input type="number" defaultValue="4.5" className="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-sm focus:border-noble-blue outline-none" />
+                    <ThumbsUp className="w-4 h-4 text-slate-600" />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">CTR (%)</label>
+                  <div className="flex items-center gap-3">
+                    <input type="number" defaultValue="1.2" className="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-sm focus:border-noble-blue outline-none" />
+                    <MousePointer className="w-4 h-4 text-slate-600" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="md:col-span-2 bg-slate-950 rounded-xl p-4 border border-slate-800/50">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-xs font-bold text-slate-400">Aggregated Reach</span>
+                  <div className="flex gap-2">
+                    <div className="bg-blue-500/20 text-blue-400 text-[9px] font-black px-2 py-0.5 rounded border border-blue-500/20 uppercase">Meta</div>
+                    <div className="bg-pink-500/20 text-pink-400 text-[9px] font-black px-2 py-0.5 rounded border border-pink-500/20 uppercase">TikTok</div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-[10px] mb-1">
+                      <span className="text-slate-500">Total Impressions</span>
+                      <span className="text-white font-bold">~575,000</span>
+                    </div>
+                    <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-blue-500 to-pink-500 h-full w-[82%]"></div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-800">
+                      <p className="text-[9px] font-bold text-slate-500 uppercase mb-1">Avg. CPM</p>
+                      <p className="text-lg font-bold text-white">{symbol}10.50</p>
+                    </div>
+                    <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-800">
+                      <p className="text-[9px] font-bold text-slate-500 uppercase mb-1">Brand Lift</p>
+                      <p className="text-lg font-bold text-emerald-400">+12%</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

@@ -101,9 +101,12 @@ const ApiDocsPage: React.FunctionComponent = () => {
                 <span className="text-[#9da4b9] text-sm">/</span>
                 <span className="text-white text-sm font-medium">Introduction</span>
               </div>
-              <h1 className="text-white text-[32px] font-bold leading-tight mb-4">Introduction</h1>
-              <p className="text-base leading-relaxed mb-4">
-                Welcome to the Noble Clarity Engine API. Our API allows you to access financial intelligence predictions, analyze business data, and integrate our analysis engine into your own applications.
+              <h1 className="text-white text-5xl font-extrabold leading-tight">
+                Financial Intelligence <span className="text-primary italic">API</span> <br />
+                & SDK Documentation
+              </h1>
+              <p className="mt-6 text-xl text-[#9da4b9] leading-relaxed font-light">
+                Comprehensive developer guides for the <strong>Financial Intelligence API</strong>. Integrate predictive modeling, cash flow forecasting, and AI-driven insights directly into your workflow.
               </p>
             </section>
 
@@ -288,8 +291,8 @@ const NavItem = ({ icon, label, active, onClick, customIconStyle }: any) => (
   <button
     onClick={onClick}
     className={`flex items-center gap-3 px-3 py-2 transition-all duration-200 rounded-lg w-full text-left group ${active
-        ? 'bg-[#0f3bbd] text-white shadow-lg shadow-blue-900/20'
-        : 'text-[#9da4b9] hover:text-white hover:bg-white/5'
+      ? 'bg-[#0f3bbd] text-white shadow-lg shadow-blue-900/20'
+      : 'text-[#9da4b9] hover:text-white hover:bg-white/5'
       }`}
   >
     <span

@@ -16,6 +16,7 @@ import {
   Rocket
 } from 'lucide-react';
 import { useUser, useNotifications } from '../contexts/NobleContext';
+import Navbar from './Navbar';
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '';
 
@@ -231,47 +232,19 @@ const PricingPage: React.FunctionComponent = () => {
 
   return (
     <div className="min-h-screen bg-[#0b0e14] text-white font-sans">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0b0e14]/80 backdrop-blur-md border-b border-white/5 px-4 md:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 bg-noble-blue rounded-xl flex items-center justify-center shadow-lg shadow-noble-blue/20">
-            <Globe className="w-6 h-6 text-white" />
-          </div>
-          <span className="font-['Montserrat'] font-extrabold text-xl tracking-tight hidden sm:block">NOBLE WORLD</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back to Home
-          </button>
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="bg-noble-blue hover:bg-noble-blue/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-noble-blue/20"
-          >
-            Get Started Now
-          </button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-40 pb-20 px-6 relative overflow-hidden">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-noble-blue/10 rounded-full blur-[120px] opacity-30 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-          <h1 className="text-4xl md:text-6xl font-extrabold font-['Montserrat'] leading-tight">
-            {isOnboarding ? (
-              <>
-                Choose your plan to <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-purple-400">Complete Registration</span>
-              </>
-            ) : (
-              <>
-                Plans for Every Stage of <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-noble-blue to-purple-400">Financial Growth</span>
-              </>
-            )}
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight animate-fade-in-up">
+            <span className="block text-primary text-sm uppercase tracking-[0.2em] font-bold mb-4">Noble Clarity Pricing & Value</span>
+            The Best <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Budgeting Apps</span> <br className="hidden md:block" />
+            for Small Business
           </h1>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Whether you're just starting out or managing a portfolio of companies,
-            Noble World gives you the insights to win.
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto animate-fade-in-up delay-100 mb-10">
+            Predictive financial intelligence should be accessible. Explore the <strong>best budgeting apps for small business</strong> and scaling startups, designed to give you crystalline clarity on your runway and ROI.
           </p>
 
           {/* Controls Container */}
@@ -385,6 +358,67 @@ const PricingPage: React.FunctionComponent = () => {
           initialBillingCycle={billingCycle}
         />
       )}
+
+      {/* FAQ Section */}
+      <section className="py-20 px-6 border-t border-slate-800 bg-[#0b0e14]">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold font-display text-white mb-12 text-center">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-colors">
+              <h3 className="text-lg font-bold text-white mb-3">What is the best budgeting app for small business startups?</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Noble Clarity Engine is widely considered one of the best budgeting apps for small business startups due to its integrated predictive analytics and AI-driven growth engine. Unlike basic trackers, it forecasts your runway and ROI.
+              </p>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-colors">
+              <h3 className="text-lg font-bold text-white mb-3">How does predictive analytics help small businesses?</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Predictive analytics allows small businesses to anticipate cash flow gaps, simulate growth scenarios, and make data-driven decisions that reduce risk and maximize ROI. It turns historical data into future foresight.
+              </p>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-colors">
+              <h3 className="text-lg font-bold text-white mb-3">Can I automate my financial health checkup?</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Yes, Noble Clarity Engine automates your financial health checkup by connecting directly to your data streams and providing real-time KPI tracking. You get an instant diagnosis of your business vitals 24/7.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Schema Markup for Google Feature Snippets */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the best budgeting app for small business startups?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Noble Clarity Engine is widely considered one of the best budgeting apps for small business startups due to its integrated predictive analytics and AI-driven growth engine."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does predictive analytics help small businesses?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Predictive analytics allows small businesses to anticipate cash flow gaps, simulate growth scenarios, and make data-driven decisions that reduce risk and maximize ROI."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I automate my financial health checkup?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Noble Clarity Engine automates your financial health checkup by connecting directly to your data streams and providing real-time KPI tracking."
+              }
+            }
+          ]
+        })}
+      </script>
 
       {/* Footer */}
       <footer className="py-12 px-8 border-t border-slate-900 bg-[#0b0e14]">

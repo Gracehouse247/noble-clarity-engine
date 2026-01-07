@@ -103,7 +103,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
 
   const netProfitMarginComparison = getComparison(kpis.netProfitMargin, benchmark.netProfitMargin);
   const currentRatioComparison = getComparison(kpis.currentRatio, benchmark.currentRatio);
-  const quickRatioComparison = getComparison(kpis.quickRatio, benchmark.quickRatio); // Added comparison
+  const quickRatioComparison = getComparison(kpis.quickRatio, benchmark.quickRatio);
   const roeComparison = getComparison(kpis.roe, benchmark.roe);
 
   const handleAnalyze = async () => {
@@ -117,23 +117,24 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
   const chartData = history.map(h => ({ name: h.period, Revenue: h.revenue, "Net Profit": calculateKPIs(h).netIncome }));
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="flex justify-between items-end">
+    <div className="space-y-6 md:space-y-8 animate-fade-in pb-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h3 className="text-2xl font-bold font-display text-white">Performance Overview: <span className="text-noble-blue">{profileName}</span></h3>
-          <p className="text-slate-500 text-sm">Targeting {data.industry} Industry Benchmarks | Period: {data.period}</p>
+          <h3 className="text-xl md:text-3xl font-black font-display text-white tracking-tight">Performance <span className="text-primary italic">Overview</span></h3>
+          <p className="text-slate-500 text-xs md:text-sm font-medium mt-1">Targeting {data.industry} Benchmarks | Period: <span className="text-slate-300 font-bold">{data.period}</span></p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
-          <span className="w-2 h-2 rounded-full bg-noble-blue animate-pulse" />
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI Core: {provider}</span>
+        <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl self-start md:self-auto">
+          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Engine: {provider}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col items-center justify-center text-center">
-          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Health Index</h4>
-          <div className="text-5xl font-extrabold text-white font-display mb-2">{safeScore}</div>
-          <p className={`text-sm font-bold ${healthScore.labelColor}`}>{healthScore.label}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-white/5 p-6 rounded-3xl flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+          <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Health Index</h4>
+          <div className="text-6xl font-black text-white font-display mb-2 drop-shadow-xl">{safeScore}</div>
+          <p className={`text-xs font-black uppercase tracking-widest ${healthScore.labelColor}`}>{healthScore.label}</p>
         </div>
         <KpiCard label="Net Profit Margin" value={`${kpis.netProfitMargin.toFixed(1)}%`} benchmarkValue={`${benchmark.netProfitMargin}%`} icon={TrendingUp} comparison={netProfitMarginComparison} />
         <KpiCard label="Current Ratio" value={kpis.currentRatio.toFixed(2)} benchmarkValue={benchmark.currentRatio.toFixed(2)} icon={ShieldCheck} comparison={currentRatioComparison} />
@@ -142,9 +143,9 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        <div className="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div className="xl:col-span-2 bg-slate-900 border border-white/5 rounded-3xl p-6 md:p-8">
           <h3 className="text-lg font-bold text-white mb-6">Financial Trends</h3>
-          <div className="h-[350px]">
+          <div className="h-[300px] md:h-[400px]">
             {history.length > 1 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
@@ -158,14 +159,14 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
                   <XAxis
                     dataKey="name"
                     stroke="#64748b"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     dy={10}
                   />
                   <YAxis
                     stroke="#64748b"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={v => `${symbol}${v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v}`}
@@ -177,109 +178,68 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
                       backdropFilter: 'blur(8px)',
                       border: '1px solid #1e293b',
                       borderRadius: '12px',
-                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                     }}
-                    itemStyle={{ color: '#f8fafc', fontSize: '12px', fontWeight: 600, padding: '2px 0' }}
-                    cursor={{ fill: '#1e293b', opacity: 0.4 }}
+                    itemStyle={{ color: '#f8fafc', fontSize: '12px', fontWeight: 600 }}
                   />
-                  <Legend
-                    verticalAlign="top"
-                    height={36}
-                    iconType="circle"
-                    wrapperStyle={{ fontSize: '12px', fontWeight: 500, color: '#94a3b8' }}
-                  />
-                  <Bar
-                    dataKey="Revenue"
-                    name="Revenue"
-                    fill="url(#colorRevenue)"
-                    radius={[6, 6, 0, 0]}
-                    barSize={40}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="Net Profit"
-                    name="Net Profit"
-                    stroke="#10b981"
-                    strokeWidth={3}
-                    dot={{ r: 4, fill: '#0b0e14', strokeWidth: 2, stroke: '#10b981' }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
-                  />
+                  <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
+                  <Bar dataKey="Revenue" fill="url(#colorRevenue)" radius={[6, 6, 0, 0]} barSize={30} />
+                  <Line type="monotone" dataKey="Net Profit" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#0b0e14', strokeWidth: 2, stroke: '#10b981' }} />
                 </ComposedChart>
               </ResponsiveContainer>
             ) : (
-              <EmptyState
-                title="No Trend Data Yet"
-                message="Save snapshots over multiple periods to visualize your business growth and profit trends."
-                className="bg-transparent border-none"
-              />
+              <EmptyState title="No Trend Data Yet" message="Save snapshots over multiple periods to visualize growth." className="bg-transparent border-none" />
             )}
           </div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2"><Sparkles size={16} className="text-noble-blue" /> Executive Summary</h3>
-            {analysisResult && <button onClick={() => setAnalysisResult(null)} className="text-xs text-slate-500 hover:text-white underline">Refresh</button>}
+
+        <div className="bg-slate-900 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2"><Sparkles size={16} className="text-primary" /> Intelligence</h3>
           </div>
           {!analysisResult ? (
-            <button onClick={handleAnalyze} disabled={isAnalyzing} className="flex-1 w-full border border-dashed border-slate-700 rounded-xl flex flex-col items-center justify-center gap-3 text-slate-500 hover:text-noble-blue hover:border-noble-blue transition-all">
-              {isAnalyzing ? <Loader2 className="w-8 h-8 animate-spin" /> : <Bot className="w-8 h-8" />}
-              <span className="font-bold text-sm">{isAnalyzing ? 'Consulting AI...' : 'Analyze Metrics'}</span>
+            <button onClick={handleAnalyze} disabled={isAnalyzing} className="flex-1 w-full border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-3 text-slate-500 hover:text-primary hover:border-primary transition-all p-8">
+              {isAnalyzing ? <Loader2 className="w-10 h-10 animate-spin" /> : <Bot className="w-10 h-10" />}
+              <span className="font-bold text-sm tracking-widest uppercase">{isAnalyzing ? 'Processing...' : 'Generate Insights'}</span>
             </button>
           ) : (
-            <div className="flex-1 overflow-y-auto text-sm text-slate-400 leading-relaxed whitespace-pre-wrap p-4 bg-slate-950 rounded-xl border border-slate-800">
+            <div className="flex-1 overflow-y-auto text-sm text-slate-400 leading-relaxed whitespace-pre-wrap p-5 bg-black/40 rounded-2xl border border-white/5 scrollbar-thin">
               {analysisResult}
             </div>
           )}
         </div>
       </div>
 
-      {/* Historical Data Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-slate-900 border border-white/5 rounded-3xl p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <History className="w-5 h-5 text-slate-500" /> Historical Records
           </h3>
           {history.length > 5 && (
-            <button
-              onClick={() => setShowAllHistory(!showAllHistory)}
-              className="text-xs font-bold text-noble-blue hover:text-white transition-colors border border-noble-blue/30 px-3 py-1.5 rounded-lg hover:bg-noble-blue/10"
-            >
+            <button onClick={() => setShowAllHistory(!showAllHistory)} className="text-[10px] font-black text-primary uppercase border border-primary/20 px-4 py-2 rounded-xl hover:bg-primary/5 transition-all">
               {showAllHistory ? 'Show Less' : `View All (${history.length})`}
             </button>
           )}
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-6 md:mx-0">
           <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-950/50 border-b border-slate-800">
+            <thead className="text-[10px] text-slate-500 uppercase tracking-widest bg-white/5">
               <tr>
-                <th className="px-6 py-3">Period</th>
-                <th className="px-6 py-3">Revenue</th>
-                <th className="px-6 py-3">Net Profit</th>
-                <th className="px-6 py-3">Margin</th>
-                <th className="px-6 py-3 text-right">Actions</th>
+                <th className="px-6 py-4">Period</th>
+                <th className="px-6 py-4">Revenue</th>
+                <th className="px-6 py-4">Net Profit</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-white/5">
               {(showAllHistory ? history.slice().reverse() : history.slice(-5).reverse()).map((h, i) => {
                 const hKpis = calculateKPIs(h);
                 return (
-                  <tr key={i} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 font-bold text-white">{h.period}</td>
-                    <td className="px-6 py-4 text-slate-300">{symbol}{h.revenue.toLocaleString()}</td>
-                    <td className={`px-6 py-4 font-bold ${hKpis.netIncome >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {symbol}{hKpis.netIncome.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${hKpis.netProfitMargin > 15 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400'}`}>
-                        {hKpis.netProfitMargin.toFixed(1)}%
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => onDeleteSnapshot(h.period || '')}
-                        className="text-slate-500 hover:text-rose-400 transition-colors p-2"
-                        title="Delete Snapshot"
-                      >
+                  <tr key={i} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-5 font-bold text-white">{h.period}</td>
+                    <td className="px-6 py-5 text-slate-300 font-mono italic">{symbol}{h.revenue.toLocaleString()}</td>
+                    <td className={`px-6 py-5 font-black ${hKpis.netIncome >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>{symbol}{hKpis.netIncome.toLocaleString()}</td>
+                    <td className="px-6 py-5 text-right">
+                      <button onClick={() => onDeleteSnapshot(h.period || '')} className="text-slate-600 hover:text-rose-500 p-2 transition-colors">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
@@ -288,14 +248,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({
               })}
               {history.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12">
-                    <EmptyState
-                      icon={History}
-                      title="No History Found"
-                      message="Snapshots allow you to track historical performance and benchmark against previous quarters."
-                      className="bg-transparent border-none min-h-[200px]"
-                    />
-                  </td>
+                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500 italic">No snapshots saved yet.</td>
                 </tr>
               )}
             </tbody>

@@ -1,31 +1,48 @@
-
 import * as React from 'react';
 import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import Dashboard from './components/Dashboard';
-import FeaturesPage from './components/FeaturesPage';
-import PricingPage from './components/PricingPage';
-import ApiDocsPage from './components/ApiDocsPage';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
-import OnboardingFlow from './components/OnboardingFlow';
-import StoryPage from './components/StoryPage';
-import SecurityPage from './components/SecurityPage';
-import PrivacyPage from './components/PrivacyPage';
-import TermsPage from './components/TermsPage';
-import SettingsPage from './components/SettingsPage';
-import ChangelogPage from './components/ChangelogPage';
-import ProtectedRoute from './components/ProtectedRoute';
 import { NobleProvider, useNotifications } from './contexts/NobleContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import SEOManager from './components/SEOManager';
+import SchemaMarkup from './components/SchemaMarkup';
 import { CheckCircle2, AlertCircle, Info, X as XIcon } from 'lucide-react';
+
+// Eager load Landing Page for immediate LCP
+import LandingPage from './components/LandingPage';
+
+// Lazy load all other routes for performance
+const Dashboard = React.lazy(() => import('./components/Dashboard'));
+const FeaturesPage = React.lazy(() => import('./components/FeaturesPage'));
+const PricingPage = React.lazy(() => import('./components/PricingPage'));
+const ApiDocsPage = React.lazy(() => import('./components/ApiDocsPage'));
+const LoginPage = React.lazy(() => import('./components/LoginPage'));
+const SignupPage = React.lazy(() => import('./components/SignupPage'));
+const OnboardingFlow = React.lazy(() => import('./components/OnboardingFlow'));
+const StoryPage = React.lazy(() => import('./components/StoryPage'));
+const SecurityPage = React.lazy(() => import('./components/SecurityPage'));
+const PrivacyPage = React.lazy(() => import('./components/PrivacyPage'));
+const TermsPage = React.lazy(() => import('./components/TermsPage'));
+const SettingsPage = React.lazy(() => import('./components/SettingsPage'));
+const ChangelogPage = React.lazy(() => import('./components/ChangelogPage'));
+const ProtectedRoute = React.lazy(() => import('./components/ProtectedRoute'));
+const AdminProtectedRoute = React.lazy(() => import('./components/AdminProtectedRoute'));
+const AdminDashboard = React.lazy(() => import('./components/admin/AdminDashboard'));
+const AdminLoginPage = React.lazy(() => import('./components/admin/AdminLoginPage'));
+const AdminElevation = React.lazy(() => import('./components/admin/AdminElevation'));
+const BlogArchive = React.lazy(() => import('./components/BlogArchive'));
+const BlogPost = React.lazy(() => import('./components/BlogPost'));
+const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
+
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center">
+    <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const ToastContainer: React.FunctionComponent = () => {
   const { notifications, markAsRead } = useNotifications();
   const [activeToasts, setActiveToasts] = React.useState<number[]>([]);
 
   React.useEffect(() => {
-    // Show only the most recent unread notification as a toast
     const unread = notifications.filter(n => !n.read);
     if (unread.length > 0) {
       const latest = unread[0];
@@ -75,35 +92,50 @@ const AppContent: React.FunctionComponent = () => {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/features" element={<FeaturesPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/api-docs" element={<ApiDocsPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/onboarding" element={
-          <ProtectedRoute>
-            <OnboardingFlow />
-          </ProtectedRoute>
-        } />
-        <Route path="/story" element={<StoryPage />} />
-        <Route path="/security" element={<SecurityPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/changelog" element={<ChangelogPage />} />
-        <Route path="/dashboard/*" element={
-          <ProtectedRoute>
-            <Dashboard onLogout={handleLogout} />
-          </ProtectedRoute>
-        } />
-        <Route path="/settings" element={
-          <ProtectedRoute>
-            <SettingsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <SEOManager />
+      <SchemaMarkup />
+      <React.Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/pricing" element={<Navigate to="/signup" replace />} />
+          <Route path="/api-docs" element={<ApiDocsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin/elevate" element={<AdminElevation />} />
+          <Route path="/blog" element={<BlogArchive />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/onboarding" element={
+            <ProtectedRoute>
+              <OnboardingFlow />
+            </ProtectedRoute>
+          } />
+          <Route path="/story" element={<StoryPage />} />
+          <Route path="/security" element={<SecurityPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/changelog" element={<ChangelogPage />} />
+          <Route path="/dashboard/*" element={
+            <ProtectedRoute>
+              <Dashboard onLogout={handleLogout} />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/*" element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } />
+          {/* 404 Monitoring & Redirection */}
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
+        </Routes>
+      </React.Suspense>
       <ToastContainer />
     </>
   );

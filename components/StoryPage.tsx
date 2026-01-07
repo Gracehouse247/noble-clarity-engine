@@ -2,6 +2,8 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ImageSEO from './ImageSEO';
+import Navbar from './Navbar';
 // Note: Some icons might be replaced by material symbols if not available in lucide-react, 
 // but sticking to the request's Material Symbols usage via class names is safer for the "copy-paste" fidelity.
 // However, the previous file used Lucide. I will use the HTML's Material Symbols logic but might need to ensure the font is loaded. 
@@ -52,37 +54,7 @@ const StoryPage: React.FunctionComponent = () => {
 
   return (
     <div className="bg-[#f6f6f8] dark:bg-[#101522] text-[#111318] dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
-      {/* Top Navigation */}
-      <header className="sticky top-0 z-50 glass-panel border-b-0 bg-[#1c1e2740] backdrop-blur-md border border-white/10">
-        <div className="px-4 md:px-10 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4 text-white cursor-pointer" onClick={() => handleNav('/')}>
-            <div className="size-8 text-[#0f3bbd] flex items-center justify-center">
-              <span className="material-symbols-outlined text-[32px]">diamond</span>
-            </div>
-            <h2 className="text-white text-lg font-bold leading-tight tracking-tight">Noble Clarity Engine</h2>
-          </div>
-          <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
-            <div className="flex items-center gap-9">
-              <button onClick={() => handleNav('/features')} className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Platform</button>
-              <button onClick={() => handleNav('/story')} className="text-white text-sm font-medium">Our Story</button>
-              <button onClick={() => handleNav('/pricing')} className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Pricing</button>
-              <button onClick={() => handleNav('/api-docs')} className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Resources</button>
-            </div>
-            <div className="flex gap-3">
-              <button onClick={() => user ? handleNav('/dashboard') : handleNav('/login')} className="flex h-9 px-4 items-center justify-center rounded-lg bg-[#1c1e27] border border-gray-700 text-white text-sm font-bold hover:bg-gray-800 transition-all">
-                {user ? "Dashboard" : "Log In"}
-              </button>
-              <button onClick={() => handleNav('/pricing')} className="flex h-9 px-4 items-center justify-center rounded-lg bg-[#0f3bbd] text-white text-sm font-bold hover:bg-blue-700 transition-all">
-                Get Started
-              </button>
-            </div>
-          </div>
-          {/* Mobile Menu Icon */}
-          <div className="md:hidden text-white">
-            <span className="material-symbols-outlined">menu</span>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="flex-1 flex flex-col items-center w-full">
         {/* Hero Section */}
@@ -97,14 +69,14 @@ const StoryPage: React.FunctionComponent = () => {
           <div className="relative z-10 container mx-auto px-6 flex flex-col items-center text-center gap-8 max-w-4xl pt-20">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-[#38bdf8] mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] animate-pulse"></span>
-              Introducing Noble Clarity Engine 2.0
+              The Future of Predictive Business Modeling
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.1] drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-8 tracking-tighter">
               From Financial Noise to <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-gray-400">Absolute Clarity</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0f3bbd] to-blue-400">Absolute Clarity</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl font-light leading-relaxed">
-              Experience the transition from operational chaos to predictive financial intelligence. We turn the cluttered desk of the traditional CFO into a dashboard of pure signal.
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed font-light mb-12">
+              At Noble Clarity Engine, we bridge the gap between complex <strong>predictive business modeling</strong> and actionable growth. Our mission is to empower every founder with the same financial firepower as a Fortune 500 enterprise.
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 w-full">
               {/* Visual representation of transition */}
@@ -112,7 +84,7 @@ const StoryPage: React.FunctionComponent = () => {
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center group-hover:bg-black/40 transition-all duration-700">
                   <span className="material-symbols-outlined text-6xl text-white/20 group-hover:text-white/80 transition-all duration-500 scale-95 group-hover:scale-110">play_circle</span>
                 </div>
-                <img alt="Futuristic clean financial data visualization interface" className="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVy3uGuPCL56cvRDwZFw_tE_pjsV_-lBBBPXQ0Ag4banaUR9mRyZQ25-9auC1NNvsz6l2hoGaB1FTvuRPG4j4mOyZe2aodZe7YlicnqjUe3JKthpiylvwdMiy36Bl_hX3R-RjGn9Yl_qQFJWa9L8rX_o39ZiHvW-nAUYrbhGudJOFSYB5lZElCKDTobGla85TQm0C_uPlpEnUfzT3revjmq74Fv0y_XJ1c0HKbaBYewwBP_vZc9TyftuMeub4vggdLD8hKVo27-Cw" />
+                <ImageSEO altText="Futuristic clean financial data visualization interface" className="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVy3uGuPCL56cvRDwZFw_tE_pjsV_-lBBBPXQ0Ag4banaUR9mRyZQ25-9auC1NNvsz6l2hoGaB1FTvuRPG4j4mOyZe2aodZe7YlicnqjUe3JKthpiylvwdMiy36Bl_hX3R-RjGn9Yl_qQFJWa9L8rX_o39ZiHvW-nAUYrbhGudJOFSYB5lZElCKDTobGla85TQm0C_uPlpEnUfzT3revjmq74Fv0y_XJ1c0HKbaBYewwBP_vZc9TyftuMeub4vggdLD8hKVo27-Cw" />
               </div>
               <p className="text-xs text-gray-500 mt-2 uppercase tracking-widest">Watch the transformation</p>
             </div>
@@ -187,7 +159,7 @@ const StoryPage: React.FunctionComponent = () => {
 
               {/* Diagram Visual */}
               <div className="w-full md:w-1/2 relative h-64 md:h-80 bg-[#1c1e27] rounded-lg overflow-hidden border border-gray-800 flex items-center justify-center">
-                <img alt="Abstract data flow diagram glowing blue" className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLV7IbliAABM5CC_gIFCGT-2iHDOSkqlhlngruFhEHphbhlcU3QLB46m0N9WuyuZkrX5fmmYS6QCYu3LYKFq7NCDtFOTHnGR2gqXZGIZz8E36tLa2FR_AYKqydOVEo7ivf6OCMbmUzKgRF-oJQdbpRNCpjrTEfzSihRAur5hTW3YFU27oUFXnQKKl6vjKqGMW7mOXzd9j-KFhny5E_DuzafzsQ8Jk4GwudVriEoAJlugl-nh-2fC4Zhirnf7siPK_Y7kSmUxeSbNs" />
+                <ImageSEO altText="Abstract data flow diagram glowing blue" className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLV7IbliAABM5CC_gIFCGT-2iHDOSkqlhlngruFhEHphbhlcU3QLB46m0N9WuyuZkrX5fmmYS6QCYu3LYKFq7NCDtFOTHnGR2gqXZGIZz8E36tLa2FR_AYKqydOVEo7ivf6OCMbmUzKgRF-oJQdbpRNCpjrTEfzSihRAur5hTW3YFU27oUFXnQKKl6vjKqGMW7mOXzd9j-KFhny5E_DuzafzsQ8Jk4GwudVriEoAJlugl-nh-2fC4Zhirnf7siPK_Y7kSmUxeSbNs" />
                 {/* Simplified Overlay Diagram using Tailwind & Icons */}
                 <div className="relative z-10 flex items-center gap-4 text-white">
                   <div className="flex flex-col items-center gap-2">
@@ -337,65 +309,7 @@ const StoryPage: React.FunctionComponent = () => {
           </div>
         </section>
 
-        {/* Meet the Architects */}
-        <section className="w-full py-24 bg-[#101522]">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center tracking-tight">Meet the Architects</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Architect 1 */}
-              <div className="group relative h-[400px] rounded-xl overflow-hidden bg-[#1c1e27] border border-gray-800 cursor-pointer">
-                <img alt="Professional headshot of a man in a suit" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvWN7yQesqFYCLjrg3xRGntnxoyr5dUfiRRK8rA4OFr3n3CkWInl8HrGxUaV9BKRA5SnOyA9Dgu_BLkgwsyEOKY2cc5uMA6BQ9-Kapisv8i_qkB1Lm-Xiezdve5vofQQBOk3WtAuKVhGW6LYOtxHTFj6ixmJ4fgifEioOjClKjh0Qcf66SqVdAaG_1D4U-Qkk-xvHHKyKb0tzEuD87idv4MNjFsaghcqfsv4WuAu1hB3xOypm1CFGsgCcuLO1HrAOZ8M25pXEi-14" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-xl font-bold text-white">James Sterling</h3>
-                  <p className="text-[#0f3bbd] font-medium text-sm mb-3">Chief Strategy Officer</p>
-                  <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-3">
-                    Former Wall Street analyst turned fintech visionary. James ensures every algorithm is rooted in sound economic theory.
-                  </p>
-                  <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                    <a className="inline-flex items-center justify-center w-8 h-8 rounded bg-blue-600 text-white hover:bg-blue-500" href="#">
-                      <span className="text-xs font-bold">in</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/* Architect 2 */}
-              <div className="group relative h-[400px] rounded-xl overflow-hidden bg-[#1c1e27] border border-gray-800 cursor-pointer">
-                <img alt="Professional headshot of a woman executive" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPr2A8D8sTnU-712WyALFTnphZyyHDgpU-KvXuSlxQnagBdxVxal_3XmJU2wpQggFjZ9c8KMjny2fwSBNctxKDCB1EnFwTZfrOfkrOBYPUblsbVxGruVoB18ZNRHJpv8_CB320Ui4nxS2cRtuwAIXcddgW82TyE2A5T7K_i2Aua_0jNbX9f2TDrqBBokciG4y1RwQs63pI1x_LQovWT6dmAO3aXql48qjqXbflQvMpSjmI0JKKy7LEFw4n-nadlAi6rpEXKJiNOWo" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-xl font-bold text-white">Elena Corves</h3>
-                  <p className="text-[#a855f7] font-medium text-sm mb-3">Head of AI Engineering</p>
-                  <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-3">
-                    PhD in Computational Finance. Elena bridges the gap between raw machine learning capabilities and actionable business insights.
-                  </p>
-                  <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                    <a className="inline-flex items-center justify-center w-8 h-8 rounded bg-blue-600 text-white hover:bg-blue-500" href="#">
-                      <span className="text-xs font-bold">in</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/* Architect 3 */}
-              <div className="group relative h-[400px] rounded-xl overflow-hidden bg-[#1c1e27] border border-gray-800 cursor-pointer">
-                <img alt="Professional headshot of a man in casual business attire" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCluzCGGom9EeVtbp390-BcoiwDvYbtbLRSkE7tbdAqPXkRrBf0XD15u6lSHdmu5dVlj68YXHEc1HtXjFmOeXROkzPlDD6M_dxsP4VZAXJj44OzhTXhZrWNNdQ1psmjydNzQq03ikZve-Wm0Ixa-33tz8BSU6hrWjBofkCIXZq7BetTynyQuAyHbSPeEvKp8WysA0Tsn0pCeqf3E_UsoVLdIOCYZph8YKYWPWyTyICIP4bDi-ulOPLpqQ4dgygi7aH0oTkCR26kJh0" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-xl font-bold text-white">David Chen</h3>
-                  <p className="text-[#38bdf8] font-medium text-sm mb-3">VP of Product</p>
-                  <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-3">
-                    Product design obsessed. David believes enterprise tools should feel as intuitive as consumer apps, without sacrificing power.
-                  </p>
-                  <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                    <a className="inline-flex items-center justify-center w-8 h-8 rounded bg-blue-600 text-white hover:bg-blue-500" href="#">
-                      <span className="text-xs font-bold">in</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+
 
         {/* Tech Stack Ticker */}
         <section className="w-full py-12 bg-black border-y border-gray-900">

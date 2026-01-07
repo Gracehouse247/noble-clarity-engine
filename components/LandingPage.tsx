@@ -1,9 +1,14 @@
 
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../contexts/NobleContext';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
+import ImageSEO from './ImageSEO';
+import Navbar from './Navbar';
+import { db } from '../firebaseConfig';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { Review } from '../types';
 
 const LandingPage: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -32,7 +37,45 @@ const LandingPage: React.FunctionComponent = () => {
     }
   };
 
+  const [dynamicReviews, setDynamicReviews] = React.useState<Review[]>([]);
+  const [loadingReviews, setLoadingReviews] = React.useState(true);
+
   React.useEffect(() => {
+    const fetchPublishedReviews = async () => {
+      try {
+        const feedCol = collection(db, 'feedback');
+        const q = query(feedCol, where('status', '==', 'published'), limit(6));
+        const snapshot = await getDocs(q);
+        const list = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as any[];
+
+        // Map fields to Review type
+        const mappedList: Review[] = list.map(item => ({
+          id: item.id,
+          authorName: item.userName,
+          authorRole: item.authorRole || 'Business Founder',
+          authorAvatar: item.authorAvatar || `https://ui-avatars.com/api/?name=${item.userName}`,
+          rating: item.rating,
+          comment: item.comment,
+          date: item.date,
+          status: item.status,
+          sentiment: item.sentiment,
+          reply: item.reply,
+          replyDate: item.replyDate
+        }));
+
+        setDynamicReviews(mappedList);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+
+    fetchPublishedReviews();
+
     const params = new URLSearchParams(window.location.search);
     if (params.get('signup') === 'true') {
       setAuthMode('signup');
@@ -45,41 +88,7 @@ const LandingPage: React.FunctionComponent = () => {
   return (
     <div className="bg-background-dark text-slate-200 font-display overflow-x-hidden selection:bg-primary/30 selection:text-white min-h-screen flex flex-col">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-50 w-full glass-panel border-b-0 border-b-[#283339]/50 transition-all duration-300">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-              <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary/20">
-                <span className="material-symbols-outlined text-[20px]">diamond</span>
-              </div>
-              <span className="text-white text-lg font-bold tracking-tight">Noble Clarity</span>
-            </div>
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
-              <button onClick={() => navigate('/features')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Product</button>
-              <button onClick={() => navigate('/story')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Solutions</button>
-              <button onClick={() => navigate('/api-docs')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Resources</button>
-              <button onClick={() => navigate('/pricing')} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Pricing</button>
-            </nav>
-            {/* Actions */}
-            <div className="flex items-center gap-3">
-              {user ? (
-                <button onClick={() => navigate('/dashboard')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
-                  <span>Dashboard</span>
-                </button>
-              ) : (
-                <>
-                  <button onClick={() => navigate('/login')} className="hidden sm:flex text-slate-300 hover:text-white text-sm font-medium px-3 py-2 transition-colors">Log In</button>
-                  <button onClick={() => navigate('/pricing')} className="flex items-center justify-center rounded-lg h-9 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40">
-                    <span>Get Started Now</span>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="flex flex-col w-full relative flex-grow">
         {/* Hero Section */}
@@ -94,17 +103,17 @@ const LandingPage: React.FunctionComponent = () => {
               <div className="flex flex-col gap-6 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit">
                   <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-                  <span className="text-xs font-medium text-primary uppercase tracking-wider">EMPOWERING NEXT-GEN FOUNDERS</span>
+                  <span className="text-xs font-medium text-primary tracking-wider">Financial Intelligence Platform</span>
                 </div>
                 <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight animate-fade-in-up delay-100">
                   Financial <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Intelligence</span>,<br /> Refined.
                 </h1>
                 <p className="text-lg text-slate-400 leading-relaxed max-w-lg animate-fade-in-up delay-200">
-                  Predictive clarity for the modern enterprise. Unlock the power of AI-driven financial analysis with crystalline precision.
+                  Noble Clarity Engine: The most powerful <strong>financial data analytics platform</strong> for modern founders. Unlock predictive business insights with crystalline precision.
                 </p>
                 <div className="flex flex-wrap gap-4 pt-4 animate-fade-in-up delay-300">
-                  <button onClick={() => user ? navigate('/dashboard') : navigate('/pricing')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/25 hover:scale-105 hover:shadow-primary/40">
-                    <span>Get Started Now</span>
+                  <button onClick={() => user ? navigate('/dashboard') : navigate('/signup')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/25 hover:scale-105 hover:shadow-primary/40">
+                    <span>Start for Free Now</span>
                     <span className="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
                   </button>
                   <button onClick={() => navigate('/features')} className="flex items-center justify-center rounded-lg h-12 px-6 bg-transparent border border-white/20 hover:bg-white/5 text-white text-base font-bold transition-all hover:scale-105">
@@ -207,9 +216,9 @@ const LandingPage: React.FunctionComponent = () => {
                   'opuforty.png'
                 ].map((logo, index) => (
                   <div key={index} className="carousel-item">
-                    <img
+                    <ImageSEO
                       src={`/trusted/${logo}`}
-                      alt={`Partner Logo ${index + 1}`}
+                      alt={`Trusted Partner: ${logo.split('.')[0]}`}
                     />
                   </div>
                 ))}
@@ -221,9 +230,9 @@ const LandingPage: React.FunctionComponent = () => {
                   'opuforty.png'
                 ].map((logo, index) => (
                   <div key={`dup1-${index}`} className="carousel-item">
-                    <img
+                    <ImageSEO
                       src={`/trusted/${logo}`}
-                      alt={`Partner Logo ${index + 1}-dup`}
+                      alt={`Noble Clarity Partner: ${logo.split('.')[0]}`}
                     />
                   </div>
                 ))}
@@ -238,9 +247,8 @@ const LandingPage: React.FunctionComponent = () => {
                   'zidanuel.png'
                 ].map((logo, index) => (
                   <div key={index} className="carousel-item">
-                    <img
+                    <ImageSEO
                       src={`/trusted/${logo}`}
-                      alt={`Partner Logo ${index + 17}`}
                     />
                   </div>
                 ))}
@@ -515,42 +523,79 @@ const LandingPage: React.FunctionComponent = () => {
           <div className="absolute top-0 right-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-white mb-12 text-center">Growth Stories</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Testimonial 1 */}
-              <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative">
-                <div className="absolute top-8 right-8 text-primary opacity-20">
-                  <span className="material-symbols-outlined text-6xl">format_quote</span>
-                </div>
-                <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"Noble Clarity Engine gave us the confidence to scale our ad spend by 400%. The predictive models were accurate within a 2% margin of error."</p>
-                <div className="flex items-center gap-4 mt-auto">
-                  <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqUH46wT5oOXwv1HncED8rYFJJ3Jqj871BycfLUW7C5GxoV8b9VBPJQfREdEzeSgyt_OS2H1nh9TxvbBQzO0Ky1UHhP1m0f19Cm5xR3z8MafT10XJ2a87N31F5w1YuZd_zhwEi7J03rOUAB1vpSiyhEj2T8akZ1BuxPp8MnSXBo3_jBnDf__BxFNwUtu7AmEBRELXKZp4My2nLPNYBtw5q47srWlwE5pDU9bXnvdQsZ4jc6ZmCIEFmM3K4UsGmhImt-S0eDDfRV4c')" }}></div>
-                  <div>
-                    <h5 className="text-white font-bold text-sm">Elena Rodriguez</h5>
-                    <p className="text-xs text-slate-500">CFO, TechFlow Inc.</p>
+            <h2 className="text-3xl font-bold text-white mb-12 text-center font-display tracking-tight">Crystalline <span className="text-primary">Social Proof</span></h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Fallback Static Testimonial 1 if no dynamic reviews */}
+              {dynamicReviews.length === 0 && !loadingReviews && (
+                <>
+                  <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative group hover:border-primary/20 transition-all">
+                    <div className="absolute top-8 right-8 text-primary opacity-20 group-hover:opacity-40 transition-opacity">
+                      <span className="material-symbols-outlined text-6xl">format_quote</span>
+                    </div>
+                    <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"Noble Clarity Engine gave us the confidence to scale our ad spend by 400%. The predictive models were accurate within a 2% margin of error."</p>
+                    <div className="flex items-center gap-4 mt-auto">
+                      <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqUH46wT5oOXwv1HncED8rYFJJ3Jqj871BycfLUW7C5GxoV8b9VBPJQfREdEzeSgyt_OS2H1nh9TxvbBQzO0Ky1UHhP1m0f19Cm5xR3z8MafT10XJ2a87N31F5w1YuZd_zhwEi7J03rOUAB1vpSiyhEj2T8akZ1BuxPp8MnSXBo3_jBnDf__BxFNwUtu7AmEBRELXKZp4My2nLPNYBtw5q47srWlwE5pDU9bXnvdQsZ4jc6ZmCIEFmM3K4UsGmhImt-S0eDDfRV4c')" }}></div>
+                      <div>
+                        <h5 className="text-white font-bold text-sm">Elena Rodriguez</h5>
+                        <p className="text-xs text-slate-500">CFO, TechFlow Inc.</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="ml-auto bg-green-500/10 border border-green-500/20 px-3 py-1 rounded">
-                    <span className="text-green-400 text-xs font-bold">+30% Efficiency</span>
+                  <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative group hover:border-primary/20 transition-all">
+                    <div className="absolute top-8 right-8 text-primary opacity-20 group-hover:opacity-40 transition-opacity">
+                      <span className="material-symbols-outlined text-6xl">format_quote</span>
+                    </div>
+                    <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"The unified dashboard replaced five different tools we were using. It's not just about data visualization; it's about actual financial intelligence."</p>
+                    <div className="flex items-center gap-4 mt-auto">
+                      <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6wMtZWK51bmsIEhCDvt83t9XYERNsqYsXUENNgsZNWw5eOHMX74sHjL5exqxHssXQDxtokaQgU8GZuV-4k41LwtkN58KeYA9urtTL2bQd3bhtFXSj6ieX5dmSaPvJXtHFminnh0YKEIo1OjWLbWPD3H-1WNHMlZ5CJs-Y2yOjoFW8EklKit1nMKYOncMst_71irtD76O4dGZMwXsbUw7p5LwEoFkFLO-74NqbBMQnIEuXOXlzs6XfYIcQwaOu5tV1NFyln0LF2Vo')" }}></div>
+                      <div>
+                        <h5 className="text-white font-bold text-sm">David Chen</h5>
+                        <p className="text-xs text-slate-500">Founder, ScaleUp</p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Dynamic Reviews */}
+              {dynamicReviews.map((review) => (
+                <div key={review.id} className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative border border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className={`material-symbols-outlined text-sm ${i < review.rating ? 'text-amber-400 fill-current' : 'text-slate-700'}`}>star</span>
+                    ))}
+                  </div>
+
+                  <p className="text-base text-slate-300 leading-relaxed italic z-10 relative">"{review.comment}"</p>
+
+                  {review.reply && (
+                    <div className="mt-2 p-4 bg-primary/5 border border-primary/10 rounded-xl relative">
+                      <span className="absolute -top-2 left-4 px-2 bg-background-dark text-[10px] font-black text-primary uppercase tracking-widest">Admin Response</span>
+                      <p className="text-xs text-slate-400 leading-relaxed font-medium">"{review.reply}"</p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-4 mt-auto pt-4 border-t border-white/5">
+                    <img src={review.authorAvatar} alt={review.authorName} className="w-10 h-10 rounded-full border border-white/10" />
+                    <div>
+                      <h5 className="text-white font-bold text-xs">{review.authorName}</h5>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider">{review.authorRole}</p>
+                    </div>
+                    <div className="ml-auto">
+                      <span className="text-[9px] text-slate-600 font-mono italic">{review.date}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/* Testimonial 2 */}
-              <div className="glass-card p-8 rounded-2xl flex flex-col gap-6 relative">
-                <div className="absolute top-8 right-8 text-primary opacity-20">
-                  <span className="material-symbols-outlined text-6xl">format_quote</span>
+              ))}
+
+              {loadingReviews && (
+                <div className="col-span-full py-20 flex flex-col items-center justify-center gap-4 opacity-50">
+                  <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Syncing Platform Experiences...</p>
                 </div>
-                <p className="text-lg text-slate-300 leading-relaxed italic z-10 relative">"The unified dashboard replaced five different tools we were using. It's not just about data visualization; it's about actual financial intelligence."</p>
-                <div className="flex items-center gap-4 mt-auto">
-                  <div className="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary/50" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6wMtZWK51bmsIEhCDvt83t9XYERNsqYsXUENNgsZNWw5eOHMX74sHjL5exqxHssXQDxtokaQgU8GZuV-4k41LwtkN58KeYA9urtTL2bQd3bhtFXSj6ieX5dmSaPvJXtHFminnh0YKEIo1OjWLbWPD3H-1WNHMlZ5CJs-Y2yOjoFW8EklKit1nMKYOncMst_71irtD76O4dGZMwXsbUw7p5LwEoFkFLO-74NqbBMQnIEuXOXlzs6XfYIcQwaOu5tV1NFyln0LF2Vo')" }}></div>
-                  <div>
-                    <h5 className="text-white font-bold text-sm">David Chen</h5>
-                    <p className="text-xs text-slate-500">Founder, ScaleUp</p>
-                  </div>
-                  <div className="ml-auto bg-green-500/10 border border-green-500/20 px-3 py-1 rounded">
-                    <span className="text-green-400 text-xs font-bold">3x Revenue</span>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </section>
@@ -572,13 +617,13 @@ const LandingPage: React.FunctionComponent = () => {
                   <div className="flex flex-col gap-3">
                     <span className="text-white font-bold">Product</span>
                     <button onClick={() => navigate('/features')} className="text-slate-500 hover:text-primary transition-colors text-left">Features</button>
-                    <button onClick={() => navigate('/pricing')} className="text-slate-500 hover:text-primary transition-colors text-left">Pricing</button>
+                    <button onClick={() => navigate('/signup')} className="text-slate-500 hover:text-primary transition-colors text-left">Start Free</button>
                     <button onClick={() => navigate('/changelog')} className="text-slate-500 hover:text-primary transition-colors text-left">Changelog</button>
                   </div>
                   <div className="flex flex-col gap-3">
                     <span className="text-white font-bold">Company</span>
                     <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/about-us/" target="_blank" rel="noopener noreferrer">About</a>
-                    <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/book-consultation/" target="_blank" rel="noopener noreferrer">Consult Us</a>
+                    <Link to="/blog" className="text-slate-500 hover:text-primary transition-colors text-left">Insights</Link>
                     <a className="text-slate-500 hover:text-primary transition-colors" href="https://noblesworld.com.ng/contact-us/" target="_blank" rel="noopener noreferrer">Contact</a>
                   </div>
                   <div className="flex flex-col gap-3">

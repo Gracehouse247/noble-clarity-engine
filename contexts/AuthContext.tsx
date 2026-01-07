@@ -14,6 +14,7 @@ interface AuthContextType {
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
     sendPasswordResetEmail: (email: string) => Promise<void>;
+    updateUserPassword: (password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -61,8 +62,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const updateUserPassword = async (password: string) => {
+        if (!user) throw new Error("No user logged in");
+        try {
+            const { updatePassword: firebaseUpdatePassword } = await import('firebase/auth');
+            await firebaseUpdatePassword(user, password);
+        } catch (error) {
+            console.error("Error updating password", error);
+            throw error;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, signInWithGoogle, sendPasswordResetEmail, logout }}>
+        <AuthContext.Provider value={{ user, loading, signInWithGoogle, sendPasswordResetEmail, updateUserPassword, logout }}>
             {!loading && children}
         </AuthContext.Provider>
     );

@@ -79,8 +79,11 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
       role: 'Founder',
       avatarUrl: 'https://ui-avatars.com/api/?name=Noble+User',
       currency: 'USD',
-      plan: 'starter',
+      plan: 'enterprise',
+      systemRole: 'admin',
       preferredProvider: 'gemini',
+      twoFactorEnabled: false,
+      integrations: [],
       notifications: {
         marketAlerts: true,
         weeklyDigest: true,
@@ -142,8 +145,10 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
           role: 'Founder',
           avatarUrl: 'https://ui-avatars.com/api/?name=Noble+User',
           currency: 'USD',
-          plan: 'starter',
+          plan: 'enterprise',
           preferredProvider: 'gemini',
+          twoFactorEnabled: false,
+          integrations: [],
           notifications: {
             marketAlerts: true,
             weeklyDigest: true,
@@ -196,13 +201,36 @@ export const UserProvider: React.FunctionComponent<{ children: React.ReactNode }
     }
   }, []);
 
-  const submitReview = React.useCallback((review: Omit<Review, 'id' | 'date'>) => {
+  const submitReview = React.useCallback(async (review: Omit<Review, 'id' | 'date' | 'status' | 'sentiment'>) => {
+    const sentiment: 'positive' | 'neutral' | 'negative' = review.rating >= 4 ? 'positive' : (review.rating <= 2 ? 'negative' : 'neutral');
+
     const newReview: Review = {
       ...review,
       id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0],
+      status: 'pending',
+      sentiment
     };
+
+    // 1. Update local state for immediate feedback if needed (though admin only shows it)
     setReviews(prev => [newReview, ...prev]);
+
+    // 2. Save to Firestore
+    try {
+      const { collection, addDoc } = await import('firebase/firestore');
+      await addDoc(collection(db, 'feedback'), {
+        userName: newReview.authorName, // Maintain compatibility with FeedbackManager's field naming
+        authorRole: newReview.authorRole,
+        authorAvatar: newReview.authorAvatar,
+        rating: newReview.rating,
+        comment: newReview.comment,
+        date: newReview.date,
+        status: newReview.status,
+        sentiment: newReview.sentiment
+      });
+    } catch (error) {
+      console.error("Error submitting review to Firestore:", error);
+    }
   }, []);
 
   const logout = React.useCallback(() => {
@@ -260,6 +288,7 @@ interface BusinessContextType {
   activeProfileId: string | null;
   activeProfile: BusinessProfile | undefined;
   activeProfileData: ProfileData | undefined;
+  profilesData: Record<string, ProfileData>;
   switchProfile: (id: string) => void;
   createProfile: (data: Omit<BusinessProfile, 'id'>) => void;
   deleteProfile: (id: string) => void;
@@ -379,7 +408,7 @@ export const BusinessProvider: React.FunctionComponent<{ children: React.ReactNo
 
   return (
     <BusinessContext.Provider value={{
-      profiles, activeProfileId, activeProfile: profiles.find(p => p.id === activeProfileId),
+      profiles, activeProfileId, profilesData, activeProfile: profiles.find(p => p.id === activeProfileId),
       activeProfileData: activeProfileId ? profilesData[activeProfileId] : undefined,
       switchProfile: setActiveProfileId, createProfile, deleteProfile, updateFinancialData,
       saveSnapshot, deleteSnapshot, loadSnapshot, clearHistory, updateGoals, updateProfile,

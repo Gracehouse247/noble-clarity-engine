@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { X, Star, Send, ShieldCheck, Sparkles } from 'lucide-react';
 import { useUser } from '../contexts/NobleContext';
+import ImageSEO from './ImageSEO';
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ const ReviewModal: React.FunctionComponent<ReviewModalProps> = ({ isOpen, onClos
         <form onSubmit={handleSubmit} className="p-8 space-y-8">
           {/* User Profile Summary */}
           <div className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
-            <img src={userProfile.avatarUrl} alt="" className="w-12 h-12 rounded-full border border-slate-600" />
+            <ImageSEO src={userProfile.avatarUrl} altText={`${userProfile.name} profile`} className="w-12 h-12 rounded-full border border-slate-600" />
             <div>
               <p className="text-sm font-bold text-white leading-none">{userProfile.name}</p>
               <p className="text-[11px] text-slate-400 mt-1 uppercase tracking-wider">{userProfile.role}</p>
@@ -78,8 +79,8 @@ const ReviewModal: React.FunctionComponent<ReviewModalProps> = ({ isOpen, onClos
                   onClick={() => setRating(s)}
                   className="transition-transform active:scale-90"
                 >
-                  <Star 
-                    className={`w-8 h-8 ${ (hoveredRating || rating) >= s ? 'text-amber-400 fill-current' : 'text-slate-700' }`} 
+                  <Star
+                    className={`w-8 h-8 ${(hoveredRating || rating) >= s ? 'text-amber-400 fill-current' : 'text-slate-700'}`}
                   />
                 </button>
               ))}
@@ -104,8 +105,8 @@ const ReviewModal: React.FunctionComponent<ReviewModalProps> = ({ isOpen, onClos
           </div>
 
           <div className="flex items-center gap-2 text-emerald-400/60">
-             <ShieldCheck className="w-4 h-4" />
-             <span className="text-[10px] font-medium uppercase tracking-wider">Authenticated Review Submission</span>
+            <ShieldCheck className="w-4 h-4" />
+            <span className="text-[10px] font-medium uppercase tracking-wider">Authenticated Review Submission</span>
           </div>
 
           <button
