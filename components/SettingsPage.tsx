@@ -1,6 +1,6 @@
 ﻿
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications, useUser, useBusiness } from '../contexts/NobleContext';
 import {
@@ -39,8 +39,10 @@ import {
     Share2,
     Mail,
     ListTodo,
-    X
+    X,
+    Cpu
 } from 'lucide-react';
+import { AIProvider } from '../types';
 import { storage } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { initiateOAuth, openPlaidLink, syncStripeData, connectGoogleSheets, syncHubSpotData, syncMetaAdsData, syncGoogleAdsData, syncFidelityData, syncBloombergData, syncXeroData, initiateOAuthConnection, syncTikTokAdsData } from '../services/ecosystem';
@@ -237,9 +239,12 @@ const SettingsPage: React.FC = () => {
     const { wipeAppData, resetProfile, activeProfile, activeProfileData, updateFinancialData } = useBusiness();
     const { addNotification, clearAllNotifications } = useNotifications();
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Tabs
-    const [activeTab, setActiveTab] = useState<'account' | 'ai' | 'billing' | 'notifications' | 'security' | 'integrations' | 'data'>('account');
+    const [activeTab, setActiveTab] = useState<'account' | 'ai' | 'billing' | 'notifications' | 'security' | 'integrations' | 'data'>(
+        (location.state as any)?.tab || (new URLSearchParams(location.search).get('tab') as any) || 'account'
+    );
 
     // Local State
     const [name, setName] = useState(userProfile.name);
@@ -251,6 +256,8 @@ const SettingsPage: React.FC = () => {
     });
     const [tempApiKeys, setTempApiKeys] = useState(apiKeys);
     const [showGoogleKey, setShowGoogleKey] = useState(false);
+    const [showOpenAIKey, setShowOpenAIKey] = useState(false);
+    const [preferredProvider, setPreferredProvider] = useState<AIProvider>(userProfile.preferredProvider || 'gemini');
     const [isSaving, setIsSaving] = useState(false);
 
     // Integration Config State
@@ -295,7 +302,7 @@ const SettingsPage: React.FC = () => {
                 twoFactorEnabled,
                 integrations: connectedApps,
                 avatarUrl: avatarPreview,
-                preferredProvider: 'gemini'
+                preferredProvider: preferredProvider
             });
             updateApiKeys(tempApiKeys, true);
 
@@ -881,16 +888,80 @@ const SettingsPage: React.FC = () => {
                                             Don't have a key? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-noble-blue hover:underline font-bold inline-flex items-center gap-1">Get one from Google AI Studio <ExternalLink size={10} /></a>
                                         </p>
                                     </div>
+
+                                    {/* OpenAI Key */}
+                                    <div className="p-8 rounded-[2.5rem] border bg-emerald-500/5 border-emerald-500/30 transition-all">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                                                    <Sparkles className="w-6 h-6 text-emerald-500" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-white font-bold text-lg">OpenAI API Key</h4>
+                                                    <div className="mt-2 space-y-1">
+                                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Setup Instructions:</p>
+                                                        <ul className="text-[11px] text-slate-500 list-decimal list-inside space-y-0.5">
+                                                            <li>Login to the <a href="https://platform.openai.com/" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">OpenAI Dashboard</a></li>
+                                                            <li>Go to "API Keys" section</li>
+                                                            <li>Create a "Secret Key" and name it "Noble Clarity"</li>
+                                                            <li>Securely copy and paste the key below</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowOpenAIKey(!showOpenAIKey)}
+                                                className="p-2 text-slate-500 hover:text-white transition-colors"
+                                            >
+                                                {showOpenAIKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
+                                        </div>
+                                        <input
+                                            type={showOpenAIKey ? "text" : "password"}
+                                            value={tempApiKeys.openai}
+                                            onChange={(e) => setTempApiKeys({ ...tempApiKeys, openai: e.target.value })}
+                                            placeholder="sk-..."
+                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 px-6 text-white font-mono text-sm focus:border-emerald-500 outline-none"
+                                        />
+                                        <p className="mt-4 text-[11px] text-slate-500 flex items-center gap-2">
+                                            <AlertCircle size={14} className="text-emerald-500" />
+                                            Required for GPT-4 features. <a href="https://platform.openai.com/account/billing" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline font-bold inline-flex items-center gap-1">Verify billing at OpenAI <ExternalLink size={10} /></a>
+                                        </p>
+                                    </div>
+
+                                    {/* Intelligence Preference */}
+                                    <div className="p-8 rounded-[2.5rem] border bg-slate-800/20 border-white/5 transition-all">
+                                        <h4 className="text-white font-bold text-lg mb-6 flex items-center gap-3">
+                                            <Cpu className="w-6 h-6 text-slate-400" />
+                                            Preferred AI Intelligence
+                                        </h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {[
+                                                { id: 'gemini' as AIProvider, name: 'Google Gemini 2.5 Pro', desc: 'Fast, native Google integration, high-context.', color: 'border-noble-blue bg-noble-blue/5' },
+                                                { id: 'openai' as AIProvider, name: 'OpenAI GPT-4 Turbo', desc: 'Industry standard, high logical reasoning.', color: 'border-emerald-500 bg-emerald-500/5' }
+                                            ].map((ai) => (
+                                                <button
+                                                    key={ai.id}
+                                                    onClick={() => setPreferredProvider(ai.id)}
+                                                    className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${preferredProvider === ai.id ? ai.color : 'border-slate-800 bg-slate-950/50 hover:border-slate-700'}`}
+                                                >
+                                                    {preferredProvider === ai.id && <div className="absolute top-4 right-4"><CheckCircle2 className="w-5 h-5 text-current" /></div>}
+                                                    <h5 className={`font-bold ${preferredProvider === ai.id ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>{ai.name}</h5>
+                                                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">{ai.desc}</p>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <div className="mt-8 flex justify-end">
                                         <button
                                             onClick={() => {
-                                                updateApiKeys({ ...tempApiKeys, google: tempApiKeys.google }, true);
-                                                addNotification({ title: 'Gemini Key Saved', msg: 'Your Gemini API configuration has been updated.', type: 'success' });
+                                                handleSave();
                                             }}
-                                            className="px-6 py-3 bg-noble-blue hover:bg-noble-blue/90 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-noble-blue/20 flex items-center gap-2"
+                                            className="px-8 py-4 bg-noble-blue hover:bg-noble-blue/90 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-xl shadow-noble-blue/20 flex items-center gap-3 active:scale-95"
                                         >
-                                            <Save size={16} />
-                                            Save Gemini Configuration
+                                            {isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save size={16} />}
+                                            Save AI Configuration
                                         </button>
                                     </div>
                                 </div>

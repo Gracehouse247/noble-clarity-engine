@@ -350,6 +350,7 @@ const Dashboard: React.FunctionComponent<DashboardProps> = ({ onLogout }) => {
               keys={apiKeys}
               provider={userProfile.preferredProvider}
               onClose={() => setIsAICoachOpen(false)}
+              onSettingsClick={() => { navigate('/settings', { state: { tab: 'ai' } }); setIsAICoachOpen(false); }}
             />
           </div>
         )}

@@ -126,7 +126,7 @@ async function callGemini(prompt: string, systemInstruction: string, apiKey: str
     }
 
     const genAI = new GoogleGenerativeAI(apiKey || '');
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
     const result = await model.generateContent(prompt);
     return result.response.text();
 }
@@ -211,8 +211,7 @@ export async function getGoalSuggestion(
         }
         return null;
     } catch (error) {
-        console.error("Goal Suggestion Error:", error);
-        return null;
+        return handleApiError(error, provider);
     }
 }
 
@@ -266,7 +265,7 @@ export async function generateSpeech(text: string, apiKey?: string): Promise<str
 
         const ai = new GoogleGenerativeAI(apiKey || '');
         const model = ai.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-pro",
         });
         const response = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: text }] }],

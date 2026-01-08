@@ -1,9 +1,9 @@
-
 import * as React from 'react';
 import { FinancialData, FinancialGoal, GoalMetric } from '../types';
 import { calculateKPIs, CURRENCY_SYMBOLS } from '../constants';
-import { useUser } from '../contexts/NobleContext';
+import { useUser, useNotifications } from '../contexts/NobleContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { getGoalSuggestion } from '../services/ai';
 import {
   Target,
@@ -19,7 +19,8 @@ import {
   Wallet,
   X,
   Trophy,
-  Sparkles
+  Sparkles,
+  Settings
 } from 'lucide-react';
 
 interface FinancialGoalsProps {
@@ -41,7 +42,8 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [editingGoal, setEditingGoal] = React.useState<FinancialGoal | null>(null);
-  const { userProfile } = useUser();
+  const navigate = useNavigate();
+  const { userProfile, apiKeys } = useUser();
   const symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
 
   // New Goal Form State
@@ -55,26 +57,11 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
   const [showAiSuggestion, setShowAiSuggestion] = React.useState(true);
   const [aiSuggestion, setAiSuggestion] = React.useState<{ name: string; metric: GoalMetric; targetValue: number; reasoning: string } | null>(null);
   const [loadingSuggestion, setLoadingSuggestion] = React.useState(false);
-  const { apiKeys } = useUser();
+  const [suggestionError, setSuggestionError] = React.useState<string | null>(null);
   const { user } = useAuth();
   const preferredProvider = userProfile.preferredProvider || 'gemini';
 
-  React.useEffect(() => {
-    const loadSuggestion = async () => {
-      if (activeTab === 'active' && showAiSuggestion && !aiSuggestion) {
-        setLoadingSuggestion(true);
-        try {
-          const suggestion = await getGoalSuggestion(currentData, apiKeys, preferredProvider);
-          if (suggestion) setAiSuggestion(suggestion);
-        } catch (err) {
-          console.error("Failed to load AI suggestion:", err);
-        } finally {
-          setLoadingSuggestion(false);
-        }
-      }
-    };
-    loadSuggestion();
-  }, [currentData, activeTab, showAiSuggestion, apiKeys, preferredProvider, aiSuggestion]);
+  const kpis = calculateKPIs(currentData);
 
   const getActualValue = (metric: GoalMetric) => {
     switch (metric) {
@@ -115,7 +102,28 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
     return `${symbol}${val.toLocaleString()}`;
   };
 
-  const kpis = calculateKPIs(currentData);
+  React.useEffect(() => {
+    const loadSuggestion = async () => {
+      if (activeTab === 'active' && showAiSuggestion && !aiSuggestion) {
+        setLoadingSuggestion(true);
+        setSuggestionError(null);
+        try {
+          const suggestion = await getGoalSuggestion(currentData, apiKeys, preferredProvider);
+          if (suggestion && typeof suggestion === 'string' && (suggestion.includes('Settings') || suggestion.includes('API key'))) {
+            setSuggestionError(suggestion);
+          } else if (suggestion) {
+            setAiSuggestion(suggestion);
+          }
+        } catch (err) {
+          console.error("Failed to load AI suggestion:", err);
+          setSuggestionError("Failed to connect to Nobel AI. Please check your settings.");
+        } finally {
+          setLoadingSuggestion(false);
+        }
+      }
+    };
+    loadSuggestion();
+  }, [currentData, activeTab, showAiSuggestion, apiKeys, preferredProvider, aiSuggestion]);
 
   // Filter goals based on tab
   const filteredGoals = goals.filter(g => {
@@ -254,7 +262,6 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
         {filteredGoals.map((goal) => {
           const actual = getActualValue(goal.metric);
           const progress = Math.min((actual / goal.targetValue) * 100, 100);
-          const Icon = getMetricIcon(goal.metric);
 
           return (
             <div key={goal.id} className="p-0.5 rounded-xl bg-white/10 shadow-lg relative group">
@@ -296,7 +303,6 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                         <Calendar className="w-3.5 h-3.5" /> Target: {goal.deadline}
                       </p>
                     </div>
-                    {/* Placeholder View Details - could open modal in future */}
                     <button
                       onClick={() => openEditModal(goal)}
                       className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-noble-blue/10 hover:bg-noble-blue/20 text-noble-blue text-sm font-bold leading-normal transition-colors border border-noble-blue/20"
@@ -338,6 +344,19 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                     <div className="h-4 bg-slate-800 rounded w-3/4 animate-pulse"></div>
                     <div className="h-4 bg-slate-800 rounded w-1/2 animate-pulse"></div>
                   </div>
+                ) : suggestionError ? (
+                  <div className="space-y-4">
+                    <p className="text-rose-300 leading-relaxed text-sm">
+                      {suggestionError}
+                    </p>
+                    <button
+                      onClick={() => navigate('/settings', { state: { tab: 'ai' } })}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-bold text-noble-blue flex items-center gap-2 transition-all mt-1"
+                    >
+                      <Settings className="w-3.5 h-3.5" />
+                      Open AI Settings
+                    </button>
+                  </div>
                 ) : aiSuggestion ? (
                   <>
                     <p className="text-slate-300 leading-relaxed text-sm">
@@ -364,7 +383,7 @@ const FinancialGoals: React.FunctionComponent<FinancialGoalsProps> = ({
                     Dismiss
                   </button>
                   <button
-                    disabled={loadingSuggestion}
+                    disabled={loadingSuggestion || !!suggestionError}
                     onClick={() => {
                       if (allowAdd) {
                         setNewGoalName(aiSuggestion?.name || "Optimize Net Margin");

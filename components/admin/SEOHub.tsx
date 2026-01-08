@@ -41,6 +41,57 @@ const REFERRING_DOMAINS = [
 ];
 
 const SEOHub: React.FunctionComponent = () => {
+    const [loading, setLoading] = React.useState(true);
+    const [data, setData] = React.useState<any>(null);
+    const [error, setError] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        const fetchSEOData = async () => {
+            try {
+                const response = await fetch('https://clarity.noblesworld.com.ng/api/seo-analytics');
+                if (!response.ok) throw new Error('Failed to fetch SEO metrics');
+                const result = await response.json();
+                setData(result);
+            } catch (err: any) {
+                console.error('SEO Hub Fetch Error:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSEOData();
+    }, []);
+
+    // Transform GSC data for the chart
+    const chartData = React.useMemo(() => {
+        if (!data?.searchConsole?.rows) return TRAFFIC_DATA;
+
+        // Take last 7 days and format
+        return data.searchConsole.rows.slice(-7).map((row: any) => ({
+            day: new Date(row.keys[0]).toLocaleDateString('en-US', { weekday: 'short' }),
+            organic: row.clicks,
+            direct: Math.floor(row.clicks * 0.4), // Estimation since direct isn't in GSC
+            social: Math.floor(row.clicks * 0.2)
+        }));
+    }, [data]);
+
+    const totalClicks = React.useMemo(() => {
+        if (!data?.searchConsole?.rows) return 0;
+        return data.searchConsole.rows.reduce((acc: number, row: any) => acc + row.clicks, 0);
+    }, [data]);
+
+    if (loading) {
+        return (
+            <div className="min-h-[400px] flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-rose-500/20 border-t-rose-500 rounded-full animate-spin"></div>
+                    <p className="text-slate-400 font-medium">Synchronizing with Google Search Console...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex items-center justify-between">
@@ -49,7 +100,7 @@ const SEOHub: React.FunctionComponent = () => {
                     <p className="text-slate-400 text-sm mt-1">Monitor platform visibility, organic acquisition and referral authority.</p>
                 </div>
                 <div className="flex gap-2">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold border border-slate-800">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold border border-slate-800 hover:bg-slate-800 transition-colors">
                         Update IndexNow
                     </button>
                 </div>
@@ -60,20 +111,20 @@ const SEOHub: React.FunctionComponent = () => {
                 <div className="lg:col-span-2 bg-slate-900 border border-slate-800 p-8 rounded-3xl">
                     <div className="flex items-center justify-between mb-8">
                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                            <MousePointer2 className="text-rose-500" size={20} /> Acquisition Channels
+                            <MousePointer2 className="text-rose-500" size={20} /> Organic Impressions & Clicks
                         </h3>
                         <div className="flex gap-4">
                             <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
-                                <div className="w-2 h-2 rounded-full bg-rose-500"></div> Organic
+                                <div className="w-2 h-2 rounded-full bg-rose-500"></div> Search Clicks
                             </div>
                             <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
-                                <div className="w-2 h-2 rounded-full bg-blue-500"></div> Direct
+                                <div className="w-2 h-2 rounded-full bg-blue-500"></div> Est. Direct
                             </div>
                         </div>
                     </div>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={TRAFFIC_DATA}>
+                            <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                                 <XAxis dataKey="day" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
                                 <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
@@ -90,10 +141,10 @@ const SEOHub: React.FunctionComponent = () => {
                 {/* Top Keywords / Quick Stats */}
                 <div className="flex flex-col gap-6">
                     <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl">
-                        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Domain Authority</h4>
-                        <p className="text-4xl font-extrabold text-white">42 <span className="text-sm font-medium text-emerald-500">+4</span></p>
+                        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">30-Day Organic Clicks</h4>
+                        <p className="text-4xl font-extrabold text-white">{totalClicks} <span className="text-sm font-medium text-emerald-500">Live</span></p>
                         <div className="mt-4 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-rose-600 w-[42%]"></div>
+                            <div className="h-full bg-rose-600 w-[65%]"></div>
                         </div>
                     </div>
 
@@ -101,8 +152,8 @@ const SEOHub: React.FunctionComponent = () => {
                         <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Indexing Status</h4>
                         <div className="space-y-4">
                             {[
-                                { label: 'Indexed Pages', val: '124', status: 'Healthy' },
-                                { label: 'Crawl Errors', val: '0', status: 'Clean' },
+                                { label: 'Search Impressions', val: data?.searchConsole?.rows ? data.searchConsole.rows.reduce((a: any, b: any) => a + b.impressions, 0).toLocaleString() : '---', status: 'Healthy' },
+                                { label: 'Average Position', val: data?.searchConsole?.rows ? (data.searchConsole.rows.reduce((a: any, b: any) => a + b.position, 0) / data.searchConsole.rows.length).toFixed(1) : '---', status: 'Clean' },
                                 { label: 'Mobile Optimized', val: '100%', status: 'Perfect' }
                             ].map((stat, i) => (
                                 <div key={i} className="flex items-center justify-between">
@@ -119,7 +170,7 @@ const SEOHub: React.FunctionComponent = () => {
             <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
                 <div className="p-6 border-b border-slate-800 bg-slate-950/30 flex items-center justify-between">
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                        <Share2 className="text-blue-500" size={16} /> Referring Domain Profiles
+                        <Share2 className="text-blue-500" size={16} /> Active Traffic Sources (GA4)
                     </h3>
                     <button className="text-xs text-slate-400 hover:text-white flex items-center gap-1">
                         <ListFilter size={14} /> View All
@@ -129,43 +180,36 @@ const SEOHub: React.FunctionComponent = () => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="text-[10px] text-slate-500 uppercase font-bold tracking-widest bg-slate-950/20 border-b border-slate-800">
-                                <th className="px-8 py-4">Domain</th>
-                                <th className="px-8 py-4">Traffic Acquisition</th>
-                                <th className="px-8 py-4">Domain Authority (DA)</th>
-                                <th className="px-8 py-4 text-center">Backlink Quality</th>
+                                <th className="px-8 py-4">Source</th>
+                                <th className="px-8 py-4">Sessions</th>
+                                <th className="px-8 py-4">Status</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-800">
-                            {REFERRING_DOMAINS.map((domain, i) => (
+                            {data?.analytics?.rows?.map((row: any, i: number) => (
                                 <tr key={i} className="hover:bg-slate-800/20 transition-all cursor-pointer">
                                     <td className="px-8 py-5">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
                                                 <Globe size={14} className="text-slate-400" />
                                             </div>
-                                            <span className="text-sm font-bold text-white">{domain.domain}</span>
-                                            <ExternalLink size={12} className="text-slate-600" />
+                                            <span className="text-sm font-bold text-white">{row.dimensionValues[0].value}</span>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-5 text-sm text-slate-300 font-mono">{domain.traffic} visits</td>
+                                    <td className="px-8 py-5 text-sm text-slate-300 font-mono">{row.metricValues[0].value} sessions</td>
                                     <td className="px-8 py-5">
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex-1 h-1.5 bg-slate-800 rounded-full max-w-[100px]">
-                                                <div className="h-full bg-blue-500 rounded-full" style={{ width: `${domain.authority}%` }}></div>
-                                            </div>
-                                            <span className="text-xs font-bold text-white">{domain.authority}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-5 text-center">
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${domain.trend === 'up' ? 'bg-emerald-500/10 text-emerald-500' :
-                                                domain.trend === 'down' ? 'bg-rose-500/10 text-rose-500' :
-                                                    'bg-slate-500/10 text-slate-500'
-                                            }`}>
-                                            {domain.trend}ward
+                                        <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-500">
+                                            Active
                                         </span>
                                     </td>
                                 </tr>
-                            ))}
+                            )) || (
+                                    <tr>
+                                        <td colSpan={3} className="px-8 py-10 text-center text-slate-500 text-sm">
+                                            {data?.analytics ? 'No traffic data found for the last 30 days.' : 'Google Analytics Property ID not configured in .env'}
+                                        </td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>

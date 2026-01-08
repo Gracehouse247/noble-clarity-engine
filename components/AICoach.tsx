@@ -2,13 +2,14 @@
 import * as React from 'react';
 import { getFinancialInsights } from '../services/ai';
 import { FinancialData, AIProvider } from '../types';
-import { Sparkles, Send, Bot, User, Loader2, RefreshCw, AlertTriangle, Cpu, X } from 'lucide-react';
+import { Sparkles, Send, Bot, User, Loader2, RefreshCw, AlertTriangle, Cpu, X, Settings } from 'lucide-react';
 
 interface AICoachProps {
   data: FinancialData;
   keys?: { google: string; openai: string };
   provider?: AIProvider;
   onClose?: () => void;
+  onSettingsClick?: () => void;
 }
 
 interface Message {
@@ -21,7 +22,7 @@ const engagingLoadingMessages = [
   "Cross-referencing benchmarks...", "Finalizing analysis...", "Almost there..."
 ];
 
-const AICoach: React.FunctionComponent<AICoachProps> = ({ data, keys, provider = 'gemini', onClose }) => {
+const AICoach: React.FunctionComponent<AICoachProps> = ({ data, keys, provider = 'gemini', onClose, onSettingsClick }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -98,14 +99,26 @@ const AICoach: React.FunctionComponent<AICoachProps> = ({ data, keys, provider =
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-6 bg-[#0b0e14]">
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
-            <div className={`flex gap-3 max-w-[90%] ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-slate-700' : 'bg-noble-deep border border-noble-blue'}`}>
-                {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+            <div className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} gap-2 max-w-[90%]`}>
+              <div className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-slate-700' : 'bg-noble-deep border border-noble-blue'}`}>
+                  {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                </div>
+                <div className={`p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-noble-blue text-white' : 'bg-slate-800 text-slate-200 border border-slate-700'
+                  }`}>
+                  <div className="whitespace-pre-wrap">{m.content}</div>
+                </div>
               </div>
-              <div className={`p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-noble-blue text-white' : 'bg-slate-800 text-slate-200 border border-slate-700'
-                }`}>
-                <div className="whitespace-pre-wrap">{m.content}</div>
-              </div>
+              {/* Action Button for Settings/API errors */}
+              {m.role === 'assistant' && (m.content.includes('Settings') || m.content.includes('API key')) && onSettingsClick && (
+                <button
+                  onClick={onSettingsClick}
+                  className="ml-11 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-bold text-noble-blue flex items-center gap-2 transition-all mt-1"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                  Open AI Settings
+                </button>
+              )}
             </div>
           </div>
         ))}

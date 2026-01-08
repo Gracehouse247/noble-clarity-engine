@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FinancialData, AIProvider } from '../types';
 import { useUser, useNotifications } from '../contexts/NobleContext';
 import { CURRENCY_SYMBOLS, STORAGE_KEYS } from '../constants';
@@ -7,7 +8,7 @@ import {
   Users, Target, DollarSign, TrendingUp, Filter, Calculator, ArrowRight,
   Volume2, Square, Loader2, Save, Download, RefreshCw, Mail, Share2, Megaphone,
   Info, AlertTriangle, CheckCircle2, Plus, Trash2, Clock, ThumbsUp, Heart,
-  Split, ShieldAlert, MousePointer, ChevronDown, Bot, Video, FileText, Layers, RefreshCcw, Sparkles
+  Split, ShieldAlert, MousePointer, ChevronDown, Bot, Video, FileText, Layers, RefreshCcw, Sparkles, Settings
 } from 'lucide-react';
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip,
@@ -35,6 +36,7 @@ const MARKETING_BENCHMARKS: Record<string, { roas: number; cvr: number; cpc: num
 const MarketingROI: React.FunctionComponent<MarketingROIProps> = ({ currentData, keys, provider }) => {
   const { userProfile } = useUser();
   const { addNotification } = useNotifications();
+  const navigate = useNavigate();
   const symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
 
   // --- State ---
@@ -583,8 +585,19 @@ const MarketingROI: React.FunctionComponent<MarketingROIProps> = ({ currentData,
             </div>
 
             {aiInsights ? (
-              <div className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed animate-fade-in p-4 bg-slate-950 rounded-xl border border-slate-800">
-                {aiInsights}
+              <div className="space-y-4">
+                <div className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed animate-fade-in p-4 bg-slate-950 rounded-xl border border-slate-800">
+                  {aiInsights}
+                </div>
+                {(aiInsights.includes('Settings') || aiInsights.includes('API key')) && (
+                  <button
+                    onClick={() => navigate('/settings', { state: { tab: 'ai' } })}
+                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-bold text-noble-blue flex items-center gap-2 transition-all mt-1"
+                  >
+                    <Settings className="w-3.5 h-3.5" />
+                    Open AI Settings
+                  </button>
+                )}
               </div>
             ) : (
               <button onClick={getAiStrategy} disabled={isAiLoading} className="w-full py-8 border-2 border-dashed border-slate-700 hover:border-noble-blue rounded-xl flex flex-col items-center justify-center gap-2 text-slate-500 hover:text-noble-blue transition-all group">

@@ -25,17 +25,24 @@ export const notifySearchEngines = async (urls: string[]) => {
         urlList: urls
     };
 
-    console.log('Notifying search engines via IndexNow...', payload);
+    // Google uses Sitemap Pings, not IndexNow. 
+    // We notify Google by pinging the sitemap location.
+    const googlePing = `http://www.google.com/ping?sitemap=https://${host}/sitemap.xml`;
 
-    const results = await Promise.allSettled(
-        SEARCH_ENGINES.map(engine =>
-            fetch(engine, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-        )
+    console.log('Notifying search engines via IndexNow & Google Ping...', payload);
+
+    const requests = SEARCH_ENGINES.map(engine =>
+        fetch(engine, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
     );
+
+    // Add Google Ping (GET request)
+    requests.push(fetch(googlePing));
+
+    const results = await Promise.allSettled(requests);
 
     return results;
 };
