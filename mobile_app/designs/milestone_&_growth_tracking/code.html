@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Milestone &amp; Growth Tracking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#607AFB", "primary-glow": "#9d4dff", "background-light": "#f5f6f8", "background-dark": "#0f1323", "surface-dark": "#231b2e", "glass-border": "rgba(255, 255, 255, 0.08)"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, backgroundImage: {"glass-gradient": "linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%)", "purple-sheen": "linear-gradient(90deg, transparent, rgba(127, 19, 236, 0.1), transparent)"}}}};</script>
+<style>
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(35, 27, 46, 0.7) 0%, rgba(25, 16, 34, 0.7) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-nav {
+            background: rgba(25, 16, 34, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(127, 19, 236, 0.4);
+        }
+
+        /* Circular Progress Utilities */
+        .circle-chart__circle {
+            animation: circle-chart-fill 1s reverse; /* 1s to fill */
+            transform: rotate(-90deg); /* Start from top */
+            transform-origin: center;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden min-h-screen relative pb-28">
+<!-- Header Section -->
+<header class="sticky top-0 z-40 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-glass-border pt-12 pb-4 px-5">
+<div class="flex items-center justify-between mb-5">
+<div class="flex items-center gap-3">
+<button class="text-white/80 hover:text-white transition-colors">
+<span class="material-symbols-outlined !text-[28px]">menu</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight text-white">Strategic Milestones</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border border-white/10 overflow-hidden flex items-center justify-center relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-90" data-alt="Founder profile avatar with abstract gradient" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCtzyWNxN0gicbDIRxd5pAVoCxgT9sE3nS3eTwWvA2ivnRyZfIjM_lSwEtyMjcmH3ppodAU7qjFQTzdrrHYTdTiF8Jz4ZAGsUkXFjfJiYiqglzoaSxCrnt8m-fazvXuitdkqF65DxCDnnSgkE77kmH8B7YgPGHtIIBEBz6qOjb7UWsQN8TmH5Q7FIkN77YEQtKgDmCy_r7kABQiCh4E7jiiVRq6O1pg8VVIE3KV8_wz2axQXz6gO4Gh6KEUi0EYW_1zaWrIg7VfDaE')"></div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<button class="flex items-center gap-2 bg-surface-dark border border-white/10 rounded-lg px-3 py-1.5 hover:bg-white/5 transition-colors">
+<span class="text-sm font-medium text-white">Q3 Growth Targets</span>
+<span class="material-symbols-outlined !text-[18px] text-gray-400">expand_more</span>
+</button>
+<div class="flex flex-col items-end">
+<span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Health</span>
+<span class="text-primary font-bold">72%</span>
+</div>
+</div>
+<!-- Overall Progress Line -->
+<div class="h-1.5 w-full bg-surface-dark rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-glow w-[72%] rounded-full shadow-[0_0_10px_rgba(127,19,236,0.5)]"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Feed -->
+<main class="px-5 py-6 space-y-6 flex flex-col">
+<!-- Card 1: Revenue Goal (Primary) -->
+<div class="glass-panel rounded-2xl p-6 relative group overflow-hidden">
+<!-- Subtle gradient sheen background -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-full flex justify-between items-start mb-4">
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-white leading-tight">Net Revenue Goal</h3>
+<p class="text-sm text-gray-400 mt-1">SaaS Recurring</p>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                        On Track
+                    </span>
+</div>
+<!-- Circular Progress -->
+<div class="relative w-48 h-48 my-2">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<!-- Background Circle -->
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a2235" stroke-linecap="round" stroke-width="8"></circle>
+<!-- Progress Circle (78%) -->
+<circle class="drop-shadow-[0_0_8px_rgba(127,19,236,0.6)]" cx="50" cy="50" fill="none" r="42" stroke="#7f13ec" stroke-dasharray="264" stroke-dashoffset="58" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<!-- Center Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="text-4xl font-bold text-white tracking-tighter">78<span class="text-2xl text-primary">%</span></span>
+<span class="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wide">Complete</span>
+</div>
+</div>
+<div class="w-full flex justify-between items-end mt-4 px-2 border-t border-white/5 pt-4">
+<div class="flex flex-col">
+<span class="text-xs text-gray-500 mb-0.5">Current</span>
+<span class="text-lg font-semibold text-white">$1.2M</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-xs text-gray-500 mb-0.5">Target</span>
+<span class="text-lg font-semibold text-gray-300">$1.5M</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Micro-Card (Insertion) -->
+<div class="relative group animate-[slideIn_0.6s_ease-out_forwards]">
+<!-- Decorative Glow -->
+<div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-purple-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+<div class="relative bg-background-dark border border-primary/30 rounded-xl p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between shadow-xl">
+<div class="flex items-start gap-3">
+<div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined fill-1">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1">
+<h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            AI Intelligence Hint
+                            <span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</h4>
+<p class="text-sm text-gray-300 leading-relaxed">Cash flow velocity is <span class="text-green-400 font-medium">12% higher</span>. Reallocate $5k to Marketing.</p>
+</div>
+</div>
+<button class="w-full sm:w-auto flex-shrink-0 px-4 py-2 bg-primary hover:bg-primary-glow text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_15px_rgba(127,19,236,0.3)] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined !text-[18px]">bolt</span>
+                    Apply Insight
+                </button>
+</div>
+</div>
+<!-- Card 2: CAC Goal (Secondary) -->
+<div class="glass-panel rounded-2xl p-5 flex flex-row items-center gap-5">
+<div class="relative w-24 h-24 flex-shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a2235" stroke-width="8"></circle>
+<!-- 45% progress - Amber color for warning/attention -->
+<circle class="drop-shadow-[0_0_6px_rgba(245,158,11,0.4)]" cx="50" cy="50" fill="none" r="42" stroke="#f59e0b" stroke-dasharray="264" stroke-dashoffset="145" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-bold text-white">45%</span>
+</div>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-start">
+<h3 class="text-base font-bold text-white">CAC Efficiency</h3>
+<span class="material-symbols-outlined text-amber-500 !text-[20px]">warning</span>
+</div>
+<p class="text-xs text-gray-400 mt-1 mb-3">Cost per acquisition rising slightly above projections.</p>
+<div class="flex items-baseline gap-2">
+<span class="text-sm font-semibold text-white">$145</span>
+<span class="text-xs text-gray-500">/ $120 Goal</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Runway Extension -->
+<div class="glass-panel rounded-2xl p-5 flex flex-row items-center gap-5 mb-8">
+<div class="relative w-24 h-24 flex-shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a2235" stroke-width="8"></circle>
+<circle class="drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]" cx="50" cy="50" fill="none" r="42" stroke="#3b82f6" stroke-dasharray="264" stroke-dashoffset="40" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-bold text-white">85%</span>
+</div>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-base font-bold text-white">Runway Extension</h3>
+<p class="text-xs text-gray-400 mt-1 mb-3">Operating cash flow optimized.</p>
+<div class="flex items-baseline gap-2">
+<span class="text-sm font-semibold text-white">18 Mos</span>
+<span class="text-xs text-gray-500">/ 24 Mos Goal</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full glass-nav pb-safe pt-2 px-6 z-50">
+<div class="flex items-end justify-between relative h-16 pb-2">
+<!-- Dashboard Tab -->
+<button class="flex flex-col items-center gap-1 w-14 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-white transition-colors">dashboard</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-gray-300">Home</span>
+</button>
+<!-- Strategic Lab Tab -->
+<button class="flex flex-col items-center gap-1 w-14 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-white transition-colors">science</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-gray-300">Lab</span>
+</button>
+<!-- Center Space for FAB -->
+<div class="w-16"></div>
+<!-- ROI Center Tab -->
+<button class="flex flex-col items-center gap-1 w-14 group">
+<span class="material-symbols-outlined text-white">data_exploration</span> <!-- Active state -->
+<span class="text-[10px] font-medium text-white">Growth</span>
+</button>
+<!-- Settings Tab -->
+<button class="flex flex-col items-center gap-1 w-14 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-white transition-colors">settings</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-gray-300">Settings</span>
+</button>
+<!-- Noble AI FAB (Floating Absolute Center) -->
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6">
+<button class="relative group flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-[#a855f7] ai-glow border-2 border-white/20 transition-transform hover:scale-105 active:scale-95">
+<!-- Pulse Effect -->
+<span class="absolute inset-0 rounded-full bg-primary opacity-40 animate-ping"></span>
+<!-- Icon -->
+<span class="material-symbols-outlined text-white !text-[32px] relative z-10">psychology_alt</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Safe Area Spacing for iPhone Bottom Bar -->
+<div class="h-6 w-full bg-transparent"></div>
+</body></html>

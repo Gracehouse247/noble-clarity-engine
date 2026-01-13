@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Financial Intelligence</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#293d99",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#13151f",
+                        "obsidian": "#0B0E14", // Deep Obsidian base
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "header": ["Montserrat", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                    backgroundImage: {
+                        'glass-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Utilities for Glassmorphism */
+        .glass-card {
+            background: rgba(19, 21, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input:focus {
+            background: rgba(41, 61, 153, 0.1);
+            border-color: #293d99;
+            box-shadow: 0 0 0 4px rgba(41, 61, 153, 0.1);
+        }
+
+        /* Abstract Background Glow */
+        .glow-blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(41, 61, 153, 0.4) 0%, rgba(11, 14, 20, 0) 70%);
+            filter: blur(60px);
+            z-index: 0;
+            opacity: 0.6;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-obsidian text-white font-display antialiased min-h-screen flex flex-col relative overflow-hidden selection:bg-primary/30">
+<!-- Background Elements -->
+<div class="glow-blob -top-20 -left-20 animate-pulse" style="animation-duration: 4s;"></div>
+<div class="glow-blob top-1/3 -right-20 bg-primary/20" style="background: radial-gradient(circle, rgba(41, 61, 153, 0.3) 0%, rgba(11, 14, 20, 0) 70%); animation-delay: 1s;"></div>
+<div class="glow-blob -bottom-20 left-1/3 w-[400px] h-[400px]" style="background: radial-gradient(circle, rgba(41, 61, 153, 0.15) 0%, rgba(11, 14, 20, 0) 70%);"></div>
+<!-- Main Content Container -->
+<main class="relative z-10 flex-1 flex flex-col justify-center items-center p-4 w-full max-w-md mx-auto min-h-screen py-8">
+<!-- Logo Area -->
+<div class="mb-8 flex flex-col items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-[#13151f] flex items-center justify-center shadow-lg border border-white/10" data-alt="Financial Intelligence Logo placeholder">
+<span class="material-symbols-outlined text-white text-3xl">insights</span>
+</div>
+</div>
+<!-- Glass Card -->
+<div class="w-full glass-card rounded-2xl p-6 sm:p-8">
+<!-- Header Text -->
+<div class="text-center mb-8">
+<h1 class="font-header text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Welcome Back</h1>
+<p class="text-gray-400 text-sm sm:text-base font-normal">Access your financial foresight.</p>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-5">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="text-xs font-medium text-gray-300 uppercase tracking-wider ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors text-[20px]">mail</span>
+</div>
+<input class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-0 text-base" id="email" placeholder="name@company.com" type="email" value=""/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center ml-1">
+<label class="text-xs font-medium text-gray-300 uppercase tracking-wider" for="password">Password</label>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors text-[20px]">lock</span>
+</div>
+<input class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-white placeholder-gray-500 focus:outline-none focus:ring-0 text-base" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<div class="flex justify-end mt-1">
+<a class="text-xs font-medium text-primary hover:text-blue-400 transition-colors" href="#">Forgot password?</a>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="mt-2 w-full bg-primary hover:bg-blue-700 text-white font-semibold py-4 rounded-xl shadow-[0_0_20px_-5px_rgba(41,61,153,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 group" type="button">
+<span>Log In</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<!-- Divider -->
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-white/10"></div>
+<span class="flex-shrink-0 mx-4 text-xs text-gray-500 font-medium">Or continue with</span>
+<div class="flex-grow border-t border-white/10"></div>
+</div>
+<!-- Social SSO -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white" type="button">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"></path>
+</svg>
+                        Google
+                    </button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white" type="button">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.1 1.88-2.54 5.79.1 6.94-.65 1.7-1.55 3.32-2.15 4.27zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"></path>
+</svg>
+                        Apple
+                    </button>
+</div>
+</form>
+</div>
+<!-- Footer -->
+<div class="mt-8 text-center">
+<p class="text-sm text-gray-400">
+                Don't have an account? 
+                <a class="text-primary font-semibold hover:text-white transition-colors ml-1" href="#">Sign Up</a>
+</p>
+</div>
+<!-- Face ID Hint (Subtle visual cue common in iOS apps) -->
+<div class="mt-12 flex flex-col items-center gap-2 opacity-50">
+<span class="material-symbols-outlined text-3xl">face</span>
+<span class="text-[10px] uppercase tracking-widest">Face ID</span>
+</div>
+</main>
+</body></html>

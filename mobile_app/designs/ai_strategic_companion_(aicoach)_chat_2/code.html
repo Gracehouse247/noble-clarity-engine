@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noble AI Strategic Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Montserrat:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec",
+                        "primary-light": "#9d4edd",
+                        "cerulean": "#09c6f9","cerulean-dark": "#0284c7",
+                        "background-dark": "#120c18","surface-dark": "#1a1324",
+                        "surface-glass": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"],
+                        "display": ["Montserrat", "sans-serif"]
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow-cerulean': '0 0 20px rgba(9, 198, 249, 0.4)',
+                        'inner-glow': 'inset 0 0 10px rgba(255, 255, 255, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .glass-panel-heavy {
+            background: rgba(18, 12, 24, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-bubble-ai {
+            background: rgba(127, 19, 236, 0.08); 
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(127, 19, 236, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .glass-input-bar {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .text-glow {
+            text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+        }.wave-rect {
+            transform-origin: bottom;
+            animation: wave-stretch 1.2s ease-in-out infinite;
+        }
+        .wave-rect:nth-child(1) { animation-delay: 0.1s; animation-duration: 1.0s; }
+        .wave-rect:nth-child(2) { animation-delay: 0.2s; animation-duration: 1.4s; }
+        .wave-rect:nth-child(3) { animation-delay: 0.0s; animation-duration: 0.8s; }
+        .wave-rect:nth-child(4) { animation-delay: 0.3s; animation-duration: 1.2s; }
+        .wave-rect:nth-child(5) { animation-delay: 0.1s; animation-duration: 1.5s; }
+        .wave-rect:nth-child(6) { animation-delay: 0.2s; animation-duration: 0.9s; }
+        @keyframes wave-stretch {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-sans h-[100dvh] flex flex-col overflow-hidden antialiased selection:bg-primary selection:text-white">
+<header class="flex items-center justify-between px-4 pt-12 pb-4 bg-transparent z-20 relative">
+<button class="text-white/70 hover:text-white transition-colors flex size-10 items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<div class="flex flex-col items-center flex-1">
+<h2 class="text-white font-display text-base font-bold leading-tight tracking-wide">Noble AI</h2>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="relative flex h-1.5 w-1.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
+</span>
+<span class="text-[10px] font-semibold text-primary uppercase tracking-widest">Strategic Companion</span>
+</div>
+</div>
+<button class="text-white/70 hover:text-white transition-colors flex size-10 items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-size: 20px;">history</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto px-4 pb-48 pt-2 space-y-6 relative scroll-smooth">
+<div class="fixed top-[15%] left-[-20%] w-[350px] h-[350px] bg-primary/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed top-[40%] right-[-10%] w-[250px] h-[250px] bg-cerulean/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<div class="relative z-10 flex justify-center py-2">
+<span class="text-white/30 text-[10px] font-semibold font-display uppercase tracking-widest px-3 py-1 rounded-full border border-white/5 backdrop-blur-sm">Today • 10:42 AM</span>
+</div>
+<div class="relative z-10 flex flex-col items-end gap-1">
+<div class="max-w-[85%] rounded-2xl rounded-tr-sm px-5 py-3.5 bg-surface-dark text-white/90 shadow-sm border border-white/5">
+<p class="text-[15px] font-normal leading-relaxed">
+                    Analyze the cash flow impact of a 15% headcount increase in Q3.
+                </p>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-start gap-3 max-w-[92%]">
+<div class="flex items-center gap-2 mb-1 pl-1">
+<div class="size-5 rounded-full bg-gradient-to-tr from-primary to-[#a855f7] flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white" style="font-size: 12px;">smart_toy</span>
+</div>
+<span class="text-primary text-[11px] font-bold tracking-wide font-display">NOBLE AI</span>
+</div>
+<div class="glass-bubble-ai rounded-2xl rounded-tl-none px-5 py-4 text-white shadow-lg">
+<p class="text-[15px] font-normal leading-relaxed text-gray-100">
+                    Based on your current burn rate, a <span class="font-bold text-white">15% headcount increase</span> will reduce runway by <span class="font-bold text-red-400">2.4 months</span>.
+                </p>
+</div>
+<div class="w-full rounded-2xl p-5 overflow-hidden shadow-xl border border-white/5 bg-[#1e1625]/80 backdrop-blur-md">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-white/50 text-[10px] font-bold uppercase tracking-wider mb-1 font-display">Projection</p>
+<p class="text-white text-sm font-semibold">Runway Impact</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-red-400 font-bold text-xl tracking-tight">-2.4 mo</span>
+</div>
+</div>
+<div class="relative h-[120px] w-full flex items-end gap-4 px-2">
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
+<div class="w-full border-t border-white"></div>
+<div class="w-full border-t border-white"></div>
+<div class="w-full border-t border-white"></div>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full max-w-[40px] bg-white/10 rounded-t-sm h-[85%] hover:bg-white/20 transition-colors"></div>
+<span class="text-[10px] text-white/40 font-medium">Current</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full max-w-[40px] bg-gradient-to-b from-primary to-primary/50 rounded-t-sm h-[65%] shadow-[0_0_15px_rgba(127,19,236,0.3)] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/10"></div>
+</div>
+<span class="text-[10px] text-primary font-bold">Projected</span>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 pl-1 pr-4 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary-100 transition-all active:scale-95 group w-fit">
+<div class="bg-primary/20 rounded-full p-1 group-hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-sm text-primary-200" style="font-size: 16px;">science</span>
+</div>
+<span class="text-xs font-semibold text-primary-100 font-display">Simulate Scenario in Lab</span>
+<span class="material-symbols-outlined text-xs opacity-50 group-hover:translate-x-0.5 transition-transform" style="font-size: 14px;">chevron_right</span>
+</button>
+</div>
+<div class="relative z-10 flex flex-col items-start gap-1 max-w-[92%] mt-2">
+<div class="glass-bubble-ai rounded-2xl px-4 py-3 border-l-4 border-l-red-500 bg-red-500/5 flex items-center justify-between gap-4 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-red-400" style="font-size: 20px;">cloud_off</span>
+<div class="flex flex-col">
+<span class="text-white font-medium text-xs">Sync Interrupted</span>
+<span class="text-white/50 text-[11px]">QuickBooks connection timed out.</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] font-bold tracking-wide uppercase transition-colors border border-red-500/20">
+                    Smart Resolve
+                </button>
+</div>
+</div>
+</main>
+<div class="fixed bottom-[100px] left-0 w-full z-30 px-4">
+<div class="flex justify-center items-end h-8 pb-3 w-full opacity-0 animate-[fade-in_1s_ease-out_forwards]">
+<svg class="text-primary" fill="none" height="24" viewBox="0 0 120 24" width="120" xmlns="http://www.w3.org/2000/svg">
+<rect class="wave-rect" fill="currentColor" height="4" rx="1.5" width="3" x="15" y="10"></rect>
+<rect class="wave-rect" fill="currentColor" height="8" rx="1.5" width="3" x="25" y="8"></rect>
+<rect class="wave-rect" fill="currentColor" height="20" rx="1.5" width="3" x="35" y="2"></rect>
+<rect class="wave-rect" fill="currentColor" height="12" rx="1.5" width="3" x="45" y="6"></rect>
+<rect class="wave-rect" fill="currentColor" height="16" rx="1.5" width="3" x="55" y="4"></rect>
+<rect class="wave-rect" fill="currentColor" height="6" rx="1.5" width="3" x="65" y="9"></rect>
+</svg>
+</div>
+<div class="glass-input-bar w-full rounded-[2rem] p-1.5 flex items-center gap-2 relative overflow-hidden group">
+<button class="size-10 flex items-center justify-center rounded-full text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-95">
+<span class="material-symbols-outlined" style="font-size: 22px;">attach_file</span>
+</button>
+<div class="flex-1 relative">
+<input class="w-full bg-transparent border-none text-white placeholder-white/30 text-[15px] focus:ring-0 p-2 font-light text-glow" placeholder="Ask Noble AI..." type="text"/>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-gradient-to-br from-cerulean to-cerulean-dark shadow-glow-cerulean text-white hover:scale-105 active:scale-95 transition-all z-10">
+<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">send</span>
+</button>
+<div class="absolute inset-0 rounded-[2rem] pointer-events-none shadow-inner-glow"></div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full glass-panel-heavy z-40 h-[85px] px-2 pb-5 border-t-0">
+<div class="flex justify-between items-center h-full px-4 pt-2">
+<button class="flex flex-col items-center justify-center gap-1.5 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">grid_view</span>
+<span class="text-[9px] font-medium tracking-wide font-display">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1.5 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">science</span>
+<span class="text-[9px] font-medium tracking-wide font-display">Lab</span>
+</button>
+<div class="relative -top-8">
+<button class="size-16 rounded-full bg-gradient-to-b from-[#9d4edd] to-primary shadow-[0_0_25px_rgba(127,19,236,0.5)] flex items-center justify-center text-white hover:scale-105 transition-transform group animate-pulse-slow border-[4px] border-[#120c18]">
+<span class="material-symbols-outlined" style="font-size: 30px;">smart_toy</span>
+</button>
+<div class="absolute -bottom-5 w-full text-center">
+<span class="text-[9px] font-bold text-primary tracking-wider uppercase font-display opacity-80">Noble</span>
+</div>
+</div>
+<button class="flex flex-col items-center justify-center gap-1.5 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">trending_up</span>
+<span class="text-[9px] font-medium tracking-wide font-display">ROI</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1.5 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">settings</span>
+<span class="text-[9px] font-medium tracking-wide font-display">Settings</span>
+</button>
+</div>
+</nav>
+
+</body></html>

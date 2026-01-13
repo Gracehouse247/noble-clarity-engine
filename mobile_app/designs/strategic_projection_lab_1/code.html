@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Strategic Projection Lab</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0d33f2",
+              "primary-glow": "#3b5bfc",
+              "background-light": "#f5f6f8",
+              "background-dark": "#101322", // Deep Obsidian base
+              "surface-glass": "rgba(255, 255, 255, 0.03)",
+              "success": "#00C853",
+              "danger": "#FF3D00",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.5rem", 
+              "lg": "1rem", 
+              "xl": "1.5rem", 
+              "2xl": "2rem",
+              "full": "9999px"
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+              'glass-gradient': 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom Utilities for Glassmorphism 2.0 and Noise */
+        .glass-panel {
+            background: rgba(20, 24, 38, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-panel-heavy {
+            background: rgba(16, 19, 34, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(13, 51, 242, 0.5);
+        }
+        
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-display antialiased overflow-x-hidden selection:bg-primary/30">
+<div class="relative flex min-h-screen w-full flex-col pb-[110px]">
+<!-- Background Ambient Glow -->
+<div class="fixed top-[-10%] left-[-10%] w-[50%] h-[40%] bg-primary/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+<div class="fixed bottom-[10%] right-[-5%] w-[40%] h-[30%] bg-purple-900/20 blur-[100px] rounded-full pointer-events-none z-0"></div>
+<!-- Top Header -->
+<header class="sticky top-0 z-40 flex items-center justify-between px-5 py-4 bg-background-dark/80 backdrop-blur-md border-b border-white/5">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<h1 class="text-base font-bold tracking-wide uppercase text-white/90">Strategic Lab</h1>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-primary-glow transition-colors">
+<span class="material-symbols-outlined text-[20px]">restart_alt</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col z-10 px-5 pt-4 gap-6">
+<!-- Scenario Title -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary-glow border border-primary/20 uppercase tracking-wider">Active Scenario</span>
+</div>
+<h2 class="text-3xl font-extrabold tracking-tight text-white leading-tight">Q4 Expansion</h2>
+<p class="text-sm text-gray-400 font-medium">Projecting impact of aggressive hiring vs. runway.</p>
+</div>
+<!-- Shadow Projection Chart (Hologram Effect) -->
+<div class="relative w-full h-[280px] rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
+<!-- Grid Background -->
+<div class="absolute inset-0 bg-grid-pattern opacity-30"></div>
+<!-- Chart Header -->
+<div class="absolute top-4 left-4 z-10">
+<p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Projected Cash Balance</p>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-white">$1.2M</span>
+<span class="text-sm font-medium text-success flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-0.5">trending_up</span>
+                            Safe
+                        </span>
+</div>
+</div>
+<!-- SVG Chart -->
+<svg class="absolute bottom-0 left-0 w-full h-[200px] px-2" fill="none" viewbox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Dotted Line (Current Trajectory) -->
+<path d="M0 120 C 60 115, 120 110, 180 130 C 240 150, 300 160, 360 170" stroke="#6B7280" stroke-dasharray="4 4" stroke-opacity="0.5" stroke-width="2"></path>
+<!-- Shadow Projection (Delta Fill) -->
+<path d="M0 120 C 60 115, 120 110, 180 130 C 240 150, 300 160, 360 170 L 360 90 C 300 60, 240 80, 180 50 C 120 20, 60 90, 0 120 Z" fill="url(#deltaGradient)" opacity="0.4"></path>
+<!-- Solid Line (Projected) -->
+<path d="M0 120 C 60 90, 120 20, 180 50 C 240 80, 300 60, 360 90" filter="url(#glow)" stroke="#0d33f2" stroke-width="3"></path>
+<!-- Active Point Indicator -->
+<circle cx="180" cy="50" fill="#0d33f2" r="4" stroke="white" stroke-width="2"></circle>
+<!-- Gradients & Filters -->
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="deltaGradient" x1="180" x2="180" y1="50" y2="170">
+<stop stop-color="#0d33f2" stop-opacity="0.3"></stop>
+<stop offset="1" stop-color="#0d33f2" stop-opacity="0"></stop>
+</lineargradient>
+<filter filterunits="userSpaceOnUse" height="220" id="glow" width="380" x="-10" y="-10">
+<fegaussianblur result="coloredBlur" stddeviation="2"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+</svg>
+<!-- X-Axis Labels -->
+<div class="absolute bottom-2 left-0 w-full flex justify-between px-6 text-[10px] font-bold text-gray-500 uppercase">
+<span>Oct</span>
+<span>Nov</span>
+<span class="text-primary-glow">Dec</span>
+<span>Jan</span>
+<span>Feb</span>
+</div>
+</div>
+<!-- Interactive Input Canvas -->
+<div class="glass-panel rounded-2xl p-5 flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-white/5 pb-2">
+<h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+                        Variables
+                    </h3>
+<span class="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">Auto-Save On</span>
+</div>
+<!-- Slider 1: Marketing Spend -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-gray-400 uppercase tracking-wide">Marketing Spend</label>
+<span class="text-base font-bold text-white tabular-nums">$45,000</span>
+</div>
+<div class="relative flex items-center h-8">
+<!-- Track Background -->
+<div class="w-full h-2 bg-[#1c2236] rounded-full overflow-hidden">
+<!-- Fill -->
+<div class="h-full bg-primary w-[32%] rounded-full shadow-[0_0_10px_rgba(13,51,242,0.6)]"></div>
+</div>
+<!-- Thumb (Visual Only) -->
+<div class="absolute left-[32%] w-6 h-6 bg-white rounded-full shadow-lg border-2 border-primary cursor-pointer flex items-center justify-center transform -translate-x-1/2 hover:scale-110 transition-transform">
+<div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-600 font-medium">
+<span>$10k</span>
+<span>$100k</span>
+</div>
+</div>
+<!-- Slider 2: New Hires -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-gray-400 uppercase tracking-wide">New Hires (Eng)</label>
+<span class="text-base font-bold text-white tabular-nums">+3</span>
+</div>
+<div class="relative flex items-center h-8">
+<div class="w-full h-2 bg-[#1c2236] rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[60%] rounded-full shadow-[0_0_10px_rgba(13,51,242,0.6)]"></div>
+</div>
+<div class="absolute left-[60%] w-6 h-6 bg-white rounded-full shadow-lg border-2 border-primary cursor-pointer flex items-center justify-center transform -translate-x-1/2 hover:scale-110 transition-transform">
+<div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-600 font-medium">
+<span>0</span>
+<span>5</span>
+</div>
+</div>
+</div>
+<!-- Decision Impact Sheet (Preview) -->
+<div class="mt-2 glass-panel rounded-xl p-4 border-l-[3px] border-l-success flex items-start gap-4 shadow-lg shadow-black/40">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success mt-1">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-sm font-bold text-white uppercase tracking-wider">Scenario Viable</h4>
+<span class="text-[10px] font-extrabold text-success bg-success/10 px-2 py-0.5 rounded border border-success/20">PASS</span>
+</div>
+<p class="text-xs text-gray-300 leading-relaxed">
+                        Runway reduced by <span class="text-white font-bold">1.5 months</span>, but projected revenue growth covers burn by Month 4.
+                    </p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 glass-panel-heavy pb-safe">
+<div class="flex items-end justify-between px-2 pt-2 pb-5">
+<!-- Nav Item 1 -->
+<button class="flex-1 flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-gray-500 group-hover:text-white transition-colors text-[24px]">dashboard</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-white">Home</span>
+</button>
+<!-- Nav Item 2 (Active) -->
+<button class="flex-1 flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-primary-glow text-[24px] drop-shadow-[0_0_5px_rgba(13,51,242,0.8)]">science</span>
+<span class="text-[10px] font-bold text-white">Lab</span>
+</button>
+<!-- FAB: Noble AI -->
+<div class="relative -top-6">
+<button class="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-white shadow-[0_0_20px_rgba(13,51,242,0.6)] border-4 border-[#101322] z-20">
+<span class="material-symbols-outlined text-[32px]">smart_toy</span>
+</button>
+<!-- Static Pulse Ring Simulation -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-primary/30 z-10"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border border-primary/10 z-0"></div>
+</div>
+<!-- Nav Item 3 -->
+<button class="flex-1 flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-gray-500 group-hover:text-white transition-colors text-[24px]">monetization_on</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-white">ROI</span>
+</button>
+<!-- Nav Item 4 -->
+<button class="flex-1 flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-gray-500 group-hover:text-white transition-colors text-[24px]">settings</span>
+<span class="text-[10px] font-medium text-gray-500 group-hover:text-white">Settings</span>
+</button>
+</div>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,1024 @@
+﻿Analyzing mobile_app...                                         
+
+   info - 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre - lib\core\app_theme.dart:28:7 - deprecated_member_use
+   info - 'onBackground' is deprecated and shouldn't be used. Use onSurface instead. This feature was deprecated after v3.18.0-0.1.pre - lib\core\app_theme.dart:33:7 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\app_theme.dart:68:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\app_theme.dart:74:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\app_theme.dart:77:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\app_theme.dart:81:52 - deprecated_member_use
+  error - The method 'toJson' isn't defined for the type 'FinancialGoal' - lib\models\financial_models.dart:194:33 - undefined_method
+   info - 'updateEmail' is deprecated and shouldn't be used. updateEmail() has been deprecated. Please use verifyBeforeUpdateEmail() instead - lib\providers\auth_provider.dart:253:18 - deprecated_member_use
+  error - The function 'StateProvider' isn't defined - lib\providers\financial_provider.dart:3:31 - undefined_function
+  error - Undefined name 'authProvider' - lib\providers\financial_provider.dart:4:22 - undefined_identifier
+  error - The function 'Provider' isn't defined - lib\providers\financial_provider.dart:8:31 - undefined_function
+  error - The name 'AsyncValue' isn't a type, so it can't be used as a type argument - lib\providers\financial_provider.dart:8:40 - non_type_as_type_argument
+  error - The name 'FinancialData' isn't a type, so it can't be used as a type argument - lib\providers\financial_provider.dart:8:51 - non_type_as_type_argument
+  error - Undefined name 'authProvider' - lib\providers\financial_provider.dart:11:31 - undefined_identifier
+  error - The name 'error' isn't a class - lib\providers\financial_provider.dart:14:18 - creation_with_non_type
+  error - Undefined name 'AsyncValue' - lib\providers\financial_provider.dart:20:12 - undefined_identifier
+  error - The function 'FutureProvider' isn't defined - lib\providers\financial_provider.dart:27:34 - undefined_function
+  error - The name 'FinancialData' isn't a type, so it can't be used as a type argument - lib\providers\financial_provider.dart:27:49 - non_type_as_type_argument
+  error - Undefined name 'apiServiceProvider' - lib\providers\financial_provider.dart:28:32 - undefined_identifier
+  error - Undefined name 'authProvider' - lib\providers\financial_provider.dart:29:31 - undefined_identifier
+  error - The function 'StateProvider' isn't defined - lib\providers\financial_provider.dart:41:31 - undefined_function
+  error - The function 'StateProvider' isn't defined - lib\providers\financial_provider.dart:42:35 - undefined_function
+warning - Unused import: 'financial_provider.dart' - lib\providers\multi_tenant_provider.dart:3:8 - unused_import
+  error - The '!==' operator is not supported - lib\providers\multi_tenant_provider.dart:25:37 - unsupported_operator
+warning - Unused import: 'multi_tenant_provider.dart' - lib\providers\notification_provider.dart:4:8 - unused_import
+  error - The method 'whenData' can't be unconditionally invoked because the receiver can be 'null' - lib\providers\notification_provider.dart:15:12 - unchecked_use_of_nullable_value
+warning - Unused import: '../providers/auth_provider.dart' - lib\screens\business_profile_screen.dart:4:8 - unused_import
+warning - Unused import: 'package:intl/intl.dart' - lib\screens\business_profile_screen.dart:6:8 - unused_import
+   info - The private field _foundingDate could be 'final' - lib\screens\business_profile_screen.dart:20:12 - prefer_final_fields
+warning - The value of the field '_foundingDate' isn't used - lib\screens\business_profile_screen.dart:20:12 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:74:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:97:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:99:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:172:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:187:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:189:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:231:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:240:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:278:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:279:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\business_profile_screen.dart:283:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:61:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:85:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:87:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:113:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:115:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:176:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:178:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:239:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:241:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:268:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:269:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:299:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:301:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:352:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:360:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\cash_flow_management_screen.dart:362:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\consolidation_screen.dart:70:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\consolidation_screen.dart:142:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\consolidation_screen.dart:144:48 - deprecated_member_use
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\screens\dashboard_screen.dart:51:12 - sized_box_for_whitespace
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:78:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:84:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:102:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:103:60 - deprecated_member_use
+  error - Undefined name 'context' - lib\screens\dashboard_screen.dart:192:33 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:257:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:290:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:385:24 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:387:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:450:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:452:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:494:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:515:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:517:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\data_entry_screen.dart:212:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\data_entry_screen.dart:247:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\data_entry_screen.dart:250:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\data_entry_screen.dart:254:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:90:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:146:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:148:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:188:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:200:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:202:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:235:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:237:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:280:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:282:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\email_roi_screen.dart:293:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:45:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:60:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:89:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:92:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:157:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:12:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:104:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:106:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:145:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:159:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:176:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:178:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:204:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:207:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:258:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:291:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:365:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:367:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:378:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:462:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:464:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\goals_screen.dart:477:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\history_screen.dart:72:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\history_screen.dart:91:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\history_screen.dart:93:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:69:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:163:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:182:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:186:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:187:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:196:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:219:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:230:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\integrations_screen.dart:231:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:34:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:46:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:77:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:94:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:96:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:184:65 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:221:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:231:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:238:53 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\login_screen.dart:265:54 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:335:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:377:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:379:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:86:28 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:90:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:91:38 - deprecated_member_use
+warning - This default clause is covered by the previous cases - lib\screens\notifications_screen.dart:147:7 - unreachable_switch_default
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:155:22 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:56:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:78:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:81:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:153:69 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:249:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:251:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:270:51 - deprecated_member_use
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:13:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\roi_intelligence_screen.dart:13:16 - undefined_class
+  error - The method 'Scaffold' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:16:12 - undefined_method
+  error - The method 'AppBar' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:18:15 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:19:26 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\roi_intelligence_screen.dart:22:22 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:24:18 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:26:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:28:20 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:32:11 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\roi_intelligence_screen.dart:33:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\roi_intelligence_screen.dart:33:30 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:33:63 - undefined_identifier
+  error - The name 'Center' isn't a class - lib\screens\roi_intelligence_screen.dart:40:30 - creation_with_non_type
+  error - The method 'CircularProgressIndicator' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:40:44 - undefined_method
+  error - The method 'Center' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:41:32 - undefined_method
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:41:46 - undefined_method
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:46:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\roi_intelligence_screen.dart:46:24 - undefined_class
+  error - The method 'SingleChildScrollView' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:60:12 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\roi_intelligence_screen.dart:61:22 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:62:14 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:64:17 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:66:11 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\roi_intelligence_screen.dart:67:28 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:68:25 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\roi_intelligence_screen.dart:69:28 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:70:29 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:72:20 - undefined_method
+  error - Undefined name 'Navigator' - lib\screens\roi_intelligence_screen.dart:78:32 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:80:21 - undefined_method
+  error - Undefined name 'Navigator' - lib\screens\roi_intelligence_screen.dart:88:32 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:90:21 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:100:17 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:104:17 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:105:11 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\roi_intelligence_screen.dart:106:28 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:107:25 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\roi_intelligence_screen.dart:108:28 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:109:29 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\roi_intelligence_screen.dart:110:23 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:110:41 - undefined_identifier
+  error - The method 'IntrinsicHeight' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:112:20 - undefined_method
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:113:22 - undefined_method
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:116:19 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:119:23 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:121:23 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:123:23 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:127:25 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:129:19 - undefined_method
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:130:28 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:138:31 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:143:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:145:31 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:150:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:152:31 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:170:17 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:173:11 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:175:15 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:183:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:184:15 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:189:52 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:195:17 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:199:17 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:205:20 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\roi_intelligence_screen.dart:206:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:208:17 - creation_with_non_type
+  error - The name 'Color' isn't a class - lib\screens\roi_intelligence_screen.dart:214:26 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\roi_intelligence_screen.dart:215:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:217:17 - creation_with_non_type
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:223:3 - undefined_class
+  error - Undefined class 'Color' - lib\screens\roi_intelligence_screen.dart:223:67 - undefined_class
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:224:12 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\roi_intelligence_screen.dart:225:22 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:226:19 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\roi_intelligence_screen.dart:227:22 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:228:23 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\roi_intelligence_screen.dart:229:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:229:35 - undefined_identifier
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:231:14 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\roi_intelligence_screen.dart:232:29 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:234:11 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:236:26 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:236:57 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:238:17 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:239:11 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:241:26 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:241:62 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:243:17 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:244:11 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:246:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:249:27 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:257:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\roi_intelligence_screen.dart:258:5 - undefined_class
+  error - Undefined class 'VoidCallback' - lib\screens\roi_intelligence_screen.dart:261:5 - undefined_class
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:263:12 - undefined_method
+  error - The method 'GestureDetector' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:264:14 - undefined_method
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:266:16 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\roi_intelligence_screen.dart:267:26 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:268:23 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:269:56 - undefined_identifier
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:270:27 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:272:18 - undefined_method
+  error - Undefined name 'TextAlign' - lib\screens\roi_intelligence_screen.dart:274:24 - undefined_identifier
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:275:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:277:40 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:277:58 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:278:35 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:278:50 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:286:3 - undefined_class
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:287:12 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\roi_intelligence_screen.dart:288:26 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:290:9 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:292:24 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:294:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:295:20 - undefined_identifier
+  error - The method 'TextButton' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:299:11 - undefined_method
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:301:20 - undefined_method
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:303:17 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:305:32 - creation_with_non_type
+  error - The name 'Icon' isn't a class - lib\screens\roi_intelligence_screen.dart:310:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\roi_intelligence_screen.dart:311:19 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:322:3 - undefined_class
+  error - Undefined class 'Color' - lib\screens\roi_intelligence_screen.dart:322:21 - undefined_class
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:323:12 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:326:19 - undefined_method
+  error - Undefined name 'BoxShape' - lib\screens\roi_intelligence_screen.dart:328:16 - undefined_identifier
+  error - The method 'BoxShadow' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:330:11 - undefined_method
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:340:3 - undefined_class
+  error - Undefined class 'Color' - lib\screens\roi_intelligence_screen.dart:340:26 - undefined_class
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:341:12 - undefined_method
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:344:3 - undefined_class
+  error - Undefined class 'Color' - lib\screens\roi_intelligence_screen.dart:348:5 - undefined_class
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:351:12 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\roi_intelligence_screen.dart:352:27 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:354:9 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\roi_intelligence_screen.dart:355:30 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:357:13 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:359:28 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:359:59 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:361:13 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:363:22 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:365:29 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:371:15 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:372:9 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:374:18 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:376:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:377:52 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\roi_intelligence_screen.dart:384:3 - undefined_class
+  error - Undefined class 'Color' - lib\screens\roi_intelligence_screen.dart:389:14 - undefined_class
+  error - Undefined class 'IconData' - lib\screens\roi_intelligence_screen.dart:390:14 - undefined_class
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:392:12 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\roi_intelligence_screen.dart:393:22 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:394:19 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\roi_intelligence_screen.dart:395:22 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:396:23 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\roi_intelligence_screen.dart:397:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:397:35 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:399:14 - undefined_method
+  error - The method 'Container' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:401:11 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\roi_intelligence_screen.dart:402:28 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:403:25 - undefined_method
+  error - Undefined name 'BorderRadius' - lib\screens\roi_intelligence_screen.dart:405:29 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:407:20 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:407:38 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\roi_intelligence_screen.dart:409:17 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:410:11 - undefined_method
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:411:20 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\roi_intelligence_screen.dart:412:35 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:414:17 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:416:32 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:417:33 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:421:17 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:423:32 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:423:63 - undefined_identifier
+  error - The method 'Column' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:428:11 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\roi_intelligence_screen.dart:429:33 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:431:15 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:433:24 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\roi_intelligence_screen.dart:434:31 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'RoiIntelligenceScreen' - lib\screens\roi_intelligence_screen.dart:439:15 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\roi_intelligence_screen.dart:441:30 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\roi_intelligence_screen.dart:441:61 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\scenario_planner_screen.dart:75:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\scenario_planner_screen.dart:75:16 - undefined_class
+  error - The method 'Scaffold' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:76:12 - undefined_method
+  error - The method 'AppBar' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:78:15 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:79:26 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:81:18 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\scenario_planner_screen.dart:82:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:82:28 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:82:53 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\scenario_planner_screen.dart:83:28 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:85:22 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:87:18 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:89:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:91:20 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:95:11 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\scenario_planner_screen.dart:96:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:96:30 - undefined_identifier
+  error - The name 'Center' isn't a class - lib\screens\scenario_planner_screen.dart:103:34 - creation_with_non_type
+  error - The method 'CircularProgressIndicator' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:103:48 - undefined_method
+  error - The method 'Center' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:104:36 - undefined_method
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:104:50 - undefined_method
+  error - Undefined class 'Widget' - lib\screens\scenario_planner_screen.dart:109:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\scenario_planner_screen.dart:109:24 - undefined_class
+warning - The value of the local variable 'currencyFormat' isn't used - lib\screens\scenario_planner_screen.dart:110:11 - unused_local_variable
+  error - The method 'SingleChildScrollView' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:127:12 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\scenario_planner_screen.dart:128:24 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:129:16 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\scenario_planner_screen.dart:130:31 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:132:19 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:133:13 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\scenario_planner_screen.dart:134:30 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:135:27 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:136:45 - deprecated_member_use
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:137:31 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\scenario_planner_screen.dart:138:25 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:139:47 - deprecated_member_use
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:142:28 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:144:24 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:146:31 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:151:19 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:152:19 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:154:22 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:156:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:157:24 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:160:19 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:162:22 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:162:53 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:165:19 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:168:13 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\scenario_planner_screen.dart:171:30 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:172:27 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\scenario_planner_screen.dart:173:30 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:174:31 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\scenario_planner_screen.dart:175:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:175:43 - undefined_identifier
+  error - The method 'Column' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:177:22 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\scenario_planner_screen.dart:178:37 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:180:26 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:182:28 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:184:35 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:185:30 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:188:25 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:189:19 - undefined_method
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:191:23 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\scenario_planner_screen.dart:193:38 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:195:39 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:196:34 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:199:29 - creation_with_non_type
+  error - The method 'Icon' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:200:23 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:201:36 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:201:56 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:205:23 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:207:32 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:209:39 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:215:25 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:216:19 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:236:91 - deprecated_member_use
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:247:19 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:250:13 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\scenario_planner_screen.dart:251:30 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:252:27 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\scenario_planner_screen.dart:253:30 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:254:31 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\scenario_planner_screen.dart:255:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:255:43 - undefined_identifier
+  error - The method 'Column' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:257:22 - undefined_method
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:259:19 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\scenario_planner_screen.dart:260:40 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:262:23 - undefined_method
+  error - The method 'Icon' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:264:27 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:265:29 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:269:33 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:270:33 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:272:36 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:274:43 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:280:29 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:282:32 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:282:63 - undefined_identifier
+  error - The name 'Divider' isn't a class - lib\screens\scenario_planner_screen.dart:286:25 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:286:52 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:298:25 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:310:25 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:322:25 - creation_with_non_type
+  error - The method 'SizedBox' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:325:19 - undefined_method
+  error - The method 'ElevatedButton' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:328:28 - undefined_method
+  error - Undefined name 'ElevatedButton' - lib\screens\scenario_planner_screen.dart:330:30 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:331:42 - undefined_identifier
+  error - Undefined name 'EdgeInsets' - lib\screens\scenario_planner_screen.dart:332:34 - undefined_identifier
+  error - The method 'RoundedRectangleBorder' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:333:32 - undefined_method
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:334:41 - undefined_identifier
+  error - Undefined name 'ButtonStyleButton' - lib\screens\scenario_planner_screen.dart:337:36 - undefined_identifier
+  error - The method 'Ink' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:339:30 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:340:37 - undefined_method
+  error - The name 'LinearGradient' isn't a class - lib\screens\scenario_planner_screen.dart:341:43 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:344:41 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:346:32 - undefined_method
+  error - Undefined name 'Alignment' - lib\screens\scenario_planner_screen.dart:347:38 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:349:37 - creation_with_non_type
+  error - The method 'CircularProgressIndicator' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:352:40 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:352:89 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\scenario_planner_screen.dart:354:37 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:356:40 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:357:47 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:358:42 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:370:19 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:373:13 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\scenario_planner_screen.dart:374:30 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:375:27 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:376:77 - deprecated_member_use
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:377:31 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\scenario_planner_screen.dart:378:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:378:43 - undefined_identifier
+  error - The method 'IntrinsicHeight' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:380:22 - undefined_method
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:381:24 - undefined_method
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:383:21 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:385:35 - undefined_method
+  error - The name 'only' isn't a class - lib\screens\scenario_planner_screen.dart:387:45 - creation_with_non_type
+  error - Undefined name 'Radius' - lib\screens\scenario_planner_screen.dart:388:36 - undefined_identifier
+  error - Undefined name 'Radius' - lib\screens\scenario_planner_screen.dart:389:39 - undefined_identifier
+  error - The method 'Expanded' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:393:21 - undefined_method
+  error - The method 'Padding' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:394:30 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\scenario_planner_screen.dart:395:40 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:396:32 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\scenario_planner_screen.dart:397:47 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:399:29 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:400:42 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\scenario_planner_screen.dart:400:63 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:404:35 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:405:29 - undefined_method
+  error - The method 'Column' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:406:38 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\scenario_planner_screen.dart:407:53 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:409:35 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\scenario_planner_screen.dart:410:56 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:412:39 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\scenario_planner_screen.dart:414:54 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:415:55 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:420:39 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\scenario_planner_screen.dart:421:56 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:422:53 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:423:103 - deprecated_member_use
+  error - Undefined name 'BorderRadius' - lib\screens\scenario_planner_screen.dart:424:57 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:426:48 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:428:50 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:431:57 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:437:41 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:438:35 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:440:44 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:442:46 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:447:43 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:448:37 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\scenario_planner_screen.dart:450:52 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:452:48 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:467:19 - creation_with_non_type
+  error - Expected to find ';' - lib\screens\scenario_planner_screen.dart:470:7 - expected_token
+warning - Dead code - lib\screens\scenario_planner_screen.dart:470:8 - dead_code
+  error - Expected an identifier - lib\screens\scenario_planner_screen.dart:470:8 - missing_identifier
+  error - Expected to find ';' - lib\screens\scenario_planner_screen.dart:470:8 - expected_token
+  error - Unexpected text ';' - lib\screens\scenario_planner_screen.dart:470:8 - unexpected_token
+  error - Expected an identifier - lib\screens\scenario_planner_screen.dart:471:5 - missing_identifier
+  error - Unexpected text ';' - lib\screens\scenario_planner_screen.dart:471:5 - unexpected_token
+   info - Unnecessary empty statement - lib\screens\scenario_planner_screen.dart:471:6 - empty_statements
+  error - Undefined class 'Widget' - lib\screens\scenario_planner_screen.dart:474:3 - undefined_class
+  error - The method 'Column' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:482:12 - undefined_method
+  error - The method 'Row' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:484:9 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\scenario_planner_screen.dart:485:30 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:487:13 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\scenario_planner_screen.dart:489:28 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:491:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:492:24 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:495:13 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\scenario_planner_screen.dart:497:28 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\scenario_planner_screen.dart:499:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:500:24 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\scenario_planner_screen.dart:505:15 - creation_with_non_type
+  error - The method 'SliderTheme' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:506:9 - undefined_method
+  error - Undefined name 'SliderTheme' - lib\screens\scenario_planner_screen.dart:507:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:509:33 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\scenario_planner_screen.dart:510:25 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\scenario_planner_screen.dart:511:48 - deprecated_member_use
+  error - The method 'Slider' isn't defined for the type '_ScenarioPlannerScreenState' - lib\screens\scenario_planner_screen.dart:514:18 - undefined_method
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:22:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\screens\settings_screen.dart:22:16 - undefined_class
+  error - The method 'Scaffold' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:23:12 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:24:30 - creation_with_non_type
+  error - The method 'AppBar' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:25:15 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:26:26 - undefined_identifier
+  error - The name 'Column' isn't a class - lib\screens\settings_screen.dart:29:22 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:31:13 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:33:22 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:35:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:37:24 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:40:13 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:42:22 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:44:24 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:50:18 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:51:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:51:28 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:51:53 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:55:11 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:56:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:56:30 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:56:54 - undefined_identifier
+  error - The method 'Stack' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:61:13 - undefined_method
+  error - The method 'Positioned' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:64:11 - undefined_method
+  error - Undefined name 'MediaQuery' - lib\screens\settings_screen.dart:66:19 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:67:20 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:70:27 - undefined_method
+  error - Undefined name 'BoxShape' - lib\screens\settings_screen.dart:71:24 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:72:42 - deprecated_member_use
+  error - The method 'SingleChildScrollView' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:77:11 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\settings_screen.dart:78:28 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:79:20 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:81:23 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:86:23 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:91:23 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:94:23 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:96:26 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:98:33 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:99:28 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:103:23 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:104:17 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:105:34 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:106:31 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:107:34 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:108:35 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:109:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:109:47 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:111:26 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:115:25 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:120:25 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:126:23 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:127:23 - creation_with_non_type
+  error - Undefined name 'TextAlign' - lib\screens\settings_screen.dart:129:30 - undefined_identifier
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:130:26 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:130:57 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:133:23 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:138:23 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:143:23 - creation_with_non_type
+  error - The method 'SizedBox' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:146:17 - undefined_method
+  error - The method 'OutlinedButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:149:26 - undefined_method
+  error - Undefined name 'OutlinedButton' - lib\screens\settings_screen.dart:151:28 - undefined_identifier
+  error - The method 'BorderSide' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:152:29 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:153:49 - deprecated_member_use
+  error - The method 'RoundedRectangleBorder' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:155:30 - undefined_method
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:156:39 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:159:34 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:161:30 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:163:37 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:170:23 - creation_with_non_type
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:179:3 - undefined_class
+  error - Undefined class 'IconData' - lib\screens\settings_screen.dart:179:42 - undefined_class
+  error - The method 'Expanded' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:180:12 - undefined_method
+  error - The method 'GestureDetector' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:181:14 - undefined_method
+  error - The method 'AnimatedContainer' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:183:16 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\settings_screen.dart:185:26 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:186:23 - undefined_method
+  error - The name 'LinearGradient' isn't a class - lib\screens\settings_screen.dart:188:25 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:192:27 - undefined_identifier
+  error - The method 'BoxShadow' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:195:21 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:196:48 - deprecated_member_use
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:202:18 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\settings_screen.dart:203:32 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:205:15 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:208:35 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:208:50 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:210:21 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:211:15 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:213:24 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:215:42 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:215:60 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:216:37 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:216:52 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:226:3 - undefined_class
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:227:12 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:228:22 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:229:19 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:230:22 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:231:23 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:232:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:232:35 - undefined_identifier
+  error - The method 'BoxShadow' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:234:11 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:234:28 - undefined_identifier
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:237:14 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:238:29 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:240:11 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\settings_screen.dart:241:32 - undefined_identifier
+  error - The name 'Row' isn't a class - lib\screens\settings_screen.dart:243:21 - creation_with_non_type
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:245:19 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:246:21 - undefined_identifier
+  error - The method 'SizedBox' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:250:19 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:251:19 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:253:28 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:253:64 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:257:15 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\settings_screen.dart:258:32 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:259:29 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:260:47 - deprecated_member_use
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:261:33 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:262:27 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:263:49 - deprecated_member_use
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:266:30 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:268:26 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:270:33 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:277:17 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:279:17 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:281:17 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:282:11 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:283:28 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:284:25 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:285:22 - undefined_identifier
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:286:29 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:287:23 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:287:41 - undefined_identifier
+  error - The name 'Row' isn't a class - lib\screens\settings_screen.dart:289:26 - creation_with_non_type
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:290:35 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:292:17 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:292:22 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:292:49 - undefined_identifier
+   info - Unnecessary 'const' keyword - lib\screens\settings_screen.dart:293:17 - unnecessary_const
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:293:23 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:294:17 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:295:26 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:297:28 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:299:30 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:307:17 - creation_with_non_type
+  error - The method 'SizedBox' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:308:11 - undefined_method
+  error - The method 'ElevatedButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:311:20 - undefined_method
+  error - Undefined name 'ElevatedButton' - lib\screens\settings_screen.dart:313:22 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:315:34 - undefined_identifier
+  error - The method 'RoundedRectangleBorder' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:316:24 - undefined_method
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:317:33 - undefined_identifier
+  error - The name 'Row' isn't a class - lib\screens\settings_screen.dart:321:28 - creation_with_non_type
+  error - Undefined name 'MainAxisAlignment' - lib\screens\settings_screen.dart:322:36 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:324:19 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:324:24 - undefined_identifier
+  error - The method 'SizedBox' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:325:19 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:326:19 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:328:28 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:329:35 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:342:3 - undefined_class
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:347:12 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:348:27 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:350:9 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\screens\settings_screen.dart:351:30 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:353:13 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:355:28 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:357:24 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:358:29 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:362:13 - undefined_method
+  error - The name 'BoxDecoration' isn't a class - lib\screens\settings_screen.dart:365:33 - creation_with_non_type
+  error - Undefined name 'BoxShape' - lib\screens\settings_screen.dart:367:24 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:372:15 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:373:9 - undefined_method
+  error - The name 'symmetric' isn't a class - lib\screens\settings_screen.dart:374:26 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:376:23 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:377:20 - undefined_identifier
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:378:27 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:379:21 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:381:39 - deprecated_member_use
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:382:21 - undefined_identifier
+  error - The method 'BoxShadow' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:386:21 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\settings_screen.dart:387:48 - deprecated_member_use
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:393:18 - undefined_method
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:395:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:396:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:397:55 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:400:21 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:401:15 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:403:30 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:404:26 - undefined_identifier
+  error - The name 'Spacer' isn't a class - lib\screens\settings_screen.dart:410:21 - creation_with_non_type
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:411:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:412:28 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:412:48 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:413:55 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:423:3 - undefined_class
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:424:12 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:425:19 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:426:22 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:427:23 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:428:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:428:35 - undefined_identifier
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:430:14 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:433:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:435:13 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:436:19 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:438:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:443:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:445:13 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:446:19 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:448:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:453:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:455:13 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:456:19 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:458:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:465:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:467:13 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:468:19 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:470:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:477:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:479:13 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:480:19 - undefined_identifier
+  error - The method 'MaterialPageRoute' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:482:15 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:489:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:491:13 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:496:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:498:13 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:503:13 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:505:13 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:513:3 - undefined_class
+  error - Undefined class 'IconData' - lib\screens\settings_screen.dart:514:5 - undefined_class
+  error - Undefined class 'Color' - lib\screens\settings_screen.dart:516:5 - undefined_class
+  error - Undefined class 'VoidCallback' - lib\screens\settings_screen.dart:517:5 - undefined_class
+  error - The method 'ListTile' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:519:12 - undefined_method
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:520:16 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:521:24 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:522:21 - undefined_method
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:524:25 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:526:16 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:528:14 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:530:22 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:531:18 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:533:23 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:536:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:536:28 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:536:56 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:541:3 - undefined_class
+  error - The method 'Divider' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:542:12 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:544:14 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:550:3 - undefined_class
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:557:12 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:558:22 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:559:19 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:560:22 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:561:23 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:562:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:562:35 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:564:14 - undefined_method
+  error - The method 'CircleAvatar' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:566:11 - undefined_method
+  error - The method 'NetworkImage' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:566:53 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:567:17 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:568:11 - undefined_method
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:569:20 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:570:35 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:572:17 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:574:32 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:576:33 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:577:28 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:580:23 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:581:17 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:583:32 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:583:63 - undefined_identifier
+  error - The method 'IconButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:588:11 - undefined_method
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:590:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:591:15 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:592:22 - undefined_identifier
+  error - Undefined class 'BuildContext' - lib\screens\settings_screen.dart:601:31 - undefined_class
+  error - The method 'TextEditingController' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:603:28 - undefined_method
+  error - The method 'TextEditingController' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:604:29 - undefined_method
+  error - The method 'TextEditingController' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:605:29 - undefined_method
+  error - The method 'showDialog' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:607:5 - undefined_method
+  error - The method 'AlertDialog' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:609:29 - undefined_method
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:611:22 - creation_with_non_type
+  error - The method 'SingleChildScrollView' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:612:18 - undefined_method
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:613:18 - undefined_method
+  error - Undefined name 'MainAxisSize' - lib\screens\settings_screen.dart:614:27 - undefined_identifier
+  error - The method 'TextField' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:616:15 - undefined_method
+  error - The name 'InputDecoration' isn't a class - lib\screens\settings_screen.dart:618:35 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:620:21 - creation_with_non_type
+  error - The method 'TextField' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:621:15 - undefined_method
+  error - The name 'InputDecoration' isn't a class - lib\screens\settings_screen.dart:623:35 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:625:21 - creation_with_non_type
+  error - The method 'TextField' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:626:15 - undefined_method
+  error - The name 'InputDecoration' isn't a class - lib\screens\settings_screen.dart:628:35 - creation_with_non_type
+  error - The method 'TextButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:634:11 - undefined_method
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:635:30 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:636:26 - creation_with_non_type
+  error - The method 'ElevatedButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:638:11 - undefined_method
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:646:15 - undefined_identifier
+  error - Undefined name 'ScaffoldMessenger' - lib\screens\settings_screen.dart:647:15 - undefined_identifier
+  error - The name 'SnackBar' isn't a class - lib\screens\settings_screen.dart:648:23 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:648:41 - undefined_method
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:651:26 - creation_with_non_type
+  error - Undefined class 'BuildContext' - lib\screens\settings_screen.dart:658:27 - undefined_class
+  error - The method 'showModalBottomSheet' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:659:5 - undefined_method
+  error - The name 'RoundedRectangleBorder' isn't a class - lib\screens\settings_screen.dart:662:20 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:663:23 - undefined_identifier
+  error - Undefined name 'Radius' - lib\screens\settings_screen.dart:663:50 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:668:18 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:669:28 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:670:20 - undefined_method
+  error - Undefined name 'MainAxisSize' - lib\screens\settings_screen.dart:671:29 - undefined_identifier
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:672:35 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:674:23 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:676:26 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:678:33 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:680:28 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:683:23 - creation_with_non_type
+  error - The method 'ListTile' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:684:17 - undefined_method
+  error - Undefined name 'EdgeInsets' - lib\screens\settings_screen.dart:685:35 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:686:28 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:687:36 - creation_with_non_type
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:688:33 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:690:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:691:29 - undefined_identifier
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:692:37 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:694:28 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:695:23 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:697:29 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:698:29 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:702:32 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:704:28 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:704:45 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:706:35 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:708:28 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:708:45 - undefined_identifier
+  error - The method 'Switch' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:710:29 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:718:23 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:719:23 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:721:26 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:721:43 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:723:17 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:725:26 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:727:27 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:728:27 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:729:33 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:733:23 - creation_with_non_type
+  error - The method 'SizedBox' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:734:17 - undefined_method
+  error - The method 'ElevatedButton' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:736:26 - undefined_method
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:737:38 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:738:34 - creation_with_non_type
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:749:3 - undefined_class
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:752:12 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:753:27 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\screens\settings_screen.dart:755:15 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:757:18 - undefined_method
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:759:25 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:760:20 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:764:15 - creation_with_non_type
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:765:9 - undefined_method
+  error - The method 'BoxDecoration' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:766:23 - undefined_method
+  error - The name 'Color' isn't a class - lib\screens\settings_screen.dart:767:26 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:768:27 - undefined_identifier
+  error - Undefined name 'Border' - lib\screens\settings_screen.dart:769:21 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:769:39 - undefined_identifier
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:771:18 - undefined_method
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:776:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:790:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:810:17 - undefined_identifier
+  error - Undefined class 'Widget' - lib\screens\settings_screen.dart:827:3 - undefined_class
+  error - Undefined class 'IconData' - lib\screens\settings_screen.dart:830:5 - undefined_class
+  error - Undefined class 'VoidCallback' - lib\screens\settings_screen.dart:831:5 - undefined_class
+  error - The method 'ListTile' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:833:12 - undefined_method
+  error - The method 'Icon' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:834:16 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:835:14 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:837:22 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:837:39 - undefined_identifier
+  error - The method 'Row' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:839:17 - undefined_method
+  error - Undefined name 'MainAxisSize' - lib\screens\settings_screen.dart:840:23 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:842:11 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:844:26 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:845:22 - undefined_identifier
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:846:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:850:17 - creation_with_non_type
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:851:17 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:851:22 - undefined_identifier
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:851:50 - undefined_identifier
+  error - The method 'showModalBottomSheet' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:864:5 - undefined_method
+  error - The name 'RoundedRectangleBorder' isn't a class - lib\screens\settings_screen.dart:867:20 - creation_with_non_type
+  error - Undefined name 'BorderRadius' - lib\screens\settings_screen.dart:868:23 - undefined_identifier
+  error - Undefined name 'Radius' - lib\screens\settings_screen.dart:868:50 - undefined_identifier
+  error - The method 'Container' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:870:29 - undefined_method
+  error - The name 'all' isn't a class - lib\screens\settings_screen.dart:871:24 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:872:16 - undefined_method
+  error - Undefined name 'MainAxisSize' - lib\screens\settings_screen.dart:873:25 - undefined_identifier
+  error - Undefined name 'CrossAxisAlignment' - lib\screens\settings_screen.dart:874:31 - undefined_identifier
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:876:13 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\screens\settings_screen.dart:878:28 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\screens\settings_screen.dart:878:64 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\screens\settings_screen.dart:880:19 - creation_with_non_type
+  error - The method 'ListTile' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:882:24 - undefined_method
+  error - The method 'Text' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:883:24 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type '_SettingsScreenState' - lib\screens\settings_screen.dart:885:26 - undefined_method
+  error - Undefined name 'Colors' - lib\screens\settings_screen.dart:886:68 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\screens\settings_screen.dart:890:29 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\screens\settings_screen.dart:890:34 - undefined_identifier
+  error - Undefined name 'Navigator' - lib\screens\settings_screen.dart:894:19 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:31:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:43:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:69:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:122:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:161:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:164:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:261:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:273:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:280:53 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\signup_screen.dart:306:54 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:362:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:372:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:380:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:411:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\signup_screen.dart:413:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:89:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:108:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:110:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:150:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:152:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:184:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:207:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\social_roi_screen.dart:209:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:105:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:136:63 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:139:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:157:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:160:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:164:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:210:51 - deprecated_member_use
+   info - Unnecessary 'const' keyword - lib\screens\splash_screen.dart:245:31 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\splash_screen.dart:246:31 - unnecessary_const
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:272:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:294:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:318:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:319:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:320:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\static_content_screen.dart:21:54 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:33:11 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:41:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:112:7 - avoid_print
+   info - The prefix 'IO' isn't a lower_case_with_underscores identifier - lib\services\realtime_service.dart:2:60 - library_prefixes
+   info - Don't invoke 'print' in production code - lib\services\realtime_service.dart:31:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\realtime_service.dart:34:32 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\realtime_service.dart:44:7 - avoid_print
+warning - Unused import: '../providers/financial_provider.dart' - lib\widgets\ai_coach_sheet.dart:6:8 - unused_import
+   info - The private field _loadingText could be 'final' - lib\widgets\ai_coach_sheet.dart:22:10 - prefer_final_fields
+warning - The value of the field '_loadingMessages' isn't used - lib\widgets\ai_coach_sheet.dart:32:22 - unused_field
+  error - The method '_buildQuickActions' isn't defined for the type '_AiCoachSheetState' - lib\widgets\ai_coach_sheet.dart:177:52 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:213:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:216:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:252:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:277:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:301:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:309:67 - deprecated_member_use
+  error - The method '_buildActionIcon' isn't defined for the type '_AiCoachSheetState' - lib\widgets\ai_coach_sheet.dart:319:25 - undefined_method
+   info - Don't use 'BuildContext's across async gaps - lib\widgets\ai_coach_sheet.dart:333:52 - use_build_context_synchronously
+  error - The method '_buildActionIcon' isn't defined for the type '_AiCoachSheetState' - lib\widgets\ai_coach_sheet.dart:349:25 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:389:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:406:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:432:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:442:58 - deprecated_member_use
+warning - Dead code - lib\widgets\ai_coach_sheet.dart:474:3 - dead_code
+   info - The local variable '_buildQuickActions' starts with an underscore - lib\widgets\ai_coach_sheet.dart:474:10 - no_leading_underscores_for_local_identifiers
+warning - The declaration '_buildQuickActions' isn't referenced - lib\widgets\ai_coach_sheet.dart:474:10 - unused_element
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:490:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:493:54 - deprecated_member_use
+   info - The local variable '_buildActionIcon' starts with an underscore - lib\widgets\ai_coach_sheet.dart:506:10 - no_leading_underscores_for_local_identifiers
+warning - The declaration '_buildActionIcon' isn't referenced - lib\widgets\ai_coach_sheet.dart:506:10 - unused_element
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\ai_coach_sheet.dart:512:50 - deprecated_member_use
+  error - Expected to find '}' - lib\widgets\ai_coach_sheet.dart:524:1 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\business_switcher.dart:24:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\business_switcher.dart:26:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\business_switcher.dart:87:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\business_switcher.dart:88:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\business_switcher.dart:134:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\kpi_card.dart:28:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\kpi_card.dart:30:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\kpi_card.dart:43:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\kpi_card.dart:46:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\kpi_card.dart:77:32 - deprecated_member_use
+  error - The name 'MyApp' isn't a class - test\widget_test.dart:16:35 - creation_with_non_type
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign-Up - Financial Intelligence Platform</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#293d99", // Noble Imperial Blue
+                        "primary-glow": "#3b52b6",
+                        "background-dark": "#0B0E14", // Deep Obsidian
+                        "surface-dark": "#13161C",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                    },
+                    fontFamily: {
+                        "display": ["Montserrat", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "md": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px -5px rgba(41, 61, 153, 0.5)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Styles for Glassmorphism & Details */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0E14;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(19, 22, 28, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .input-glass {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-glass:focus {
+            background: rgba(41, 61, 153, 0.1);
+            border-color: #293d99;
+            box-shadow: 0 0 0 1px #293d99;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Smooth fade in */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white overflow-x-hidden">
+<!-- Top Navigation -->
+<div class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-12 pb-4 bg-background-dark/80 backdrop-blur-md border-b border-white/5">
+<button class="text-white/80 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/5 active:bg-white/10">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<span class="text-sm font-semibold tracking-wide text-white/60">STEP 1 OF 3</span>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col px-6 pt-28 pb-8 w-full max-w-md mx-auto relative z-10">
+<!-- Header Section -->
+<div class="mb-8 fade-in-up" style="animation-delay: 0.1s;">
+<h1 class="text-3xl font-bold leading-tight tracking-tight text-white mb-3">
+                Join the elite.
+            </h1>
+<p class="text-white/60 text-base font-normal leading-relaxed">
+                Financial foresight for the modern CFO. Create your account to begin.
+            </p>
+</div>
+<!-- Progress Indicators -->
+<div class="flex gap-2 mb-8 fade-in-up" style="animation-delay: 0.2s;">
+<div class="h-1 flex-1 rounded-full bg-primary shadow-[0_0_10px_rgba(41,61,153,0.6)]"></div>
+<div class="h-1 flex-1 rounded-full bg-white/10"></div>
+<div class="h-1 flex-1 rounded-full bg-white/10"></div>
+</div>
+<!-- Form Section -->
+<form class="flex flex-col gap-6 fade-in-up" onsubmit="event.preventDefault();" style="animation-delay: 0.3s;">
+<!-- Glass Card Container for Input -->
+<div class="glass-panel rounded-2xl p-6 shadow-glass relative group">
+<div class="flex flex-col gap-1">
+<label class="text-sm font-medium text-white/80 ml-1 mb-2" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">mail</span>
+<input class="input-glass w-full rounded-xl py-4 pl-12 pr-12 text-white placeholder:text-white/20 focus:outline-none focus:ring-0 text-base font-body" id="email" name="email" placeholder="name@company.com" type="email" value="alex.morgan@ventu"/>
+<!-- Validation Icon (Simulated Active State) -->
+<span class="material-symbols-outlined filled absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 animate-pulse text-[20px]">check_circle</span>
+</div>
+<p class="text-xs text-white/40 mt-2 ml-1">Please use your work email for verification.</p>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="mt-4 w-full bg-primary hover:bg-primary-glow text-white font-semibold py-4 rounded-xl shadow-glow transition-all active:scale-[0.98] flex items-center justify-center gap-2 group" type="button">
+<span>Continue</span>
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<!-- Divider -->
+<div class="flex items-center gap-4 my-2">
+<div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
+<span class="text-xs font-medium text-white/40 uppercase tracking-wider">Or continue with</span>
+<div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
+</div>
+<!-- Social Login -->
+<div class="grid grid-cols-2 gap-4">
+<button class="glass-panel hover:bg-white/5 active:bg-white/10 transition-colors border border-white/10 rounded-xl py-3.5 flex items-center justify-center gap-3 group" type="button">
+<!-- Apple Logo SVG -->
+<svg class="w-5 h-5 fill-white" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z" style="display:none;"></path><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.74 1.18 0 2.45-1.02 3.47-.85 1.51.13 2.86 1.01 3.64 2.14-3.48 2.16-2.45 6.94 1.1 8.28-.7 1.7-1.78 3.5-2.61 4.66-.5.6-1.02.74-1.26.85-.3.12-.55.25-.82.15zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"></path></svg>
+<span class="text-sm font-medium text-white/90">Apple</span>
+</button>
+<button class="glass-panel hover:bg-white/5 active:bg-white/10 transition-colors border border-white/10 rounded-xl py-3.5 flex items-center justify-center gap-3" type="button">
+<!-- Google Logo SVG -->
+<svg class="w-5 h-5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="text-sm font-medium text-white/90">Google</span>
+</button>
+</div>
+</form>
+</main>
+<!-- Footer -->
+<footer class="p-6 text-center relative z-10 fade-in-up" style="animation-delay: 0.4s;">
+<p class="text-sm text-white/50">
+            Already have an account? 
+            <a class="text-primary hover:text-primary-glow font-semibold transition-colors ml-1" href="#">Log In</a>
+</p>
+<div class="mt-8 flex justify-center gap-6">
+<a class="text-xs text-white/30 hover:text-white/50 transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs text-white/30 hover:text-white/50 transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+<!-- Background Ambient Glow -->
+<div class="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
+</body></html>

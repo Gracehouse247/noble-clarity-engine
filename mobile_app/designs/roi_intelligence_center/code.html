@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ROI Intelligence Center</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1833aa",
+              "primary-light": "#3b5bdb",
+              "background-light": "#f6f6f8",
+              "background-dark": "#0A0A0A", // Deep charcoal as requested
+              "surface-dark": "#131313",
+              "glass-border": "rgba(255, 255, 255, 0.08)",
+              "glass-bg": "rgba(255, 255, 255, 0.03)",
+              "success": "#10b981", // Emerald green equivalent
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"],
+              "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
+            },
+            borderRadius: {
+              "DEFAULT": "0.375rem", 
+              "md": "0.375rem", 
+              "lg": "0.5rem", 
+              "xl": "0.75rem", 
+              "2xl": "1rem",
+              "full": "9999px"
+            },
+            backgroundImage: {
+              'gradient-funnel': 'linear-gradient(to bottom, #1833aa, #10b981)',
+              'noble-glow': 'radial-gradient(circle at center, rgba(24, 51, 170, 0.4) 0%, rgba(24, 51, 170, 0) 70%)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Glassmorphism 2.0 Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Custom Scrollbar for hidden overflow but scrollable */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* AI Pulse Animation */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(24, 51, 170, 0.5); transform: scale(1); }
+            50% { box-shadow: 0 0 25px rgba(24, 51, 170, 0.8), 0 0 10px rgba(16, 185, 129, 0.3); transform: scale(1.05); }
+        }
+        .ai-pulse {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+        
+        /* Gradient text */
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-slate-100 selection:bg-primary selection:text-white pb-24">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-30 w-full glass-panel border-b-0 border-x-0 rounded-b-xl">
+<div class="flex items-center p-4 justify-between">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full glass-panel p-0.5">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-full" data-alt="User profile avatar showing a professional in a suit" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMxWHPJCQwye1P6DKU_RtlF895TPMabwAW62OVsBW2fnmDDwmwRvhZD_jF8n97WO1LD5ZzdmfceYc3sZ71TJrSSAQVX32j1Z9rPpfHkTdwvDwP7_1MUpEgqW34Rw8xHQAirGojQA6SASbmckWYhbCt7RBNTuCa-FwCCjubt7ccZq7rN-0uy-Hzb1crwURMuEH8wJzAAIXcQNspQ_ZQgqLHihn5Hp8rcg3Td_IHzJJZ1YG24VzxUVu5VSWWglsaYfDse3GxJo17lYo");'></div>
+</div>
+<h1 class="text-white text-lg font-bold tracking-tight text-center flex-1">ROI Intelligence</h1>
+<button class="flex size-10 items-center justify-center rounded-full glass-panel text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+</div>
+</header>
+<main class="w-full max-w-md mx-auto px-4 pt-6 flex flex-col gap-6">
+<!-- Segmented Control -->
+<div class="glass-panel p-1 rounded-xl">
+<div class="grid grid-cols-4 gap-1">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="segment" type="radio" value="all"/>
+<div class="flex items-center justify-center py-2 px-1 rounded-lg text-xs font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg">
+                        All
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="segment" type="radio" value="social"/>
+<div class="flex items-center justify-center py-2 px-1 rounded-lg text-xs font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg">
+                        Social
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="segment" type="radio" value="email"/>
+<div class="flex items-center justify-center py-2 px-1 rounded-lg text-xs font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg">
+                        Email
+                    </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="segment" type="radio" value="seo"/>
+<div class="flex items-center justify-center py-2 px-1 rounded-lg text-xs font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg">
+                        SEO
+                    </div>
+</label>
+</div>
+</div>
+<!-- Efficiency Funnel -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="text-white text-xl font-bold tracking-tight">Efficiency Funnel</h2>
+<button class="text-xs text-primary-light font-medium flex items-center gap-1">
+                    Last 30 Days <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+<div class="glass-panel rounded-2xl p-5 relative overflow-hidden">
+<!-- Subtle background glow -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[40px] rounded-full pointer-events-none"></div>
+<div class="grid grid-cols-[32px_1fr] gap-x-4 relative z-10">
+<!-- Timeline Spine -->
+<div class="flex flex-col items-center h-full py-2">
+<!-- Node 1 -->
+<div class="size-3 rounded-full bg-primary ring-4 ring-primary/20 z-10"></div>
+<div class="w-0.5 grow bg-gradient-to-b from-primary via-primary to-primary/80 my-[-2px]"></div>
+<!-- Node 2 -->
+<div class="size-3 rounded-full bg-[#254bdb] ring-4 ring-[#254bdb]/20 z-10"></div>
+<div class="w-0.5 grow bg-gradient-to-b from-primary/80 via-[#254bdb] to-[#10b981] my-[-2px]"></div>
+<!-- Node 3 -->
+<div class="size-3 rounded-full bg-[#10b981] ring-4 ring-[#10b981]/20 z-10"></div>
+<div class="w-0.5 grow bg-gradient-to-b from-[#10b981] to-[#34d399] my-[-2px]"></div>
+<!-- Node 4 -->
+<div class="size-3 rounded-full bg-[#34d399] ring-4 ring-[#34d399]/20 z-10"></div>
+</div>
+<!-- Funnel Content -->
+<div class="flex flex-col justify-between gap-6 py-0">
+<!-- Item 1 -->
+<div class="flex flex-col">
+<div class="flex justify-between items-baseline">
+<span class="text-slate-400 text-sm font-medium">Impressions</span>
+<span class="text-emerald-400 text-xs font-mono font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +12%
+                                </span>
+</div>
+<div class="text-white text-2xl font-bold font-mono tracking-tight mt-0.5">1.2M</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col">
+<div class="flex justify-between items-baseline">
+<span class="text-slate-400 text-sm font-medium">Clicks</span>
+<span class="text-slate-500 text-xs font-medium">3.7% CTR</span>
+</div>
+<div class="text-white text-2xl font-bold font-mono tracking-tight mt-0.5">45,280</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col">
+<div class="flex justify-between items-baseline">
+<span class="text-slate-400 text-sm font-medium">Leads</span>
+<span class="text-slate-500 text-xs font-medium">4.6% Conv.</span>
+</div>
+<div class="text-white text-2xl font-bold font-mono tracking-tight mt-0.5">2,105</div>
+</div>
+<!-- Item 4 -->
+<div class="flex flex-col">
+<div class="flex justify-between items-baseline">
+<span class="text-white text-sm font-bold">Conversions</span>
+<span class="text-emerald-400 text-xs font-bold font-mono">$367 Avg. Order</span>
+</div>
+<div class="text-emerald-400 text-3xl font-bold font-mono tracking-tight mt-0.5 text-shadow-sm flex items-baseline gap-2">
+                                340
+                                <span class="text-slate-400 text-sm font-normal">($125k Rev)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Platform Performance -->
+<section class="flex flex-col gap-3 pb-8">
+<h2 class="text-white text-xl font-bold tracking-tight">Platform Performance</h2>
+<!-- Card 1: TikTok (Expanded state simulated) -->
+<div class="glass-panel rounded-xl overflow-hidden group">
+<div class="p-4 flex flex-col gap-4">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#000000] flex items-center justify-center border border-white/10">
+<img alt="TikTok Logo" class="w-5 h-5" data-alt="TikTok Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFlgFPY0mbPzMqkznjKV367DBH1fGo936xoY8GaGe1RUhDO2R-pR7zZs_-PQqtq_v_VjwJJKa9kg-UqYMoD9cEjFU7nQ_ye00ycqTiNRCLx8VKo89CssRiV3byz2Irfngmnhjn8LqWmQhiw9ttl-qxqscgcnoTu_poYt4N-6Bi4kPlQg16nHO3RR8yhOOlrPjD7-Lx5VUl19R5XVnj4KaZ54gDBAtQDFqRRaeEfv-T4ph_9q5nbcRDqUbHu1JFu73pcL6J0Vm1KAE"/>
+</div>
+<div>
+<h3 class="text-white font-semibold">TikTok Ads</h3>
+<div class="text-xs text-slate-400">Viral Awareness Campaign</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-emerald-400 font-bold font-mono">4.2x ROI</div>
+<div class="text-slate-500 text-xs font-mono">$5,020 Spend</div>
+</div>
+</div>
+<!-- Deep Dive Section (Visible) -->
+<div class="pt-3 border-t border-white/5 grid grid-cols-2 gap-3">
+<div class="bg-white/5 rounded-lg p-2.5">
+<div class="text-slate-400 text-[10px] uppercase tracking-wider font-semibold">CPC</div>
+<div class="text-white font-mono font-medium text-sm">$0.42</div>
+</div>
+<div class="bg-white/5 rounded-lg p-2.5">
+<div class="text-slate-400 text-[10px] uppercase tracking-wider font-semibold">CAC</div>
+<div class="text-white font-mono font-medium text-sm">$14.20</div>
+</div>
+<div class="bg-white/5 rounded-lg p-2.5">
+<div class="text-slate-400 text-[10px] uppercase tracking-wider font-semibold">CPM</div>
+<div class="text-white font-mono font-medium text-sm">$8.50</div>
+</div>
+<div class="bg-white/5 rounded-lg p-2.5">
+<div class="text-slate-400 text-[10px] uppercase tracking-wider font-semibold">LTV</div>
+<div class="text-white font-mono font-medium text-sm">$850</div>
+</div>
+</div>
+</div>
+<div class="bg-white/5 py-1 flex justify-center cursor-pointer hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 text-[18px] transform rotate-180">expand_more</span>
+</div>
+</div>
+<!-- Card 2: LinkedIn (Collapsed) -->
+<div class="glass-panel rounded-xl overflow-hidden group">
+<div class="p-4 flex flex-col gap-4">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#0077b5] flex items-center justify-center border border-white/10">
+<img alt="LinkedIn Logo" class="w-5 h-5" data-alt="LinkedIn Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwhJIPyFAT-0cDFO45ldLKLIGDCkc1vToqMen5jufchADejP15Ah-svZUKV1N4fqo9Sy54PwiATMTkghqneqiaXf9vOk1SsgepMGMbCjWAjKmWChygkLHzW9TY2vvpbGKDpY1XMRkMT8uJaad9GDKosCiK21IgKQLY8cUrbpe2jL7kX0K5VMkZ5IdpWXvbWsPu9SEnYaiWogXBdPV_7jNCQSVuyKk0IXbncf4aB-XUlQ4B6CDqitSaK6Mwq0pri0NvAlnJvTs0jFo"/>
+</div>
+<div>
+<h3 class="text-white font-semibold">LinkedIn</h3>
+<div class="text-xs text-slate-400">B2B Lead Gen</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-emerald-400 font-bold font-mono">2.8x ROI</div>
+<div class="text-slate-500 text-xs font-mono">$12,450 Spend</div>
+</div>
+</div>
+</div>
+<div class="bg-white/5 py-1 flex justify-center cursor-pointer hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Card 3: Facebook (Collapsed) -->
+<div class="glass-panel rounded-xl overflow-hidden group">
+<div class="p-4 flex flex-col gap-4">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#1877F2] flex items-center justify-center border border-white/10">
+<img alt="Facebook Logo" class="w-5 h-5" data-alt="Facebook Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvE_RUpnLT4JGT7Rur0Ytx0XImpVwPgWrk8hxV9f_zg_7UhT-ITQs-0by0cEfr_KzM295jsOItI7HuyRZOJeXdW3VsZxMV2HN4JNdJcOtrboi_Avybk7zOErCF9X-cojfImTjJvcVZIIOFjrRFoMH41nMx79S3V3v69f_n9zzqhf68niz1hDW87vpWFbjKNDRzj6y9Ke3v34pL3PnqlGD0jzj4w8-VypddW_xUUHs5mBn13Wd4AZb2DI-ztwaSKRMWtk7ljyTR9ps"/>
+</div>
+<div>
+<h3 class="text-white font-semibold">Facebook</h3>
+<div class="text-xs text-slate-400">Retargeting</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-emerald-400 font-bold font-mono">3.1x ROI</div>
+<div class="text-slate-500 text-xs font-mono">$8,100 Spend</div>
+</div>
+</div>
+</div>
+<div class="bg-white/5 py-1 flex justify-center cursor-pointer hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full glass-panel border-t border-glass-border pb-safe pt-2 px-6 rounded-t-2xl z-40 bg-background-dark/80 backdrop-blur-xl">
+<div class="flex items-center justify-between relative max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-[10px] font-medium">Dash</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors mr-8" href="#">
+<span class="material-symbols-outlined text-[24px]">science</span>
+<span class="text-[10px] font-medium">Lab</span>
+</a>
+<!-- Noble AI FAB -->
+<div class="absolute -top-8 left-1/2 transform -translate-x-1/2">
+<button class="ai-pulse size-14 rounded-full bg-primary flex items-center justify-center border-4 border-background-dark text-white shadow-xl shadow-primary/40 relative z-50">
+<span class="material-symbols-outlined text-[28px]">psychology</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 p-2 text-primary ml-8" href="#">
+<span class="material-symbols-outlined text-[24px] fill-current">monitoring</span>
+<span class="text-[10px] font-medium">ROI</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</a>
+</div>
+<!-- Safe area spacing for iOS home indicator -->
+<div class="h-5 w-full"></div>
+</nav>
+</body></html>

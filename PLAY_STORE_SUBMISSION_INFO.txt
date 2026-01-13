@@ -1,0 +1,53 @@
+# Google Play Store Submission Info
+# Copy and paste this information into the relevant sections of the Google Play Console
+
+---
+
+### **1. App Access / Restricted Permissions**
+
+**Permission:** `android.permission.RECORD_AUDIO`
+
+**Question:** Why does your app need access to the microphone?
+
+**Answer (Copy Paste):**
+Noble Clarity Engine uses the microphone to enable the active Voice Assistant feature ("Noble Coach"). This allows users to verbally ask financial questions (e.g., "What is my current burn rate?" or "How can I improve my net margin?") and receive real-time, spoken AI insights while on the go. This hands-free interaction is a core accessibility and productivity feature designed for busy founders. Audio is processed only for the duration of the query and is not permanently stored or used for advertising.
+
+---
+
+### **2. Safety Section / Data Deletion**
+
+**Does your app allow users to delete their account?**
+YES.
+
+**How?**
+Inside the app via: Settings -> Delete Account & Data.
+
+**Link to account deletion info:**
+https://clarity.noblesworld.com.ng/pricing#/privacy (Section: Data Retention)
+
+---
+
+### **3. Privacy & Terms URLs**
+
+**Privacy Policy URL:**
+https://clarity.noblesworld.com.ng/pricing#/privacy
+
+**Terms of Service URL:**
+https://clarity.noblesworld.com.ng/pricing#/terms
+
+---
+
+### **4. Category & Tags**
+
+**Category:** Finance
+**Tags:** 
+- Business Management
+- Productivity
+- Accounting
+- Artificial Intelligence
+
+---
+
+### **5. Feature Graphics / Screenshots**
+
+Ensure you upload screenshots showing the "Noble Coach" (Voice Assistant) screen to prove the microphone usage is integral to the app's functionality.

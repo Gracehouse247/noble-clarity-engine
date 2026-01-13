@@ -1,0 +1,10 @@
+\u003c?xml version="1.0" encoding="utf-8"?\u003e
+\u003c!-- Noble Clarity - Dark Launch Background --\u003e
+\u003clayer-list xmlns:android="http://schemas.android.com/apk/res/android"\u003e
+    \u003c!-- Dark background matching app theme --\u003e
+    \u003citem\u003e
+        \u003cshape android:shape="rectangle"\u003e
+            \u003csolid android:color="#0F1116" /\u003e
+        \u003c/shape\u003e
+    \u003c/item\u003e
+\u003c/layer-list\u003e

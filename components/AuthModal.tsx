@@ -151,9 +151,30 @@ const AuthModal: React.FunctionComponent<AuthModalProps> = ({
         });
     };
 
+    const validatePassword = (pwd: string) => {
+        const minLength = 8;
+        const hasUpper = /[A-Z]/.test(pwd);
+        const hasLower = /[a-z]/.test(pwd);
+        const hasNumber = /[0-9]/.test(pwd);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+
+        if (pwd.length < minLength) return "Password must be at least 8 characters long.";
+        if (!hasUpper) return "Password must contain at least one uppercase letter.";
+        if (!hasLower) return "Password must contain at least one lowercase letter.";
+        if (!hasNumber) return "Password must contain at least one number.";
+        if (!hasSpecial) return "Password must contain at least one special character.";
+        return null;
+    };
+
     const handleSignupSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            setError(passwordError);
+            return;
+        }
 
         finalizeSignup();
     };

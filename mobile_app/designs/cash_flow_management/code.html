@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cash Flow Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#607AFB", "background-light": "#f5f6f8", "background-dark": "#0f1323", "glass-border": "rgba(255, 255, 255, 0.08)", "glass-bg": "rgba(255, 255, 255, 0.03)"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"}, boxShadow: {neon: "0 0 20px rgba(37, 244, 120, 0.15)", "neon-strong": "0 0 25px rgba(37, 244, 120, 0.4)"}}}};</script>
+<style>
+        /* Custom scrollbar for horizontal scrolling areas */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(16, 34, 23, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .pulse-animation {
+            animation: pulse-glow 3s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(37, 244, 120, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 244, 120, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 244, 120, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary selection:text-black">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden pb-32">
+<!-- Top App Bar -->
+<header class="flex items-center px-4 py-4 justify-between sticky top-0 z-40 bg-background-dark/80 backdrop-blur-md">
+<button class="text-white flex size-10 items-center justify-center rounded-full hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-2">Cash Liquidity</h2>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white/70 hover:text-white">
+<span class="material-symbols-outlined text-[24px]">visibility</span>
+</button>
+</header>
+<!-- Timeframe Chips -->
+<div class="w-full px-4 mb-6">
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
+<button class="flex h-9 shrink-0 items-center justify-center px-4 rounded-full bg-primary text-background-dark font-semibold text-sm shadow-neon">
+                    This Month
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center px-4 rounded-full glass-panel hover:bg-white/10 text-white/70 font-medium text-sm transition-all border border-transparent hover:border-white/20">
+                    Last 3 Months
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center px-4 rounded-full glass-panel hover:bg-white/10 text-white/70 font-medium text-sm transition-all border border-transparent hover:border-white/20">
+                    YTD
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center px-4 rounded-full glass-panel hover:bg-white/10 text-white/70 font-medium text-sm transition-all border border-transparent hover:border-white/20">
+                    All Time
+                </button>
+</div>
+</div>
+<!-- Hero: Total Cash Balance -->
+<div class="px-4 mb-6">
+<div class="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+<!-- Abstract shine effect -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-[60px]"></div>
+<div class="flex flex-col gap-1 items-center text-center relative z-10">
+<p class="text-white/60 text-sm font-medium uppercase tracking-widest mb-2">Total Cash Balance</p>
+<h1 class="text-white text-4xl font-bold tracking-tight mb-1">$1,240,500.00</h1>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[16px]">trending_up</span>
+<p class="text-primary text-sm font-semibold">+4.2%</p>
+<span class="text-white/40 text-xs ml-1">vs last month</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Liquidity Ratios -->
+<div class="px-4 mb-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-panel rounded-xl p-5 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<p class="text-white/70 text-sm font-medium">Current Ratio</p>
+<span class="material-symbols-outlined text-white/30 text-[20px]">info</span>
+</div>
+<div class="flex items-end gap-2">
+<p class="text-white text-2xl font-bold leading-none">1.5</p>
+<p class="text-primary text-xs font-medium mb-0.5">+4.2%</p>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-5 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<p class="text-white/70 text-sm font-medium">Quick Ratio</p>
+<span class="material-symbols-outlined text-white/30 text-[20px]">info</span>
+</div>
+<div class="flex items-end gap-2">
+<p class="text-white text-2xl font-bold leading-none">1.2</p>
+<p class="text-primary text-xs font-medium mb-0.5">+1.1%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="px-4 mb-6">
+<div class="glass-panel rounded-2xl p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-white text-base font-semibold">Net Flow Analysis</p>
+<div class="flex items-baseline gap-2 mt-1">
+<p class="text-white text-2xl font-bold">+$12,450</p>
+<span class="text-white/50 text-sm">Net</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="flex size-8 items-center justify-center rounded-lg bg-white/5 text-white/60">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</span>
+</div>
+</div>
+<!-- Chart Visualization -->
+<div class="relative h-[200px] w-full">
+<svg class="w-full h-full overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 375 150">
+<defs>
+<lineargradient id="gradient-chart" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#25f478" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#25f478" stop-opacity="0"></stop>
+</lineargradient>
+<filter height="140%" id="glow-line" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="coloredBlur" stddeviation="3"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Grid Lines -->
+<line stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" x1="0" x2="375" y1="0" y2="0"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" x1="0" x2="375" y1="75" y2="75"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" x1="0" x2="375" y1="150" y2="150"></line>
+<!-- Area Fill -->
+<path d="M0 100 Q 40 80, 80 110 T 160 90 T 240 60 T 320 80 T 375 50 V 150 H 0 Z" fill="url(#gradient-chart)"></path>
+<!-- Main Line -->
+<path d="M0 100 Q 40 80, 80 110 T 160 90 T 240 60 T 320 80 T 375 50" fill="none" filter="url(#glow-line)" stroke="#25f478" stroke-width="3"></path>
+<!-- Scrubber / Interactive Point Mockup -->
+<line stroke="rgba(255,255,255,0.2)" stroke-dasharray="2 2" x1="240" x2="240" y1="0" y2="150"></line>
+<circle class="shadow-neon" cx="240" cy="60" fill="#25f478" r="5" stroke="white" stroke-width="2"></circle>
+</svg>
+<!-- Tooltip Mockup -->
+<div class="absolute top-8 left-[58%] -translate-x-1/2 bg-gray-900 border border-white/10 rounded-lg px-3 py-1.5 shadow-xl flex flex-col items-center z-10">
+<span class="text-xs text-white/60">Oct 12</span>
+<span class="text-sm font-bold text-white">+$15,200</span>
+</div>
+</div>
+<!-- X Axis Labels -->
+<div class="flex justify-between mt-4 px-2">
+<p class="text-white/30 text-xs font-medium">Week 1</p>
+<p class="text-white/30 text-xs font-medium">Week 2</p>
+<p class="text-white/30 text-xs font-medium">Week 3</p>
+<p class="text-white/30 text-xs font-medium">Week 4</p>
+</div>
+</div>
+</div>
+<!-- Runway Forecast -->
+<div class="px-4 mb-4">
+<h3 class="text-white text-sm font-bold uppercase tracking-widest mb-3 opacity-60">Runway Forecast</h3>
+<div class="glass-panel rounded-2xl p-5 flex flex-col gap-5">
+<div class="flex justify-between items-center">
+<div>
+<p class="text-white/60 text-sm mb-1">Estimated Runway</p>
+<p class="text-white text-2xl font-bold">14.5 Months</p>
+</div>
+<div class="text-right">
+<p class="text-white/60 text-sm mb-1">Avg. Burn Rate</p>
+<p class="text-red-400 text-xl font-semibold">-$45k<span class="text-sm text-white/40">/mo</span></p>
+</div>
+</div>
+<!-- Progress Bar Visual -->
+<div class="w-full bg-white/5 rounded-full h-3 overflow-hidden">
+<div class="bg-gradient-to-r from-primary/60 to-primary h-full rounded-full w-[65%] shadow-neon"></div>
+</div>
+<div class="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+<span class="material-symbols-outlined text-red-400 text-[20px]">warning</span>
+<p class="text-red-200 text-xs leading-relaxed">High spending projected in Nov. Review expenses to extend runway.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full glass-nav pb-safe pt-3 px-6 z-50 rounded-t-2xl">
+<div class="flex justify-between items-center max-w-lg mx-auto relative h-16">
+<!-- Nav Item: Dashboard -->
+<button class="flex flex-col items-center justify-center gap-1 w-12 text-white/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<!-- Nav Item: Strategic Lab -->
+<button class="flex flex-col items-center justify-center gap-1 w-12 text-white/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">science</span>
+<span class="text-[10px] font-medium">Lab</span>
+</button>
+<!-- Spacer for FAB -->
+<div class="w-16"></div>
+<!-- Noble AI FAB (Central) -->
+<div class="absolute left-1/2 -top-8 -translate-x-1/2">
+<button class="size-16 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-neon-strong pulse-animation hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[32px] fill-current">smart_toy</span>
+</button>
+<div class="absolute -bottom-6 w-full text-center">
+<span class="text-[10px] font-bold text-primary tracking-wide">NOBLE AI</span>
+</div>
+</div>
+<!-- Nav Item: ROI Center -->
+<button class="flex flex-col items-center justify-center gap-1 w-12 text-white/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">monetization_on</span>
+<span class="text-[10px] font-medium">ROI</span>
+</button>
+<!-- Nav Item: Settings -->
+<button class="flex flex-col items-center justify-center gap-1 w-12 text-white/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</div>
+</nav>
+<div class="h-6 w-full bg-transparent"></div> <!-- Safe area spacing hack if needed -->
+</body></html>

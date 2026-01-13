@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noble AI - AICoach Chat Input</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d33f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101322",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(13, 51, 242, 0.3)',
+                        'inner-light': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Glassmorphism 2.0 Utility */
+        .glass-panel {
+            background: rgba(16, 19, 34, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Input Focus Glow Animation */
+        .input-wrapper {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-wrapper:focus-within {
+            background: rgba(40, 43, 57, 0.9);
+            border-color: rgba(13, 51, 242, 0.6);
+            box-shadow: 0 0 0 1px rgba(13, 51, 242, 0.4), 0 0 20px rgba(13, 51, 242, 0.15);
+        }
+
+        /* 3D Button Effect */
+        .btn-isometric {
+            box-shadow: 
+                0 4px 6px -1px rgba(13, 51, 242, 0.3), 
+                0 2px 4px -1px rgba(13, 51, 242, 0.15),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -2px 0 rgba(0,0,0,0.1);
+        }
+        .btn-isometric:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Custom Scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display antialiased overflow-hidden selection:bg-primary/30 selection:text-white">
+<!-- Screen Content Wrapper -->
+<div class="relative flex flex-col h-full w-full max-w-md mx-auto bg-background-light dark:bg-background-dark min-h-screen shadow-2xl overflow-hidden border-x border-white/5">
+<!-- Header (Context) -->
+<header class="absolute top-0 left-0 right-0 z-20 px-6 pt-12 pb-4 bg-gradient-to-b from-background-dark via-background-dark/90 to-transparent">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-indigo-500 p-[1px]">
+<div class="w-full h-full rounded-full bg-background-dark flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+</div>
+<div>
+<h1 class="text-white font-semibold text-lg tracking-tight">Noble AI</h1>
+<p class="text-xs text-slate-400 font-medium">Strategic Companion</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Chat Canvas -->
+<main class="flex-1 w-full overflow-y-auto no-scrollbar pt-32 px-4 pb-4 space-y-6 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background-dark to-background-dark">
+<!-- Timestamp -->
+<div class="flex justify-center my-4">
+<span class="text-[11px] font-medium text-slate-500 uppercase tracking-widest">Today 9:41 AM</span>
+</div>
+<!-- AI Message -->
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary/80 to-indigo-600 flex-shrink-0 flex items-center justify-center shadow-lg shadow-primary/20 mt-1">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1.5 max-w-[85%]">
+<div class="bg-[#1C1F2E] border border-white/5 p-4 rounded-2xl rounded-tl-sm text-gray-200 text-[15px] leading-relaxed shadow-sm">
+<p>I've analyzed the Q3 cash flow projections. Based on current burn rate, extending the runway by 4 months is feasible if we optimize the marketing spend.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-medium hover:bg-primary/20 transition-colors">View Projection</button>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-row-reverse gap-4">
+<div class="w-8 h-8 rounded-full bg-slate-700 flex-shrink-0 overflow-hidden mt-1 border border-white/10">
+<div class="w-full h-full bg-cover bg-center" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCdj5UpqhldlmITj4c75CCFWGjPt2yk5ODiwDuBPlp_MWFJbgtIOS_EXIFDKzY8Fh22WWfDnkDFjTRf5t1hCMHpybBp-8LnYuRqG1xX-fAQRMCjf7POnMjI_cpyWpMNk_XW2MQuf6twWDyr3dtmxMUZg0ro4DBOGT5wWcbxptNAt2fG4wfZ_D3CuLgN6J4PJDVGmneVS12dfMyRvcPH1fafMMrZGcEAFzyk1kunAXu85njUl7OeqM9VG2oBbtPGOtl7bQOUc5zFERo');"></div>
+</div>
+<div class="flex flex-col gap-1.5 max-w-[80%] items-end">
+<div class="bg-primary text-white p-4 rounded-2xl rounded-tr-sm text-[15px] leading-relaxed shadow-md shadow-primary/20 shadow-inner-light bg-gradient-to-br from-primary to-blue-700">
+<p>That's interesting. How does that impact our hiring plan for engineering?</p>
+</div>
+<span class="text-[10px] text-slate-500 font-medium">Read 9:45 AM</span>
+</div>
+</div>
+<!-- AI Typing Indicator -->
+<div class="flex gap-4 opacity-80">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary/80 to-indigo-600 flex-shrink-0 flex items-center justify-center shadow-lg shadow-primary/20 mt-1">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="bg-[#1C1F2E] border border-white/5 px-4 py-3 rounded-2xl rounded-tl-sm w-16 flex items-center justify-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:0.1s]"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]"></div>
+</div>
+</div>
+<!-- Spacer for input area visibility -->
+<div class="h-24"></div>
+</main>
+<!-- Input Area Container (Anchored Bottom) -->
+<div class="relative z-30">
+<!-- Glassmorphic Input Bar -->
+<div class="glass-panel w-full px-4 pt-3 pb-4">
+<div class="flex items-end gap-3 max-w-full">
+<!-- Left Action: Attachment -->
+<button aria-label="Add attachment" class="flex-shrink-0 w-10 h-10 mb-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/20">
+<span class="material-symbols-outlined text-[26px] rotate-45">attach_file</span>
+</button>
+<!-- Input Field -->
+<div class="input-wrapper flex-1 min-h-[48px] bg-[#282b39]/70 rounded-[20px] border border-white/10 flex items-center px-4 relative overflow-hidden group cursor-text">
+<input autofocus="" class="w-full h-full bg-transparent border-none text-white placeholder:text-slate-500 text-[15px] font-medium leading-normal focus:ring-0 py-3 pr-8 font-display" placeholder="Ask about cash flow, runway, or strategy..." type="text" value=""/>
+<!-- Subtle Glow Effect Layer -->
+<div class="absolute inset-0 rounded-[20px] pointer-events-none ring-1 ring-white/5"></div>
+<!-- Right-side Mic Icon (inside input) -->
+<button class="absolute right-2 text-slate-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+</div>
+<!-- Right Action: Send Button (3D Isometric Style) -->
+<button aria-label="Send message" class="flex-shrink-0 w-12 h-12 mb-0 rounded-xl bg-primary text-white flex items-center justify-center btn-isometric hover:brightness-110 transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-[#101322]">
+<span class="material-symbols-outlined text-[24px] font-bold -ml-0.5 mt-0.5" style="font-variation-settings: 'wght' 600;">send</span>
+</button>
+</div>
+</div>
+<!-- Keyboard Placeholder (Simulating Active State) -->
+<div class="w-full bg-[#1c1c1e] border-t border-black/50">
+<div class="w-full bg-center bg-no-repeat bg-cover aspect-[390/290]" data-alt="iOS Dark Mode Keyboard Interface showing standard QWERTY layout" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzy3DsLqiGjjbt9qzWsNWrToWnfVCRGQWKCULTden9cLav2BG8UhcUp76Y3w87rzeIoshPynJeSg2hteAt1HyBvEg-S-kgDjXqoOMPXnNMELy5XoNEIDJgvnU5ndgJ3X1UfTuHGrtEnAMzhi7ApMJGW2MF9qaV5VZQtQLPgyy4Fn6jRGsOs0TTFWtQ7DSsn67fka7mkJXAcJV0Vd_swkvOQr0M2hrLVS9M7kyX7aRq9Fzz254oY5K2VJmWVw9bmBUmDdIuCfGkn3U");'>
+</div>
+</div>
+</div>
+</div>
+</body></html>

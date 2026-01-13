@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noble AI Strategic Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#607AFB", "primary-content": "#ffffff", "background-light": "#f5f6f8", "background-dark": "#0f1323", "surface-dark": "#0a0a0a", "glass-border": "rgba(255, 255, 255, 0.1)"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, animation: {"pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite", wave: "wave 1.5s ease-in-out infinite"}, keyframes: {wave: {"0%, 100%": {height: "10px"}, "50%": {height: "24px"}}}}}};</script>
+<style>
+        /* Custom Scrollbar for sleek look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(25, 16, 34, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-bubble-ai {
+            background: rgba(127, 19, 236, 0.1); /* Primary with low opacity */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-bubble-widget {
+            background: rgba(30, 20, 45, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .wave-bar {
+            width: 3px;
+            background-color: #7f13ec;
+            border-radius: 99px;
+            animation: wave 1s ease-in-out infinite;
+        }
+        .wave-bar:nth-child(odd) { animation-duration: 0.8s; }
+        .wave-bar:nth-child(2n) { animation-duration: 1.1s; }
+        .wave-bar:nth-child(3n) { animation-duration: 1.3s; }
+        .wave-bar:nth-child(4n) { animation-duration: 0.9s; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dark dark:bg-background-dark text-white font-display h-screen flex flex-col overflow-hidden antialiased selection:bg-primary selection:text-white">
+<!-- Top App Bar -->
+<header class="flex items-center justify-between p-4 pt-6 pb-2 bg-transparent z-20 relative">
+<button class="text-white/70 hover:text-white transition-colors flex size-10 items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<div class="flex flex-col items-center flex-1">
+<h2 class="text-white text-base font-bold leading-tight tracking-wide">Noble AI</h2>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-xs font-medium text-primary uppercase tracking-wider">Strategic Mode</span>
+</div>
+</div>
+<button class="text-white/70 hover:text-white transition-colors flex size-10 items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-size: 20px;">autorenew</span>
+</button>
+</header>
+<!-- Main Chat Canvas -->
+<main class="flex-1 overflow-y-auto px-4 pb-32 pt-2 space-y-6 relative">
+<!-- Background Gradient Orb -->
+<div class="fixed top-[20%] left-[-10%] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<!-- Meta Text -->
+<div class="relative z-10 flex justify-center py-4">
+<span class="text-white/40 text-xs font-medium uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm">Today • Strategic Session</span>
+</div>
+<!-- Single Message: User (Right) -->
+<div class="relative z-10 flex flex-col items-end gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-white/50 text-[11px] font-medium tracking-wide">CFO • 10:42 AM</span>
+</div>
+<div class="max-w-[85%] rounded-2xl rounded-tr-sm px-5 py-3.5 bg-[#2a2435] text-white/90 shadow-sm border border-white/5">
+<p class="text-[15px] font-normal leading-relaxed">
+                    Analyze the cash flow impact of a 15% headcount increase in Q3.
+                </p>
+</div>
+</div>
+<!-- Single Message: AI Cluster (Left) -->
+<div class="relative z-10 flex flex-col items-start gap-3 max-w-[92%]">
+<div class="flex items-center gap-2 mb-1">
+<div class="size-6 rounded-full bg-gradient-to-tr from-primary to-[#a855f7] flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white" style="font-size: 14px;">smart_toy</span>
+</div>
+<span class="text-primary text-[11px] font-bold tracking-wide">NOBLE AI</span>
+</div>
+<!-- Message Bubble 1: Text -->
+<div class="glass-bubble-ai rounded-2xl rounded-tl-none px-5 py-4 text-white shadow-lg">
+<p class="text-[15px] font-normal leading-relaxed text-gray-100">
+                    Based on current runway, a <span class="font-bold text-white">15% increase</span> reduces runway by <span class="font-bold text-red-400">2.4 months</span>.
+                </p>
+</div>
+<!-- Message Bubble 2: Chart Widget -->
+<div class="glass-bubble-widget w-full rounded-2xl p-5 overflow-hidden shadow-xl">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">Impact Analysis</p>
+<p class="text-white text-sm font-semibold">Current vs. Projected Runway</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-red-400 font-bold text-xl tracking-tight">-2.4 mo</span>
+<span class="text-white/40 text-[10px]">Delta</span>
+</div>
+</div>
+<!-- Chart Visual -->
+<div class="grid grid-cols-2 gap-8 items-end h-[140px] px-4 pb-2 border-b border-white/10 relative">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+<div class="border-t border-dashed border-white w-full h-0"></div>
+<div class="border-t border-dashed border-white w-full h-0"></div>
+<div class="border-t border-dashed border-white w-full h-0"></div>
+<div class="border-t border-dashed border-white w-full h-0"></div>
+</div>
+<!-- Current Bar -->
+<div class="flex flex-col items-center gap-3 h-full justify-end z-10 group">
+<span class="text-white font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity mb-1">18.2m</span>
+<div class="w-12 bg-white/20 rounded-t-sm backdrop-blur-sm border border-white/10 hover:bg-primary/40 transition-colors" style="height: 90%;"></div>
+<p class="text-white/60 text-[11px] font-medium tracking-wide">Current</p>
+</div>
+<!-- Projected Bar -->
+<div class="flex flex-col items-center gap-3 h-full justify-end z-10 group">
+<span class="text-red-300 font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity mb-1">15.8m</span>
+<div class="w-12 bg-primary rounded-t-sm shadow-[0_0_15px_rgba(127,19,236,0.5)] border border-primary/50 relative overflow-hidden" style="height: 75%;">
+<div class="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
+</div>
+<p class="text-primary text-[11px] font-bold tracking-wide">Projected</p>
+</div>
+</div>
+</div>
+<!-- Message Bubble 3: Action Suggestion -->
+<button class="flex items-center gap-2 pl-1 pr-4 py-1.5 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary-100 transition-all active:scale-95 group w-fit">
+<div class="bg-primary/20 rounded-full p-1 group-hover:bg-primary/40 transition-colors">
+<span class="material-symbols-outlined text-sm text-primary-200" style="font-size: 16px;">science</span>
+</div>
+<span class="text-xs font-semibold text-primary-100">Simulate Scenario in ROI Center</span>
+<span class="material-symbols-outlined text-xs opacity-50 group-hover:translate-x-0.5 transition-transform" style="font-size: 14px;">chevron_right</span>
+</button>
+</div>
+<!-- Actionable Error Toast (Example) -->
+<div class="relative z-10 flex justify-center w-full mt-4">
+<div class="flex items-center gap-3 bg-red-500/10 border border-red-500/20 backdrop-blur-md px-4 py-2.5 rounded-lg shadow-lg">
+<span class="material-symbols-outlined text-red-400" style="font-size: 18px;">error</span>
+<span class="text-red-200 text-xs font-medium">QuickBooks Sync Failed</span>
+<div class="w-px h-4 bg-red-500/20 mx-1"></div>
+<button class="text-white text-xs font-bold hover:text-red-200 transition-colors">RETRY</button>
+</div>
+</div>
+<div class="h-6"></div> <!-- Spacer -->
+</main>
+<!-- Bottom Input Area & Waveform -->
+<div class="fixed bottom-[80px] left-0 w-full z-30 px-4 pb-2">
+<!-- AI Waveform Visualizer -->
+<div class="flex justify-center items-end h-8 gap-[3px] mb-4 opacity-80">
+<!-- Generating random heights for wave animation look -->
+<div class="wave-bar h-3"></div>
+<div class="wave-bar h-5"></div>
+<div class="wave-bar h-2"></div>
+<div class="wave-bar h-6 bg-primary/60"></div>
+<div class="wave-bar h-4 bg-primary/80"></div>
+<div class="wave-bar h-7 bg-primary"></div>
+<div class="wave-bar h-5 bg-primary/80"></div>
+<div class="wave-bar h-3 bg-primary/60"></div>
+<div class="wave-bar h-6"></div>
+<div class="wave-bar h-2"></div>
+<div class="wave-bar h-4"></div>
+</div>
+<!-- Input Bar -->
+<div class="glass-panel w-full rounded-2xl flex items-center p-2 gap-2 shadow-2xl shadow-black/50">
+<button class="size-10 flex items-center justify-center rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">add_circle</span>
+</button>
+<input class="flex-1 bg-transparent border-none text-white placeholder-white/30 text-sm focus:ring-0 p-2 font-light" placeholder="Ask Noble..." type="text"/>
+<button class="size-10 flex items-center justify-center rounded-xl text-white/50 hover:text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">mic</span>
+</button>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full bg-[#140d1b]/90 backdrop-blur-xl border-t border-white/5 z-40 h-[80px] px-2 pb-4">
+<div class="flex justify-between items-center h-full px-2">
+<!-- Nav Item: Dashboard -->
+<button class="flex flex-col items-center justify-center gap-1 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">grid_view</span>
+<span class="text-[9px] font-medium tracking-wide">Home</span>
+</button>
+<!-- Nav Item: Lab -->
+<button class="flex flex-col items-center justify-center gap-1 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">science</span>
+<span class="text-[9px] font-medium tracking-wide">Lab</span>
+</button>
+<!-- Nav Item: FAB (Noble AI) -->
+<div class="relative -top-6">
+<button class="size-16 rounded-full bg-gradient-to-b from-[#9d4edd] to-primary shadow-[0_0_20px_rgba(127,19,236,0.6)] flex items-center justify-center text-white hover:scale-105 transition-transform group animate-pulse-slow border-4 border-[#140d1b]">
+<span class="material-symbols-outlined" style="font-size: 32px;">smart_toy</span>
+</button>
+</div>
+<!-- Nav Item: ROI -->
+<button class="flex flex-col items-center justify-center gap-1 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">trending_up</span>
+<span class="text-[9px] font-medium tracking-wide">ROI</span>
+</button>
+<!-- Nav Item: Settings -->
+<button class="flex flex-col items-center justify-center gap-1 w-16 text-white/40 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform" style="font-size: 24px;">settings</span>
+<span class="text-[9px] font-medium tracking-wide">Settings</span>
+</button>
+</div>
+</nav>
+</body></html>

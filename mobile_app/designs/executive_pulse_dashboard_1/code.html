@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Executive Pulse Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#293d99",
+                        "primary-light": "#4f63c2", 
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#13151f",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-bg": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "md": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-nav {
+            background: rgba(19, 21, 31, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Animation for the gauge needle */
+        @keyframes needle-bounce {
+            0% { transform: rotate(-90deg); }
+            60% { transform: rotate(45deg); }
+            80% { transform: rotate(35deg); }
+            100% { transform: rotate(40deg); } /* Final position based on 22% being roughly mid-left */
+        }
+        .needle-anim {
+            transform-origin: bottom center;
+            animation: needle-bounce 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            /* Adjusting final rotation to match 22% visually on a 180deg scale. 
+               0% = -90deg (left), 50% = 0deg (up), 100% = 90deg (right).
+               22% of 180 degrees is roughly 40 degrees from start.
+               -90 + (180 * 0.75) roughly implies healthy zone. Let's aim for a "healthy" looking angle.
+               Let's say range is 0-100. 22% is low? Usually Margin 22% is good. 
+               Let's assume the gauge goes from 0 to 40%. So 22% is just past middle.
+            */
+            transform: rotate(10deg); 
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-display antialiased selection:bg-primary selection:text-white h-screen overflow-hidden flex flex-col">
+<!-- Scrollable Main Content -->
+<div class="flex-1 overflow-y-auto no-scrollbar pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-30 pt-14 pb-4 px-6 bg-gradient-to-b from-background-dark via-background-dark/95 to-transparent backdrop-blur-xs">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="relative group cursor-pointer">
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-primary/30" data-alt="Profile picture of executive user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9U6pRr5rhH7GzZmiT2AdW6goAXEqmvkrhQqo-whJyGcxalCqTawoxI3364JFHVZafE29TM1BMjr9bFMlEG8OSzcmZOHvBaY_0jvzfc5aox3ZrcKjqNirS7ckSkUPeX7gFwhJHAhgd01Vt1a8R8poBaY04ykZc2F_UWv3VM0EtFefZTBfePVlJgFGzruS7-guu4SJVtjuwG2eZ2mv3KfLo0qS1TWrY3i_eaoxrQk1hr-gKFMam46XsTw47y8EdaEjFCI3MmC2Awc4');">
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background-dark rounded-full"></div>
+</div>
+<div>
+<p class="text-gray-400 text-xs font-medium tracking-wide uppercase">Welcome back</p>
+<p class="text-white text-lg font-bold leading-tight">Alex</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+<span class="text-xs font-medium text-gray-200">Oct 2023</span>
+<span class="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+</button>
+<button class="relative p-2 text-gray-300 hover:text-white transition-colors">
+<span class="material-symbols-outlined filled">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full animate-pulse"></span>
+</button>
+</div>
+</div>
+</header>
+<!-- KPI Carousel -->
+<section class="mb-8 pl-6">
+<div class="flex overflow-x-auto gap-4 pb-4 pr-6 snap-x snap-mandatory no-scrollbar">
+<!-- Card 1: Revenue -->
+<div class="snap-center min-w-[260px] glass-panel rounded-xl p-5 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<div class="flex flex-col">
+<span class="text-gray-400 text-sm font-medium tracking-wide">Revenue</span>
+<span class="text-2xl font-bold text-white mt-1">$452,000</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-xs font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>12%</span>
+</div>
+</div>
+<div class="h-12 w-full mt-4">
+<!-- Sparkline SVG -->
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<defs>
+<lineargradient id="gradRevenue" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#34d399;stop-opacity:0.3"></stop>
+<stop offset="100%" style="stop-color:#34d399;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 35 C 10 32, 20 38, 30 25 S 50 30, 60 15 S 80 20, 100 5" fill="url(#gradRevenue)" stroke="none"></path>
+<path d="M0 35 C 10 32, 20 38, 30 25 S 50 30, 60 15 S 80 20, 100 5" fill="none" stroke="#34d399" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-all duration-500"></div>
+</div>
+<!-- Card 2: Runway -->
+<div class="snap-center min-w-[260px] glass-panel rounded-xl p-5 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<div class="flex flex-col">
+<span class="text-gray-400 text-sm font-medium tracking-wide">Runway</span>
+<span class="text-2xl font-bold text-white mt-1">18 Months</span>
+</div>
+<div class="flex items-center gap-1 text-gray-300 bg-white/5 px-2 py-0.5 rounded text-xs font-medium">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+<span>Stable</span>
+</div>
+</div>
+<div class="h-12 w-full mt-4">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0 20 L 20 20 L 40 18 L 60 22 L 80 20 L 100 20" fill="none" stroke="#94a3b8" stroke-dasharray="4 2" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
+</div>
+<!-- Card 3: Net Margin -->
+<div class="snap-center min-w-[260px] glass-panel rounded-xl p-5 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<div class="flex flex-col">
+<span class="text-gray-400 text-sm font-medium tracking-wide">Net Margin</span>
+<span class="text-2xl font-bold text-white mt-1">22%</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-xs font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>2%</span>
+</div>
+</div>
+<div class="h-12 w-full mt-4">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<defs>
+<lineargradient id="gradMargin" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#293d99;stop-opacity:0.4"></stop>
+<stop offset="100%" style="stop-color:#293d99;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 30 C 15 30, 30 25, 45 28 S 70 15, 100 10" fill="url(#gradMargin)" stroke="none"></path>
+<path d="M0 30 C 15 30, 30 25, 45 28 S 70 15, 100 10" fill="none" stroke="#293d99" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-all duration-500"></div>
+</div>
+</div>
+</section>
+<!-- Revenue Intelligence Chart -->
+<section class="px-6 mb-8">
+<div class="glass-panel rounded-xl p-6">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="text-white text-lg font-semibold">Cash Flow Composition</h3>
+<p class="text-gray-400 text-sm mt-1">SaaS vs Services Revenue</p>
+</div>
+<button class="p-2 rounded-lg hover:bg-white/5 text-primary-light transition-colors">
+<span class="material-symbols-outlined">fullscreen</span>
+</button>
+</div>
+<div class="relative h-64 w-full select-none">
+<!-- Interactive Scrubbing Line Indicator (Visual) -->
+<div class="absolute left-2/3 top-0 bottom-8 w-px bg-white/20 z-10 flex flex-col items-center pointer-events-none">
+<div class="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)] translate-y-[52px]"></div>
+<div class="mt-2 bg-gray-900 border border-white/10 p-2 rounded shadow-xl backdrop-blur-md">
+<p class="text-xs text-gray-400">Oct 24</p>
+<p class="text-sm font-bold text-white">$42.5k</p>
+</div>
+</div>
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 400 200">
+<defs>
+<lineargradient id="gradientSaas" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#293d99" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#293d99" stop-opacity="0.1"></stop>
+</lineargradient>
+<lineargradient id="gradientService" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4f63c2" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#4f63c2" stop-opacity="0.05"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="rgba(255,255,255,0.05)" stroke-width="1" x1="0" x2="400" y1="160" y2="160"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="1" x1="0" x2="400" y1="120" y2="120"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="1" x1="0" x2="400" y1="80" y2="80"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-width="1" x1="0" x2="400" y1="40" y2="40"></line>
+<!-- Layer 2: Services -->
+<path d="M0 160 C 50 150, 100 155, 150 140 S 250 130, 300 135 S 350 120, 400 115 L 400 200 L 0 200 Z" fill="url(#gradientService)"></path>
+<path d="M0 160 C 50 150, 100 155, 150 140 S 250 130, 300 135 S 350 120, 400 115" fill="none" stroke="#637aff" stroke-linecap="round" stroke-width="2"></path>
+<!-- Layer 1: SaaS (Top Layer) -->
+<path d="M0 130 C 60 120, 120 125, 180 90 S 280 80, 320 60 S 360 50, 400 30 L 400 200 L 0 200 Z" fill="url(#gradientSaas)" style="mix-blend-mode: screen;"></path>
+<path d="M0 130 C 60 120, 120 125, 180 90 S 280 80, 320 60 S 360 50, 400 30" fill="none" stroke="#4c6eff" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="flex justify-between mt-4 text-xs text-gray-500 font-medium tracking-wider">
+<span>OCT 01</span>
+<span>OCT 10</span>
+<span>OCT 20</span>
+<span>OCT 31</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Net Margin Gauge -->
+<section class="px-6 pb-8">
+<div class="glass-panel rounded-xl p-6 flex flex-col items-center">
+<h3 class="text-white text-lg font-semibold self-start mb-6">Net Margin Health</h3>
+<div class="relative w-64 h-32 mb-4">
+<!-- Gauge SVG -->
+<svg class="w-full h-full overflow-visible" viewbox="0 0 200 110">
+<!-- Background Arc -->
+<path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1f2937" stroke-linecap="round" stroke-width="16"></path>
+<!-- Colored Zones (Simulated with gradients on segments) -->
+<!-- Red Zone (Low) -->
+<path d="M 20 100 A 80 80 0 0 1 45 65" fill="none" stroke="#ef4444" stroke-linecap="round" stroke-opacity="0.2" stroke-width="16"></path>
+<!-- Yellow Zone (Mid) -->
+<path d="M 45 65 A 80 80 0 0 1 100 20" fill="none" stroke="#eab308" stroke-linecap="round" stroke-opacity="0.2" stroke-width="16"></path>
+<!-- Green Zone (High) -->
+<path d="M 100 20 A 80 80 0 0 1 180 100" fill="none" stroke="#10b981" stroke-linecap="round" stroke-opacity="0.2" stroke-width="16"></path>
+<!-- Active Progress Arc (Leading to needle) -->
+<defs>
+<lineargradient id="gaugeGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" style="stop-color:#4f63c2"></stop>
+<stop offset="100%" style="stop-color:#293d99"></stop>
+</lineargradient>
+<filter height="140%" id="glow" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+</defs>
+<!-- Arc to 22% (approx 120 degrees visually for this style) -->
+<path d="M 20 100 A 80 80 0 0 1 125 35" fill="none" filter="url(#glow)" stroke="url(#gaugeGradient)" stroke-linecap="round" stroke-width="16"></path>
+<!-- Center Point -->
+<circle cx="100" cy="100" fill="#1f2937" r="6" stroke="#293d99" stroke-width="2"></circle>
+<!-- Needle -->
+<g class="needle-anim" style="transform-origin: 100px 100px;">
+<path d="M 96 100 L 100 25 L 104 100 Z" fill="#fff"></path>
+<circle cx="100" cy="100" fill="#fff" r="4"></circle>
+</g>
+</svg>
+<!-- Text inside gauge -->
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 text-center">
+<span class="block text-3xl font-bold text-white">22%</span>
+<span class="block text-xs text-emerald-400 font-medium">Healthy</span>
+</div>
+</div>
+<div class="bg-white/5 rounded-lg p-3 w-full text-center border border-white/5">
+<p class="text-gray-400 text-sm">Top <span class="text-white font-bold">10%</span> of industry peers</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Navigation -->
+<nav class="glass-nav fixed bottom-0 left-0 right-0 px-6 py-2 pb-6 z-50">
+<div class="flex justify-between items-center max-w-lg mx-auto">
+<button class="flex flex-col items-center gap-1 p-2 text-primary-light">
+<span class="material-symbols-outlined filled">dashboard</span>
+<span class="text-[10px] font-medium">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-200 transition-colors">
+<span class="material-symbols-outlined">donut_large</span>
+<span class="text-[10px] font-medium">Scenarios</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-200 transition-colors">
+<span class="material-symbols-outlined">monetization_on</span>
+<span class="text-[10px] font-medium">ROI</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-200 transition-colors">
+<span class="material-symbols-outlined">flag</span>
+<span class="text-[10px] font-medium">Goals</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-200 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</div>
+</nav>
+</body></html>
