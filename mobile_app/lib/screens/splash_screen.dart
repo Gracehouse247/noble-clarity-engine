@@ -154,36 +154,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                                 ),
                               ),
 
-                              // Main Frosted Container with Scale Animation
-                              ScaleTransition(
-                                scale: _scaleAnimation,
-                                child: Container(
-                                  width: 180,
-                                  height: 180,
-                                  padding: const EdgeInsets.all(42),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.04),
-                                    borderRadius: BorderRadius.circular(48),
-                                    border: Border.all(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.15,
+                              // Main Frosted Container
+                              // Removed ScaleTransition to match Native Splash immediately
+                              Container(
+                                width: 180,
+                                height: 180,
+                                padding: const EdgeInsets.all(42),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.04),
+                                  borderRadius: BorderRadius.circular(48),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.15),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.4,
                                       ),
+                                      blurRadius: 40,
+                                      offset: const Offset(0, 20),
                                     ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.4,
-                                        ),
-                                        blurRadius: 40,
-                                        offset: const Offset(0, 20),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/logo_icon.png',
-                                    fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.high,
-                                  ),
+                                  ],
+                                ),
+                                child: Image.asset(
+                                  'assets/images/logo_icon.png',
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.high,
                                 ),
                               ),
                             ],

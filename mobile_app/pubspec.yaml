@@ -73,6 +73,19 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.0
+
+flutter_native_splash:
+  color: "#050505"
+  image: assets/images/logo_icon.png
+  branding: assets/images/logo_full.png
+# branding_bottom is not supported in this version
+  fullscreen: true
+  android_12:
+    image: assets/images/logo_icon.png
+    color: "#050505"
+  android: true
+  ios: true
 
 flutter_launcher_icons:
   android: "launcher_icon"
