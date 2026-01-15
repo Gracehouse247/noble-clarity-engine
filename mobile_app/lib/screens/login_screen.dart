@@ -154,9 +154,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       _emailController.text,
                                       _passwordController.text,
                                     );
+
                                 if (mounted) {
-                                  ref.read(navigationProvider.notifier).state =
-                                      AppRoute.dashboard;
+                                  final user = ref
+                                      .read(authProvider.notifier)
+                                      .currentUser;
+                                  if (user != null && !user.emailVerified) {
+                                    ref
+                                            .read(navigationProvider.notifier)
+                                            .state =
+                                        AppRoute.verifyEmail;
+                                  } else {
+                                    ref
+                                            .read(navigationProvider.notifier)
+                                            .state =
+                                        AppRoute.dashboard;
+                                  }
                                 }
                               } catch (e) {
                                 if (!mounted) return;

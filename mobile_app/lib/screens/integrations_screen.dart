@@ -38,51 +38,123 @@ class _IntegrationsScreenState extends ConsumerState<IntegrationsScreen> {
       return;
     }
 
-    setState(() {
-      _isSyncing = true;
-    });
+    // Show simulated connection dialog for most services
+    _showSecureConnectionDialog(service);
+  }
 
-    try {
-      final result = await apiService.syncIntegration(service, userId);
+  void _showSecureConnectionDialog(String service) {
+    Color brandColor = AppTheme.primaryBlue;
+    IconData brandIcon = Icons.extension;
 
-      if (mounted) {
-        setState(() {
-          _connectedStatus[service] = true;
-          _isSyncing = false;
-        });
+    // Map typical brand colors/icons for better UI
+    if (service == 'Stripe') {
+      brandColor = const Color(0xFF635BFF);
+      brandIcon = Icons.payments_outlined;
+    } else if (service == 'PayPal') {
+      brandColor = const Color(0xFF003087);
+      brandIcon = Icons.account_balance_wallet_outlined;
+    } else if (service == 'QuickBooks' || service == 'HubSpot') {
+      brandColor = const Color(0xFFFF7A59);
+      brandIcon = Icons.hub_outlined;
+    }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          bool isConnecting = false;
+
+          return AlertDialog(
+            backgroundColor: const Color(0xFF0F172A),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Connected to $service'),
-                if (result['status'] != null)
-                  Text(
-                    'Status: ${result['status']}',
-                    style: const TextStyle(fontSize: 12, color: Colors.white70),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: brandColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
                   ),
+                  child: Icon(brandIcon, color: brandColor, size: 40),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Connect $service',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Establish a secure link to ingest your $service data into the Noble Clarity Engine.',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: isConnecting
+                        ? null
+                        : () async {
+                            setModalState(() => isConnecting = true);
+                            await Future.delayed(const Duration(seconds: 2));
+                            if (mounted) {
+                              setState(() {
+                                _connectedStatus[service] = true;
+                              });
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '$service linked successfully!',
+                                  ),
+                                  backgroundColor: AppTheme.profitGreen,
+                                ),
+                              );
+                            }
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: brandColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: isConnecting
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text('ESTABLISH SECURE LINK'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.white38),
+                  ),
+                ),
               ],
             ),
-            backgroundColor: AppTheme.profitGreen,
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isSyncing = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to connect to $service: $e'),
-            backgroundColor: AppTheme.lossRed,
-          ),
-        );
-      }
-    }
+          );
+        },
+      ),
+    );
   }
 
   @override

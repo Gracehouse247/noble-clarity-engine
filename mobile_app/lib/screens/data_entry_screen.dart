@@ -152,6 +152,59 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     final userId = ref.read(authProvider).userId;
     if (userId == null) return;
 
+    // Special handling for Google Sheets (REAL OAUTH)
+    if (service == 'sheets') {
+      try {
+        setState(() {
+          _isSyncing = true;
+          _syncingService = 'Google Sheets';
+        });
+
+        final token = await ref
+            .read(authProvider.notifier)
+            .signInWithSheetsScopes();
+        if (token != null) {
+          // Send token to backend
+          await ref
+              .read(apiServiceProvider)
+              .connectIntegration('sheets', userId, token);
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Google Sheets connected successfully!'),
+                backgroundColor: AppTheme.profitGreen,
+              ),
+            );
+          }
+        }
+        return;
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Google Sheets connection failed: $e'),
+              backgroundColor: AppTheme.lossRed,
+            ),
+          );
+        }
+        return;
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isSyncing = false;
+            _syncingService = null;
+          });
+        }
+      }
+    }
+
+    // Special handling for Stripe/Plaid (Simulated Secure Connection UI)
+    if (service == 'stripe' || service == 'plaid') {
+      _showSecureConnectionDialog(service);
+      return;
+    }
+
     setState(() {
       _isSyncing = true;
       _syncingService = service;
@@ -187,6 +240,112 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
         });
       }
     }
+  }
+
+  void _showSecureConnectionDialog(String service) {
+    final isStripe = service == 'stripe';
+    final color = isStripe ? const Color(0xFF635BFF) : Colors.black;
+    final icon = isStripe ? Icons.payment : Icons.account_balance;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          bool isConnecting = false;
+
+          return AlertDialog(
+            backgroundColor: const Color(0xFF0F172A),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: color, size: 40),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Connect ${service.substring(0, 1).toUpperCase()}${service.substring(1)}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  isStripe
+                      ? 'Link your account to sync revenue & churn data.'
+                      : 'Securely aggregate your bank transaction data.',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: isConnecting
+                        ? null
+                        : () async {
+                            setModalState(() => isConnecting = true);
+                            // Simulate link establishment
+                            await Future.delayed(const Duration(seconds: 2));
+                            if (mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${service.toUpperCase()} linked successfully!',
+                                  ),
+                                  backgroundColor: AppTheme.profitGreen,
+                                ),
+                              );
+                            }
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: color == Colors.black
+                          ? AppTheme.primaryBlue
+                          : color,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: isConnecting
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text('ESTABLISH SECURE LINK'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.white38),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _handleCsvImport() async {

@@ -67,9 +67,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
           email: user.email,
           displayName: user.displayName,
           photoUrl: user.photoURL,
-          isAuthenticated: true,
+          isAuthenticated: user.emailVerified, // dashboard check
           isLoading: false,
         );
+
+        // If authenticated but not verified, force verification screen
+        if (!user.emailVerified) {
+          ref.read(navigationProvider.notifier).state = AppRoute.verifyEmail;
+        }
       } else {
         state = const AuthState();
       }
@@ -146,18 +151,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
           email: user.email,
           displayName: user.displayName,
           photoUrl: user.photoURL,
-          isAuthenticated: true,
+          isAuthenticated: false, // Wait for verification
           isLoading: false,
         );
+
+        // Redirect to Verification Screen
+        ref.read(navigationProvider.notifier).state = AppRoute.verifyEmail;
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint('🔥 Firebase Signup Error: ${e.code}');
       String errorMessage = 'Sign up failed';
+
       if (e.code == 'weak-password') {
         errorMessage = 'Password is too weak';
       } else if (e.code == 'email-already-in-use') {
-        errorMessage = 'An account already exists with this email';
+        errorMessage = 'EMAIL_EXISTS';
       } else if (e.code == 'invalid-email') {
         errorMessage = 'Invalid email address';
+      } else {
+        errorMessage = e.message ?? 'Sign up failed';
       }
 
       state = state.copyWith(isLoading: false, errorMessage: errorMessage);
@@ -225,6 +237,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         errorMessage: 'Google sign-in failed: ${e.toString()}',
       );
+      rethrow;
+    }
+  }
+
+  // Google Sign-In with specific scopes for Google Sheets
+  Future<String?> signInWithSheetsScopes() async {
+    try {
+      final googleSignIn = GoogleSignIn(
+        scopes: [
+          'https://www.googleapis.com/auth/spreadsheets.readonly',
+          'https://www.googleapis.com/auth/userinfo.email',
+        ],
+        serverClientId: FirebaseConfig.webClientId,
+      );
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      return googleAuth.accessToken;
+    } catch (e) {
+      debugPrint('Google Sheets OAuth Error: $e');
       rethrow;
     }
   }

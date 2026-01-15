@@ -282,15 +282,32 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 return;
                               }
 
-                              await ref
-                                  .read(authProvider.notifier)
-                                  .signup(
-                                    _emailController.text,
-                                    password: _passwordController.text,
+                              try {
+                                await ref
+                                    .read(authProvider.notifier)
+                                    .signup(
+                                      _emailController.text,
+                                      password: _passwordController.text,
+                                    );
+                              } catch (e) {
+                                if (mounted) {
+                                  final authState = ref.read(authProvider);
+                                  String msg =
+                                      authState.errorMessage ??
+                                      'Signup failed. Please try again.';
+
+                                  if (msg == 'EMAIL_EXISTS') {
+                                    msg =
+                                        'An account already exists with this email address.';
+                                  }
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(msg),
+                                      backgroundColor: AppTheme.lossRed,
+                                    ),
                                   );
-                              if (mounted) {
-                                ref.read(navigationProvider.notifier).state =
-                                    AppRoute.dashboard;
+                                }
                               }
                             },
                             style: ElevatedButton.styleFrom(

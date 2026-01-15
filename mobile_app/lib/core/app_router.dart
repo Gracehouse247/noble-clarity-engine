@@ -9,6 +9,7 @@ import '../screens/ai_insights_feed.dart';
 import '../screens/ai_coach_screen.dart';
 import '../screens/main_shell.dart';
 import '../screens/legal_pages.dart';
+import '../screens/email_verification_screen.dart';
 
 enum AppRoute {
   splash,
@@ -37,6 +38,7 @@ enum AppRoute {
   terms,
   privacy,
   deletion,
+  verifyEmail,
 }
 
 final navigationProvider = StateProvider<AppRoute>((ref) => AppRoute.splash);
@@ -62,6 +64,8 @@ class AppRouter {
         return const PrivacyPolicyScreen();
       case AppRoute.deletion:
         return const DataDeletionScreen();
+      case AppRoute.verifyEmail:
+        return const EmailVerificationScreen();
       default:
         return MainScreenShell(route: route);
     }
