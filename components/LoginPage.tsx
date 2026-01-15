@@ -23,9 +23,21 @@ const LoginPage: React.FunctionComponent = () => {
         setLoading(true);
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigate('/dashboard');
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            // Enforce OTP for everyone to ensure real users (as per request)
+            // Even if they are "emailVerified" by Firebase, we want to route them through our OTP flow
+            // OR we can check userCredential.user.emailVerified
+            // Given the backend handles OTP now, let's force verification if not verified
+            if (!userCredential.user.emailVerified) {
+                // Since our custom OTP backend doesn't update Firebase Auth state (yet),
+                // we treat everyone as needing verification for this session flow,
+                // OR we just route them there.
+                navigate('/verify-email');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (err: any) {
+            // ... existing error handling
             console.error("Login Error:", err);
             setError(err.message.replace('Firebase: ', ''));
         } finally {

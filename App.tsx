@@ -16,6 +16,7 @@ const PricingPage = React.lazy(() => import('./components/PricingPage'));
 const ApiDocsPage = React.lazy(() => import('./components/ApiDocsPage'));
 const LoginPage = React.lazy(() => import('./components/LoginPage'));
 const SignupPage = React.lazy(() => import('./components/SignupPage'));
+const EmailVerification = React.lazy(() => import('./components/EmailVerification'));
 const OnboardingFlow = React.lazy(() => import('./components/OnboardingFlow'));
 const StoryPage = React.lazy(() => import('./components/StoryPage'));
 const SecurityPage = React.lazy(() => import('./components/SecurityPage'));
@@ -107,6 +108,7 @@ const AppContent: React.FunctionComponent = () => {
           <Route path="/blog" element={<BlogArchive />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/onboarding" element={
             <ProtectedRoute>
               <OnboardingFlow />

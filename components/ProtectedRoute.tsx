@@ -19,7 +19,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     }
 
     if (!user) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
+    }
+
+    // Check verification (Support both Firebase Native Link AND our Custom OTP)
+    const isManuallyVerified = localStorage.getItem(`verified_${user.uid}`) === 'true';
+    if (!user.emailVerified && !isManuallyVerified) {
+        return <Navigate to="/verify-email" replace />;
     }
 
     return <>{children}</>;
