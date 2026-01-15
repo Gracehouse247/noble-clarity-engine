@@ -121,15 +121,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           // Delete Account Button (Google Play Requirement)
           Center(
-            child: TextButton(
-              onPressed: () => _confirmDeleteAccount(context),
-              child: Text(
-                'Delete Account & Data',
-                style: TextStyle(
-                  color: AppTheme.lossRed.withValues(alpha: 0.7),
-                  fontSize: 12,
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () => ref.read(navigationProvider.notifier).state =
+                      AppRoute.deletion,
+                  child: Text(
+                    'Data Deletion Policy & Request Info',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.4),
+                      fontSize: 11,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
-              ),
+                TextButton(
+                  onPressed: () => _confirmDeleteAccount(context),
+                  child: Text(
+                    'Delete Account & Data',
+                    style: TextStyle(
+                      color: AppTheme.lossRed.withValues(alpha: 0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 

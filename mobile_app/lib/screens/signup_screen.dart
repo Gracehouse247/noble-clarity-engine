@@ -93,8 +93,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(width: 48),
                       Image.asset(
-                        'assets/images/logo_icon.png',
-                        height: 32,
+                        'assets/images/logo_full.png',
+                        height: 40,
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 48),
@@ -448,9 +448,31 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () =>
+                                ref.read(navigationProvider.notifier).state =
+                                    AppRoute.terms,
                             child: Text(
                               'Terms of Service',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 4,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                ref.read(navigationProvider.notifier).state =
+                                    AppRoute.deletion,
+                            child: Text(
+                              'Data Deletion',
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 fontSize: 11,

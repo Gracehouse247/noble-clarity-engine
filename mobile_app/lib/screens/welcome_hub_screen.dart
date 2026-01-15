@@ -48,7 +48,7 @@ class WelcomeHubScreen extends ConsumerWidget {
                             ),
                           ),
                           child: Image.asset(
-                            'assets/images/logo_icon.png',
+                            'assets/images/logo_full.png',
                             height: 60,
                             fit: BoxFit.contain,
                           ),

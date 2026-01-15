@@ -116,3 +116,42 @@ class OurStoryScreen extends StatelessWidget {
     );
   }
 }
+
+class DataDeletionScreen extends StatelessWidget {
+  const DataDeletionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const StaticContentScreen(
+      title: 'DATA DELETION',
+      sections: [
+        StaticSection(
+          title: 'Account Deletion Request',
+          content:
+              'We respect your right to privacy and data sovereignty. You can request the permanent deletion of your account and all associated financial data at any time.',
+        ),
+        StaticSection(
+          title: 'What happens to my data?',
+          content:
+              'Upon completion of your request, the following will be permanently removed from our systems:',
+          bullets: [
+            'All personal profile information',
+            'All synced business financial records',
+            'AI-generated insights and history',
+            'Saved API keys and credentials',
+          ],
+        ),
+        StaticSection(
+          title: 'How to initiate deletion',
+          content:
+              'To request deletion, you can use the "Delete Account" button in your Settings within the app. Alternatively, you can send an email request to our data protection team.',
+          bullets: [
+            'Email: support@noblesworld.com.ng',
+            'Subject: Account Deletion Request',
+            'Processing Time: Within 48 hours',
+          ],
+        ),
+      ],
+    );
+  }
+}

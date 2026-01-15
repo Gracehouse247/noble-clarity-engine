@@ -21,6 +21,7 @@ const StoryPage = React.lazy(() => import('./components/StoryPage'));
 const SecurityPage = React.lazy(() => import('./components/SecurityPage'));
 const PrivacyPage = React.lazy(() => import('./components/PrivacyPage'));
 const TermsPage = React.lazy(() => import('./components/TermsPage'));
+const DeletionPage = React.lazy(() => import('./components/DeletionPage'));
 const SettingsPage = React.lazy(() => import('./components/SettingsPage'));
 const ChangelogPage = React.lazy(() => import('./components/ChangelogPage'));
 const ProtectedRoute = React.lazy(() => import('./components/ProtectedRoute'));
@@ -115,6 +116,7 @@ const AppContent: React.FunctionComponent = () => {
           <Route path="/security" element={<SecurityPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/data-deletion" element={<DeletionPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
           <Route path="/dashboard/*" element={
             <ProtectedRoute>
@@ -153,4 +155,5 @@ const App: React.FunctionComponent = () => {
   );
 };
 
+// Build timestamp: 2026-01-15T02:30:00Z
 export default App;

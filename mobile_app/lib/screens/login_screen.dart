@@ -330,6 +330,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
 
+                  const SizedBox(height: 24),
+
+                  // Legal Links
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () =>
+                            ref.read(navigationProvider.notifier).state =
+                                AppRoute.privacy,
+                        child: const Text(
+                          'Privacy Policy',
+                          style: TextStyle(color: Colors.white24, fontSize: 11),
+                        ),
+                      ),
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: const BoxDecoration(
+                          color: Colors.white12,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            ref.read(navigationProvider.notifier).state =
+                                AppRoute.deletion,
+                        child: const Text(
+                          'Data Deletion',
+                          style: TextStyle(color: Colors.white24, fontSize: 11),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
                   const SizedBox(height: 48),
                 ],
               ),

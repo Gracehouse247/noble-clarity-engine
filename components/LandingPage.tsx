@@ -630,6 +630,7 @@ const LandingPage: React.FunctionComponent = () => {
                     <span className="text-white font-bold">Legal</span>
                     <button onClick={() => navigate('/privacy')} className="text-slate-500 hover:text-primary transition-colors text-left">Privacy</button>
                     <button onClick={() => navigate('/terms')} className="text-slate-500 hover:text-primary transition-colors text-left">Terms</button>
+                    <button onClick={() => navigate('/data-deletion')} className="text-slate-500 hover:text-primary transition-colors text-left">Deletion</button>
                     <button onClick={() => navigate('/security')} className="text-slate-500 hover:text-primary transition-colors text-left">Security</button>
                   </div>
                 </div>

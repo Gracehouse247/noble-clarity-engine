@@ -8,6 +8,7 @@ import '../screens/data_connect_screen.dart';
 import '../screens/ai_insights_feed.dart';
 import '../screens/ai_coach_screen.dart';
 import '../screens/main_shell.dart';
+import '../screens/legal_pages.dart';
 
 enum AppRoute {
   splash,
@@ -35,6 +36,7 @@ enum AppRoute {
   security,
   terms,
   privacy,
+  deletion,
 }
 
 final navigationProvider = StateProvider<AppRoute>((ref) => AppRoute.splash);
@@ -56,6 +58,10 @@ class AppRouter {
         return const AiInsightsFeedScreen();
       case AppRoute.aiCoach:
         return const AiCoachChatScreen();
+      case AppRoute.privacy:
+        return const PrivacyPolicyScreen();
+      case AppRoute.deletion:
+        return const DataDeletionScreen();
       default:
         return MainScreenShell(route: route);
     }
@@ -76,6 +82,7 @@ class AppRouter {
       case AppRoute.security:
       case AppRoute.terms:
       case AppRoute.privacy:
+      case AppRoute.deletion:
         return AppRoute.dashboard;
       default:
         return null; // Implies no specific back navigation/open drawer
