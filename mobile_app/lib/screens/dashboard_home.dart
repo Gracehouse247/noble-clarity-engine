@@ -8,11 +8,12 @@ import '../models/financial_models.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/business_switcher.dart';
 import 'package:intl/intl.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../widgets/drill_down_modal.dart';
 import '../widgets/benchmark_card.dart';
 import '../providers/multi_tenant_provider.dart';
-import 'data_source_selection_screen.dart';
+
+import '../widgets/dashboard_action_buttons.dart';
 
 class DashboardHome extends ConsumerStatefulWidget {
   const DashboardHome({super.key});
@@ -93,7 +94,7 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
               runway,
             ),
             const SizedBox(height: 32),
-            _buildCashFlowSection(context, data),
+            _buildCashFlowSection(context, data, profileData),
             const SizedBox(height: 32),
             _buildNetMarginSection(margin),
             const SizedBox(height: 32),
@@ -229,120 +230,7 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
   }
 
   Widget _buildActionButtons(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        children: [
-          _buildActionItem(
-            context,
-            'Business Profile',
-            Icons.account_balance_outlined,
-            const Color(0xFF259df4),
-            () => ref.read(navigationProvider.notifier).state =
-                AppRoute.businessProfile,
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Cash Flow',
-            Icons.account_balance_wallet_outlined,
-            const Color(0xFF25f478),
-            () {},
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Connect Data',
-            Icons.link,
-            const Color(0xFFF4A125),
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const DataSourceSelectionScreen(),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Integrations',
-            Icons.hub_outlined,
-            const Color(0xFFf4a261),
-            () => ref.read(navigationProvider.notifier).state =
-                AppRoute.integrations,
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Update Data',
-            Icons.edit_note,
-            const Color(0xFFe76f51),
-            () => ref.read(navigationProvider.notifier).state =
-                AppRoute.dataEntry,
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Analyze Trends',
-            Icons.description_outlined,
-            Colors.orange,
-            () => ref.read(navigationProvider.notifier).state = AppRoute.roi,
-          ),
-          const SizedBox(width: 12),
-          _buildActionItem(
-            context,
-            'Save Snapshot',
-            Icons.camera_alt_outlined,
-            Colors.purpleAccent,
-            () {
-              final activeId = ref.read(activeProfileIdProvider);
-              ref.read(profilesDataProvider.notifier).saveSnapshot(activeId);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Financial snapshot saved to history!'),
-                  backgroundColor: AppTheme.profitGreen,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionItem(
-    BuildContext context,
-    String label,
-    IconData icon,
-    Color color,
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: color, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const DashboardActionButtons();
   }
 
   Widget _buildKpiCarousel(
@@ -384,7 +272,39 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
     );
   }
 
-  Widget _buildCashFlowSection(BuildContext context, FinancialData data) {
+  Widget _buildCashFlowSection(
+    BuildContext context,
+    FinancialData data,
+    ProfileData? profileData,
+  ) {
+    List<FlSpot> trendSpots = [];
+    if (profileData != null && profileData.history.isNotEmpty) {
+      final history = profileData.history;
+      // Use last 11 months + current
+      final recentHistory = history.length > 11
+          ? history.sublist(history.length - 11)
+          : history;
+
+      for (int i = 0; i < recentHistory.length; i++) {
+        final h = recentHistory[i];
+        final netFlow = h.revenue - h.cogs - h.operatingExpenses;
+        trendSpots.add(FlSpot(i.toDouble(), netFlow / 100000));
+      }
+      // Add current month
+      final currentNetFlow = data.revenue - data.cogs - data.operatingExpenses;
+      trendSpots.add(
+        FlSpot(recentHistory.length.toDouble(), currentNetFlow / 100000),
+      );
+    } else {
+      // Fallback Demo Data
+      trendSpots = [
+        FlSpot(0, data.revenue * 0.6 / 100000),
+        FlSpot(4, data.revenue * 0.7 / 100000),
+        FlSpot(8, data.revenue * 0.8 / 100000), // Scaled for demo
+        FlSpot(11, data.revenue / 100000),
+      ];
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: GestureDetector(
@@ -508,15 +428,7 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
                     borderData: FlBorderData(show: false),
                     lineBarsData: [
                       LineChartBarData(
-                        spots: [
-                          FlSpot(
-                            0,
-                            data.revenue * 0.6 / 100000,
-                          ), // Scaled for demo
-                          FlSpot(4, data.revenue * 0.7 / 100000),
-                          FlSpot(8, data.revenue * 0.8 / 100000),
-                          FlSpot(11, data.revenue / 100000),
-                        ],
+                        spots: trendSpots,
                         isCurved: true,
                         color: AppTheme.primaryBlue,
                         barWidth: 4,

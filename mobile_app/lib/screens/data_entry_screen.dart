@@ -1,8 +1,13 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
+import '../core/app_router.dart';
 import '../models/financial_models.dart';
 import '../providers/multi_tenant_provider.dart';
+import '../providers/auth_provider.dart';
+import '../services/api_service.dart';
+import 'package:file_picker/file_picker.dart';
+import '../services/csv_parsing_service.dart';
 
 class DataEntryScreen extends ConsumerStatefulWidget {
   const DataEntryScreen({super.key});
@@ -15,6 +20,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final _formKey = GlobalKey<FormState>();
+  bool _isSyncing = false;
+  String? _syncingService;
 
   // Manual Form Controllers
   final _revenueController = TextEditingController();
@@ -25,6 +32,23 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
   final _leadsController = TextEditingController();
   final _conversionsController = TextEditingController();
   final _marketingController = TextEditingController();
+
+  // General & Metadata
+  final _periodController = TextEditingController();
+  final _industryController = TextEditingController();
+  String _selectedCurrency = 'USD';
+
+  final List<String> _currencies = ['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD'];
+  final List<String> _industries = [
+    'Technology',
+    'SaaS',
+    'E-commerce',
+    'Retail',
+    'Healthcare',
+    'Finance',
+    'Manufacturing',
+    'Other',
+  ];
 
   @override
   void initState() {
@@ -38,6 +62,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     final data = ref.read(profilesDataProvider)[activeId]?.current;
 
     if (data != null) {
+      _periodController.text = data.date;
+      _industryController.text = data.industry;
       _revenueController.text = data.revenue.toString();
       _cogsController.text = data.cogs.toString();
       _opexController.text = data.operatingExpenses.toString();
@@ -46,6 +72,15 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
       _leadsController.text = data.leadsGenerated.toString();
       _conversionsController.text = data.conversions.toString();
       _marketingController.text = data.marketingSpend.toString();
+    }
+
+    // Load Currency from Profile
+    final activeProfile = ref.read(activeProfileProvider);
+    if (activeProfile != null) {
+      _selectedCurrency = activeProfile.currency;
+      if (!_currencies.contains(_selectedCurrency)) {
+        _currencies.add(_selectedCurrency);
+      }
     }
   }
 
@@ -60,6 +95,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     _leadsController.dispose();
     _conversionsController.dispose();
     _marketingController.dispose();
+    _periodController.dispose();
+    _industryController.dispose();
     super.dispose();
   }
 
@@ -67,6 +104,15 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     if (_formKey.currentState!.validate()) {
       final activeId = ref.read(activeProfileIdProvider);
       final currentData = ref.read(profilesDataProvider)[activeId]?.current;
+
+      // Update Profile Currency
+      final activeProfile = ref.read(activeProfileProvider);
+      if (activeProfile != null &&
+          activeProfile.currency != _selectedCurrency) {
+        ref
+            .read(profilesProvider.notifier)
+            .updateProfile(activeProfile.copyWith(currency: _selectedCurrency));
+      }
 
       final newData = FinancialData(
         revenue: double.tryParse(_revenueController.text) ?? 0.0,
@@ -77,7 +123,10 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
         leadsGenerated: int.tryParse(_leadsController.text) ?? 0,
         conversions: int.tryParse(_conversionsController.text) ?? 0,
         marketingSpend: double.tryParse(_marketingController.text) ?? 0.0,
-        industry: currentData?.industry ?? 'Technology',
+        industry: _industryController.text.isNotEmpty
+            ? _industryController.text
+            : (currentData?.industry ?? 'Technology'),
+        date: _periodController.text,
         mrr: (double.tryParse(_revenueController.text) ?? 0.0) / 12,
         arr: double.tryParse(_revenueController.text) ?? 0.0,
       );
@@ -90,22 +139,113 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
         const SnackBar(
           content: Text('Financial data updated successfully'),
           backgroundColor: AppTheme.profitGreen,
+          duration: Duration(seconds: 4),
         ),
       );
 
-      // Optionally pop if this was opened as a modal or dedicated entry screen from wizard
-      // Navigator.pop(context);
+      // Redirect to dashboard after update
+      ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
     }
   }
 
-  void _showComingSoon(String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature integration coming soon!'),
-        backgroundColor: AppTheme.primaryBlue,
-        duration: const Duration(seconds: 1),
-      ),
-    );
+  Future<void> _handleIntegrationSync(String service) async {
+    final userId = ref.read(authProvider).userId;
+    if (userId == null) return;
+
+    setState(() {
+      _isSyncing = true;
+      _syncingService = service;
+    });
+
+    try {
+      final response = await ref
+          .read(apiServiceProvider)
+          .syncIntegration(service, userId);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['status'] ?? '$service integration active!'),
+            backgroundColor: AppTheme.profitGreen,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error connecting to $service: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+          _syncingService = null;
+        });
+      }
+    }
+  }
+
+  Future<void> _handleCsvImport() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['csv'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        setState(() {
+          _isSyncing = true;
+          _syncingService = 'CSV';
+        });
+
+        final csvService = CsvParsingService();
+        final parsedData = await csvService.parseFinancialCsv(
+          result.files.single.path!,
+        );
+
+        if (parsedData != null) {
+          final activeId = ref.read(activeProfileIdProvider);
+          ref
+              .read(profilesDataProvider.notifier)
+              .updateManualData(activeId, parsedData);
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Financial Data Imported Successfully'),
+                backgroundColor: AppTheme.profitGreen,
+                duration: Duration(seconds: 4),
+              ),
+            );
+            ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
+          }
+        } else {
+          throw Exception(
+            'Could not parse CSV format. Please ensure headers match industry standards.',
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+          _syncingService = null;
+        });
+      }
+    }
   }
 
   @override
@@ -195,6 +335,29 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             style: TextStyle(color: Colors.white54, fontSize: 14),
           ),
           const SizedBox(height: 32),
+          if (_isSyncing)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Column(
+                children: [
+                  LinearProgressIndicator(
+                    backgroundColor: Colors.white.withValues(alpha: 0.05),
+                    color: AppTheme.primaryBlue,
+                    minHeight: 2,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'establishing neural link to ${_syncingService ?? "service"}...'
+                        .toLowerCase(),
+                    style: const TextStyle(
+                      color: Colors.white24,
+                      fontSize: 10,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
           // Google Sheets
           _buildIntegrationCard(
@@ -202,7 +365,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             description: 'Sync financial models securely.',
             icon: Icons.table_chart,
             color: const Color(0xFF0F9D58),
-            onTap: () => _showComingSoon('Google Sheets'),
+            onTap: () => _handleIntegrationSync('sheets'),
+            isLoading: _isSyncing && _syncingService == 'sheets',
           ),
 
           // CSV Import
@@ -211,7 +375,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             description: 'Upload exported financial data.',
             icon: Icons.upload_file,
             color: Colors.orange,
-            onTap: () => _showComingSoon('CSV Import'),
+            onTap: _handleCsvImport,
+            isLoading: _isSyncing && _syncingService == 'CSV',
           ),
 
           // Stripe
@@ -220,7 +385,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             description: 'Real-time revenue & churn metrics.',
             icon: Icons.payment,
             color: const Color(0xFF635BFF),
-            onTap: () => _showComingSoon('Stripe'),
+            onTap: () => _handleIntegrationSync('stripe'),
+            isLoading: _isSyncing && _syncingService == 'stripe',
           ),
 
           // Plaid
@@ -229,7 +395,8 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             description: 'Secure bank account simplified.',
             icon: Icons.account_balance,
             color: Colors.black, // Plaid branding often black/white
-            onTap: () => _showComingSoon('Plaid'),
+            onTap: () => _handleIntegrationSync('plaid'),
+            isLoading: _isSyncing && _syncingService == 'plaid',
           ),
         ],
       ),
@@ -242,18 +409,23 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     required IconData icon,
     required Color color,
     required VoidCallback onTap,
+    bool isLoading = false,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: InkWell(
-        onTap: onTap,
+        onTap: _isSyncing ? null : onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.03),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+            border: Border.all(
+              color: isLoading
+                  ? AppTheme.primaryBlue.withValues(alpha: 0.3)
+                  : Colors.white.withValues(alpha: 0.08),
+            ),
           ),
           child: Row(
             children: [
@@ -263,7 +435,16 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
                   color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: color, size: 28),
+                child: isLoading
+                    ? const SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primaryBlue,
+                        ),
+                      )
+                    : Icon(icon, color: color, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -308,6 +489,44 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildSectionHeader('GENERAL & METADATA'),
+            const SizedBox(height: 16),
+            _buildInputField(
+              'Reporting Period',
+              _periodController,
+              Icons.calendar_today_outlined,
+              hintText: 'e.g., Q1 2026',
+            ),
+            _buildDropdownField(
+              label: 'Industry Sector',
+              value: _industryController.text.isNotEmpty
+                  ? _industryController.text
+                  : _industries.first,
+              items: _industries,
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() {
+                    _industryController.text = val;
+                  });
+                }
+              },
+              icon: Icons.business_outlined,
+            ),
+            _buildDropdownField(
+              label: 'Currency',
+              value: _selectedCurrency,
+              items: _currencies,
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() {
+                    _selectedCurrency = val;
+                  });
+                }
+              },
+              icon: Icons.attach_money,
+            ),
+
+            const SizedBox(height: 32),
             _buildSectionHeader('FINANCIAL STACK'),
             const SizedBox(height: 16),
             _buildInputField(
@@ -412,7 +631,11 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
     TextEditingController controller,
     IconData icon, {
     String? prefix,
+    String? hintText,
   }) {
+    // If controller is _periodController, we might want text input type
+    final isNumeric = controller != _periodController;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -429,12 +652,17 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
           const SizedBox(height: 8),
           TextFormField(
             controller: controller,
-            keyboardType: TextInputType.number,
+            keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               prefixIcon: Icon(icon, color: AppTheme.primaryBlue, size: 20),
               prefixText: prefix,
               prefixStyle: const TextStyle(color: AppTheme.primaryBlue),
+              hintText: hintText,
+              hintStyle: TextStyle(
+                color: Colors.white.withValues(alpha: 0.3),
+                fontSize: 12,
+              ),
               filled: true,
               fillColor: Colors.white.withValues(alpha: 0.05),
               border: OutlineInputBorder(
@@ -456,11 +684,71 @@ class _DataEntryScreenState extends ConsumerState<DataEntryScreen>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Please enter a value';
-              if (double.tryParse(value) == null) {
+              if (isNumeric && double.tryParse(value) == null) {
                 return 'Please enter a valid number';
               }
               return null;
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String value,
+    required List<String> items,
+    required Function(String?) onChanged,
+    required IconData icon,
+  }) {
+    // Ensure value is in items, otherwise fallback
+    final safeValue = items.contains(value) ? value : items.first;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          DropdownButtonFormField<String>(
+            initialValue: safeValue,
+            onChanged: onChanged,
+            style: const TextStyle(color: Colors.white),
+            dropdownColor: const Color(0xFF1E293B), // Slate-800 approx
+            icon: const Icon(Icons.arrow_drop_down, color: Colors.white54),
+            decoration: InputDecoration(
+              prefixIcon: Icon(icon, color: AppTheme.primaryBlue, size: 20),
+              filled: true,
+              fillColor: Colors.white.withValues(alpha: 0.05),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: AppTheme.primaryBlue),
+              ),
+            ),
+            items: items.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
           ),
         ],
       ),

@@ -98,8 +98,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Login failed';
-      if (e.code == 'user-not-found') {
-        errorMessage = 'No user found with this email';
+      if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
+        // Handle specifically for redirecting to signup
+        errorMessage = 'NO_USER_FOUND';
       } else if (e.code == 'wrong-password') {
         errorMessage = 'Incorrect password';
       } else if (e.code == 'invalid-email') {
@@ -131,6 +132,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       final user = userCredential.user;
       if (user != null) {
+        // Send internal Firebase verification email
+        await user.sendEmailVerification();
+
+        // Send custom tailored welcome email via our backend
+        await ref.read(apiServiceProvider).sendWelcomeEmail(email, user.uid);
+
+        // Sync profile to backend after user creation
+        await _syncProfileToBackend();
+
         state = AuthState(
           userId: user.uid,
           email: user.email,

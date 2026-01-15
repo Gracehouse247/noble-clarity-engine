@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 import '../widgets/story_insight_card.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../providers/financial_provider.dart';
 import '../services/api_service.dart';
 
@@ -139,11 +139,27 @@ List<InsightCardData> _generateRuleBasedInsights(dynamic data) {
 List<InsightCardData> _getDefaultInsights() {
   return [
     InsightCardData(
-      title: 'Welcome to Insights',
+      title: 'Welcome to Noble Clarity Engine!',
       description:
-          'Add your financial data to receive AI-powered insights and recommendations.',
+          'Unlock predictive business insights with crystalline precision. Start elevating your Financial Intelligence today.',
       type: InsightType.info,
       actionLabel: 'Add Data',
+      timestamp: DateTime.now(),
+    ),
+    InsightCardData(
+      title: 'Growth Engine Active',
+      description:
+          'Powerful tools designed to accelerate decision making. Use AI-driven coaching and scenario planning to scale.',
+      type: InsightType.opportunity,
+      actionLabel: 'Explore Tools',
+      timestamp: DateTime.now(),
+    ),
+    InsightCardData(
+      title: 'Real-time Visibility',
+      description:
+          'Monitor key performance indicators with vector precision. Consolidate your data into a single source of truth.',
+      type: InsightType.info,
+      actionLabel: 'Connect Data',
       timestamp: DateTime.now(),
     ),
   ];
@@ -199,11 +215,27 @@ class _AiInsightsFeedScreenState extends ConsumerState<AiInsightsFeedScreen> {
                 return StoryInsightCard(
                   data: insights[index],
                   onAction: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Action: ${insights[index].actionLabel}'),
-                      ),
-                    );
+                    final action = insights[index].actionLabel;
+                    if (action == 'Add Data' ||
+                        action == 'Connect Data' ||
+                        insights[index].title == 'Welcome to Insights') {
+                      ref.read(navigationProvider.notifier).state =
+                          AppRoute.dataConnect;
+                    } else if (action == 'Scenario Planner' ||
+                        action == 'View Scenarios') {
+                      ref.read(navigationProvider.notifier).state =
+                          AppRoute.planner;
+                    } else if (action == 'Analyze Cash Flow') {
+                      ref.read(navigationProvider.notifier).state =
+                          AppRoute.cashFlow;
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Action: $action'),
+                          backgroundColor: AppTheme.primaryBlue,
+                        ),
+                      );
+                    }
                   },
                 );
               },

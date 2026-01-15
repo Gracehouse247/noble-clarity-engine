@@ -12,8 +12,9 @@ class BenchmarkCard extends StatelessWidget {
     if (data.benchmark == null) return const SizedBox.shrink();
 
     final benchmark = data.benchmark!;
-    final revenueDiff =
-        ((data.revenue - benchmark.avgRevenue) / benchmark.avgRevenue) * 100;
+    final revenueDiff = benchmark.avgRevenue > 0
+        ? ((data.revenue - benchmark.avgRevenue) / benchmark.avgRevenue) * 100
+        : 0.0;
 
     // Calculate net margin
     final netProfit = data.revenue - data.cogs - data.operatingExpenses;

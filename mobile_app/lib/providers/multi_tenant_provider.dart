@@ -33,6 +33,13 @@ class ProfilesNotifier extends StateNotifier<List<BusinessProfile>> {
     if (state.length <= 1) return;
     state = state.where((p) => p.id != id).toList();
   }
+
+  void updateProfile(BusinessProfile updatedProfile) {
+    state = [
+      for (final profile in state)
+        if (profile.id == updatedProfile.id) updatedProfile else profile,
+    ];
+  }
 }
 
 final profilesProvider =

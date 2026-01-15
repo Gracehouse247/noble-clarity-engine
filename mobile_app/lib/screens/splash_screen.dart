@@ -2,7 +2,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import '../core/app_theme.dart';
-import '../main.dart';
+import '../providers/auth_provider.dart';
+import '../core/app_router.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -25,7 +26,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     super.initState();
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 1000),
     );
     _scaleAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
       CurvedAnimation(
@@ -51,10 +52,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   void _startLoading() {
-    Timer.periodic(const Duration(milliseconds: 40), (timer) {
+    Timer.periodic(const Duration(milliseconds: 30), (timer) {
       if (mounted) {
         setState(() {
-          _loadingProgress += 0.015;
+          _loadingProgress += 0.035;
           if (_loadingProgress >= 1.0) {
             _loadingProgress = 1.0;
             timer.cancel();
@@ -66,9 +67,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   void _navigateToNext() {
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
-        ref.read(navigationProvider.notifier).state = AppRoute.onboarding;
+        final authState = ref.read(authProvider);
+        if (authState.isAuthenticated) {
+          ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
+        } else {
+          ref.read(navigationProvider.notifier).state = AppRoute.onboarding;
+        }
       }
     });
   }

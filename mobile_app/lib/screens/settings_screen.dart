@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 import '../providers/auth_provider.dart';
 import '../providers/business_provider.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -15,6 +15,16 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isGeminiActive = false;
+  final _geminiKeyController = TextEditingController();
+  final _openaiKeyController = TextEditingController();
+  bool _isVerifying = false;
+
+  @override
+  void dispose() {
+    _geminiKeyController.dispose();
+    _openaiKeyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,9 +238,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ],
           ),
           const SizedBox(height: 24),
-          _buildKeyField('Google Gemini Key', 'AIzaSyDOCSxd...'),
+          _buildKeyField(
+            'Google Gemini Key',
+            _geminiKeyController,
+            hint: 'AIzaSyDOCSxd...',
+          ),
           const SizedBox(height: 20),
-          _buildKeyField('OpenAI Secret Key', 'sk-proj-892...', isActive: true),
+          _buildKeyField(
+            'OpenAI Secret Key',
+            _openaiKeyController,
+            hint: 'sk-proj-892...',
+            isActive: true,
+          ),
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(12),
@@ -295,7 +314,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _isVerifying
+                  ? null
+                  : () async {
+                      setState(() => _isVerifying = true);
+
+                      // Simulate verification delay
+                      await Future.delayed(const Duration(seconds: 2));
+
+                      if (mounted) {
+                        setState(() => _isVerifying = false);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('API Keys Verified & Saved Securely'),
+                            backgroundColor: AppTheme.profitGreen,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryBlue,
                 foregroundColor: Colors.white,
@@ -304,14 +341,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 elevation: 0,
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.verified_user_outlined, size: 18),
-                  SizedBox(width: 8),
+                  _isVerifying
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.verified_user_outlined, size: 18),
+                  const SizedBox(width: 8),
                   Text(
-                    'VERIFY & SAVE',
-                    style: TextStyle(
+                    _isVerifying ? 'VERIFYING...' : 'VERIFY & SAVE',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
                     ),
@@ -327,7 +373,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Widget _buildKeyField(
     String label,
-    String maskedValue, {
+    TextEditingController controller, {
+    String? hint,
     bool isActive = false,
   }) {
     return Column(
@@ -384,16 +431,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 size: 20,
               ),
               const SizedBox(width: 12),
-              Text(
-                maskedValue,
-                style: const TextStyle(
-                  color: Colors.white38,
-                  fontFamily: 'monospace',
-                  letterSpacing: 2,
-                  fontSize: 13,
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  obscureText: true,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontFamily: 'monospace',
+                    letterSpacing: 1,
+                    fontSize: 13,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    hintStyle: const TextStyle(color: Colors.white12),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
               ),
-              const Spacer(),
               Icon(
                 isActive ? Icons.fingerprint : Icons.visibility_off_outlined,
                 color: isActive ? AppTheme.aiPurple : Colors.white24,

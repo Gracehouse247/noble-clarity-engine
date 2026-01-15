@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../providers/auth_provider.dart';
 import 'forgot_password_screen.dart';
 
@@ -60,28 +60,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     'assets/images/logo_full.png',
                     height: 80,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 64,
-                      height: 64,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppTheme.primaryBlue,
-                            AppTheme.backgroundDark,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.insights,
-                        color: Colors.white,
-                        size: 32,
-                      ),
+                    errorBuilder: (context, error, stackTrace) => const Icon(
+                      Icons.insights,
+                      color: Colors.white,
+                      size: 64,
                     ),
                   ),
 
@@ -165,15 +147,58 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () async {
-                              await ref
-                                  .read(authProvider.notifier)
-                                  .login(
-                                    _emailController.text,
-                                    _passwordController.text,
+                              try {
+                                await ref
+                                    .read(authProvider.notifier)
+                                    .login(
+                                      _emailController.text,
+                                      _passwordController.text,
+                                    );
+                                if (mounted) {
+                                  ref.read(navigationProvider.notifier).state =
+                                      AppRoute.dashboard;
+                                }
+                              } catch (e) {
+                                if (!mounted) return;
+                                final authState = ref.read(authProvider);
+                                if (authState.errorMessage == 'NO_USER_FOUND') {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Email not registered. Redirecting to Sign Up...',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                    ),
                                   );
-                              if (mounted) {
-                                ref.read(navigationProvider.notifier).state =
-                                    AppRoute.dashboard;
+                                  Future.delayed(
+                                    const Duration(seconds: 2),
+                                    () {
+                                      if (mounted) {
+                                        ref
+                                            .read(navigationProvider.notifier)
+                                            .state = AppRoute
+                                            .signup;
+                                      }
+                                    },
+                                  );
+                                } else {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          authState.errorMessage ??
+                                              'Login failed',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                }
                               }
                             },
                             style: ElevatedButton.styleFrom(

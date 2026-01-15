@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../core/app_theme.dart';
 import '../models/financial_models.dart';
+import '../providers/auth_provider.dart';
+import '../services/api_service.dart';
+import '../core/app_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // --- Providers for managing connection state ---
 
@@ -12,19 +15,70 @@ final connectionStateProvider = StateProvider<Map<String, bool>>(
   (ref) => {'stripe': false, 'bank': false, 'csv': false, 'sheets': false},
 );
 
-class DataSourceSelectionScreen extends ConsumerWidget {
+class DataSourceSelectionScreen extends ConsumerStatefulWidget {
   const DataSourceSelectionScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DataSourceSelectionScreen> createState() =>
+      _DataSourceSelectionScreenState();
+}
+
+class _DataSourceSelectionScreenState
+    extends ConsumerState<DataSourceSelectionScreen> {
+  bool _isSyncing = false;
+  String? _syncingService;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+  );
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundDark,
+      body: Stack(
+        children: [
+          _buildContent(context),
+          if (_isSyncing)
+            Container(
+              color: Colors.black54,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(
+                      color: AppTheme.primaryBlue,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'ESTABLISHING NEURAL LINK TO ${_syncingService?.toUpperCase()}...',
+                      style: const TextStyle(
+                        color: AppTheme.primaryBlue,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
+          },
         ),
         title: const Text(
           'Connect Data Pipeline',
@@ -63,7 +117,7 @@ class DataSourceSelectionScreen extends ConsumerWidget {
               color: const Color(0xFF635BFF), // Stripe Blurple
               isConnected:
                   ref.watch(connectionStateProvider)['stripe'] ?? false,
-              onTap: () => _showStripeDialog(context, ref),
+              onTap: () => _handleIntegrationSync('Stripe'),
             ),
 
             // 2. Bank Connection (Plaid/Mono style)
@@ -74,7 +128,7 @@ class DataSourceSelectionScreen extends ConsumerWidget {
               icon: LucideIcons.landmark,
               color: const Color(0xFF00D68F), // Fintech Green
               isConnected: ref.watch(connectionStateProvider)['bank'] ?? false,
-              onTap: () => _showBankDialog(context, ref),
+              onTap: () => _handleIntegrationSync('Plaid'),
             ),
 
             // 3. Google Sheets
@@ -86,7 +140,7 @@ class DataSourceSelectionScreen extends ConsumerWidget {
               color: const Color(0xFF0F9D58), // Google Sheets Green
               isConnected:
                   ref.watch(connectionStateProvider)['sheets'] ?? false,
-              onTap: () => _showSheetsDialog(context, ref),
+              onTap: () => _handleGoogleSheetsAuth(),
             ),
 
             // 4. CSV Upload
@@ -97,7 +151,7 @@ class DataSourceSelectionScreen extends ConsumerWidget {
               icon: LucideIcons.fileSpreadsheet,
               color: Colors.orange,
               isConnected: ref.watch(connectionStateProvider)['csv'] ?? false,
-              onTap: () => _handleCsvUpload(context, ref),
+              onTap: () => _handleCsvUpload(context),
             ),
 
             // 5. Manual Entry
@@ -107,7 +161,10 @@ class DataSourceSelectionScreen extends ConsumerWidget {
               icon: LucideIcons.pencil,
               color: Colors.blueGrey,
               isConnected: false, // Always available
-              onTap: () => _showManualEntryDialog(context, ref),
+              onTap: () {
+                ref.read(navigationProvider.notifier).state =
+                    AppRoute.dataEntry;
+              },
             ),
           ],
         ),
@@ -117,180 +174,172 @@ class DataSourceSelectionScreen extends ConsumerWidget {
 
   // --- Handlers & Dialogs ---
 
-  void _showStripeDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (ctx) => _ApiKeyDialog(
-        title: 'Connect Stripe',
-        hintText: 'Enter Stripe Live Secret Key (sk_live_...)',
-        onSubmitted: (key) async {
-          // In a real app, send to backend. For now, simulate success.
-          await Future.delayed(const Duration(seconds: 2));
-          ref
-              .read(connectionStateProvider.notifier)
-              .update((state) => {...state, 'stripe': true});
-          if (context.mounted) Navigator.pop(ctx);
+  Future<void> _handleGoogleSheetsAuth() async {
+    final userId = ref.read(authProvider).userId;
+    if (userId == null) return;
+
+    setState(() {
+      _isSyncing = true;
+      _syncingService = 'Google Sheets';
+    });
+
+    try {
+      // 1. Start Interactive Sign-In Flow
+      final GoogleSignInAccount? account = await _googleSignIn.signIn();
+
+      if (account == null) {
+        // User cancelled
+        if (mounted) {
+          setState(() => _isSyncing = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Stripe Connected Successfully!'),
-              backgroundColor: Colors.green,
-            ),
+            const SnackBar(content: Text('Google Sign-In Cancelled')),
           );
-        },
-      ),
-    );
-  }
+        }
+        return;
+      }
 
-  void _showBankDialog(BuildContext context, WidgetRef ref) {
-    // Simulating Plaid Link Flow
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (ctx) => Container(
-        height: MediaQuery.of(context).size.height * 0.8,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Secure Bank Link',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: const Icon(
-                      Icons.account_balance,
-                      color: Colors.blue,
-                    ),
-                    title: const Text(
-                      'Chase Bank',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onTap: () => _simulateBankConnect(context, ref, 'Chase'),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.account_balance,
-                      color: Colors.red,
-                    ),
-                    title: const Text(
-                      'Bank of America',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onTap: () => _simulateBankConnect(context, ref, 'BoA'),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.account_balance,
-                      color: Colors.purple,
-                    ),
-                    title: const Text(
-                      'Mercury',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onTap: () => _simulateBankConnect(context, ref, 'Mercury'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      // 2. Get Auth Headers (contains Access Token)
+      final authHeaders = await account.authHeaders;
+      // Extract Bearer token
+      final token = authHeaders['Authorization']?.split(' ').last;
 
-  void _simulateBankConnect(
-    BuildContext context,
-    WidgetRef ref,
-    String bankName,
-  ) async {
-    Navigator.pop(context); // Close sheet
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Connecting to $bankName...'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
-    await Future.delayed(const Duration(seconds: 2));
-    ref
-        .read(connectionStateProvider.notifier)
-        .update((state) => {...state, 'bank': true});
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$bankName Connected!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (token == null) throw Exception('Failed to retrieve access token');
+
+      // 3. Send Token to Backend to Start Sync
+      await ref
+          .read(apiServiceProvider)
+          .connectIntegration('Sheets', userId, token);
+
+      // 4. Update UI State
+      ref
+          .read(connectionStateProvider.notifier)
+          .update((state) => {...state, 'sheets': true});
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Google Sheets Connected & Syncing!'),
+            backgroundColor: AppTheme.profitGreen,
+          ),
+        );
+        // Navigate to dashboard to see results
+        ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
+      }
+    } catch (e) {
+      debugPrint('Google Sheets Auth Error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Connection Failed: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+          _syncingService = null;
+        });
+      }
     }
   }
 
-  void _showSheetsDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (ctx) => _ApiKeyDialog(
-        title: 'Connect Google Sheets',
-        hintText: 'Paste Google Sheet Shareable Link',
-        buttonText: 'Sync Sheet',
-        onSubmitted: (url) async {
-          final uri = Uri.parse(url);
-          if (await canLaunchUrl(uri)) {
-            // Emulate auth flow
-            await launchUrl(uri);
-          }
-          ref
-              .read(connectionStateProvider.notifier)
-              .update((state) => {...state, 'sheets': true});
-          if (context.mounted) Navigator.pop(ctx);
-        },
-      ),
-    );
+  Future<void> _handleIntegrationSync(String service) async {
+    final userId = ref.read(authProvider).userId;
+    if (userId == null) return;
+
+    setState(() {
+      _isSyncing = true;
+      _syncingService = service;
+    });
+
+    try {
+      final response = await ref
+          .read(apiServiceProvider)
+          .syncIntegration(service, userId);
+
+      ref
+          .read(connectionStateProvider.notifier)
+          .update((state) => {...state, service.toLowerCase(): true});
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['status'] ?? '$service integration active!'),
+            backgroundColor: AppTheme.profitGreen,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+        // After success, go to dashboard
+        ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error connecting to $service: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+          _syncingService = null;
+        });
+      }
+    }
   }
 
-  Future<void> _handleCsvUpload(BuildContext context, WidgetRef ref) async {
+  Future<void> _handleCsvUpload(BuildContext context) async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv', 'xlsx'],
       );
 
       if (result != null) {
-        // PlatformFile file = result.files.first;
-        // In real app: upload file.bytes to backend
+        setState(() {
+          _isSyncing = true;
+          _syncingService = 'CSV';
+        });
+
+        // Simulate processing
+        await Future.delayed(const Duration(seconds: 2));
+
         ref
             .read(connectionStateProvider.notifier)
             .update((state) => {...state, 'csv': true});
+
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Financial Data Imported from CSV'),
-            backgroundColor: Colors.green,
+            backgroundColor: AppTheme.profitGreen,
+            duration: Duration(seconds: 4),
           ),
         );
-        // Simulate data injection (optional: update provider with mock parsed data)
+        ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking file: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error picking file: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+          _syncingService = null;
+        });
+      }
     }
-  }
-
-  void _showManualEntryDialog(BuildContext context, WidgetRef ref) {
-    showDialog(context: context, builder: (ctx) => const _ManualEntryForm());
   }
 }
 
@@ -395,13 +444,11 @@ class _DataSourceCard extends StatelessWidget {
 class _ApiKeyDialog extends StatefulWidget {
   final String title;
   final String hintText;
-  final String buttonText;
   final Function(String) onSubmitted;
 
   const _ApiKeyDialog({
     required this.title,
     required this.hintText,
-    this.buttonText = 'Connect',
     required this.onSubmitted,
   });
 
@@ -473,7 +520,7 @@ class _ApiKeyDialogState extends State<_ApiKeyDialog> {
                           color: Colors.white,
                         ),
                       )
-                    : Text(widget.buttonText),
+                    : const Text('Connect'),
               ),
             ),
           ],

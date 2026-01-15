@@ -1,0 +1,21 @@
+Date,Transaction_ID,Service_Type,Revenue,COGS,OpEx,Marketing_Spend,Leads_Source,Customer_Tier,Region
+2025-01-01,TXN-2025-001,SaaS Subscription - Enterprise,15000.00,2250.00,4500.00,1200.00,LinkedIn,Platinum,North America
+2025-01-02,TXN-2025-002,Consulting - Strategy,5000.00,500.00,1000.00,300.00,Referral,Gold,Europe
+2025-01-03,TXN-2025-003,SaaS Subscription - Pro,250.00,37.50,75.00,50.00,Google Ads,Silver,Asia
+2025-01-03,TXN-2025-004,SaaS Subscription - Pro,250.00,37.50,75.00,50.00,Google Ads,Silver,North America
+2025-01-04,TXN-2025-005,API Usage Overage,120.50,15.00,30.00,0.00,Organic,Silver,Europe
+2025-01-05,TXN-2025-006,SaaS Subscription - Enterprise,12000.00,1800.00,3600.00,1000.00,Direct Sales,Platinum,North America
+2025-01-06,TXN-2025-007,Custom Development,8500.00,3000.00,2000.00,150.00,Partner,Gold,North America
+2025-01-07,TXN-2025-008,SaaS Subscription - Starter,49.00,5.00,15.00,20.00,Facebook Ads,Bronze,South America
+2025-01-08,TXN-2025-009,SaaS Subscription - Starter,49.00,5.00,15.00,20.00,Facebook Ads,Bronze,Africa
+2025-01-09,TXN-2025-010,Training Workshop,2500.00,200.00,500.00,100.00,Webinar,Gold,Europe
+2025-01-10,TXN-2025-011,SaaS Subscription - Enterprise,15000.00,2250.00,4500.00,0.00,Renewal,Platinum,North America
+2025-01-11,TXN-2025-012,Support Package - Premium,1500.00,300.00,400.00,0.00,Upsell,Gold,Asia
+2025-01-12,TXN-2025-013,SaaS Subscription - Pro,250.00,37.50,75.00,50.00,Google Ads,Silver,North America
+2025-01-13,TXN-2025-014,SaaS Subscription - Pro,250.00,37.50,75.00,50.00,Google Ads,Silver,Europe
+2025-01-14,TXN-2025-015,Implementation Fee,3000.00,1000.00,800.00,0.00,Direct Sales,Platinum,North America
+2025-01-15,TXN-2025-016,SaaS Subscription - Starter,49.00,5.00,15.00,20.00,Google Ads,Bronze,North America
+2025-01-15,TXN-2025-017,SaaS Subscription - Starter,49.00,5.00,15.00,20.00,Google Ads,Bronze,North America
+2025-01-16,TXN-2025-018,SaaS Subscription - Enterprise,18000.00,2700.00,5400.00,1500.00,Event,Platinum,Europe
+2025-01-17,TXN-2025-019,Cloud Hosting Resell,500.00,400.00,20.00,0.00,Upsell,Silver,North America
+2025-01-18,TXN-2025-020,SaaS Subscription - Pro,250.00,37.50,75.00,50.00,Organic,Silver,Australia

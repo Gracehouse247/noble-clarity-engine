@@ -144,7 +144,7 @@ io.on('connection', (socket) => {
 
         try {
             const ai = new GoogleGenerativeAI(key);
-            const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
             const result = await model.generateContentStream({
                 contents: [{ role: 'user', parts: [{ text: (systemInstruction || "") + "\n\nUser: " + prompt }] }]
@@ -246,7 +246,10 @@ app.use(async (req, res, next) => {
         return handleTTS(req, res);
     }
 
-    // 4. Email Blast
+    // 4. Email Blast & Welcome
+    if (p.includes('welcome-email')) {
+        return handleWelcomeEmail(req, res);
+    }
     if (p.includes('blast-email')) {
         return handleEmail(req, res);
     }
@@ -458,7 +461,7 @@ async function handleGemini(req, res) {
     if (!key) return res.status(400).json({ error: 'AI Key Missing' });
     try {
         const ai = new GoogleGenerativeAI(key);
-        const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         const result = await model.generateContent({
             contents: [{ role: 'user', parts: [{ text: (systemInstruction || "") + "\n\nUser: " + prompt }] }]
         });
@@ -476,7 +479,7 @@ async function handleTTS(req, res) {
     if (!key) return res.status(400).json({ error: 'AI Key Missing' });
     try {
         const ai = new GoogleGenerativeAI(key);
-        const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         const result = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: text }] }],
             generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } } } }
@@ -540,6 +543,105 @@ async function handleEmail(req, res) {
         }
         res.json({ success: true, count: recipients.length });
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+// --- 📧 WELCOME EMAIL HANDLER ---
+async function handleWelcomeEmail(req, res) {
+    const { email, userId } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email address missing' });
+
+    const subject = "Welcome to Noble Clarity Engine!";
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background-color: #0F1116; color: #FFFFFF;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #0F1116; padding: 40px 20px;">
+                <tr>
+                    <td align="center">
+                        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #14161B; border: 1px solid #1A1D23; border-radius: 24px; padding: 40px; overflow: hidden;">
+                            <!-- Header -->
+                            <tr>
+                                <td align="center" style="padding-bottom: 30px;">
+                                    <h1 style="color: #293D99; margin: 0; font-size: 24px; letter-spacing: 2px;">NOBLE CLARITY</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding-bottom: 40px;">
+                                    <h2 style="font-size: 28px; font-weight: bold; margin: 0 0 10px 0;">Welcome to Noble Clarity Engine!</h2>
+                                    <p style="font-size: 16px; color: #94A3B8; margin: 0;">Unlock predictive business insights with crystalline precision.</p>
+                                </td>
+                            </tr>
+
+                            <!-- Content -->
+                            <tr>
+                                <td style="padding-bottom: 30px;">
+                                    <p style="font-size: 14px; font-weight: bold; color: #FFFFFF; margin: 0 0 20px 0;">Here are 3 ways to start elevating your Financial Intelligence with Noble Clarity Engine:</p>
+                                    
+                                    <!-- Growth Engine -->
+                                    <div style="margin-bottom: 25px;">
+                                        <h3 style="color: #293D99; font-size: 18px; margin: 0 0 5px 0;">Growth Engine</h3>
+                                        <p style="font-size: 14px; color: #94A3B8; line-height: 1.6; margin: 0;">Powerful tools designed to accelerate decision making. From AI-driven coaching to intricate scenario planning.</p>
+                                        <a href="https://clarity.noblesworld.com.ng" style="color: #293D99; text-decoration: none; font-size: 13px; font-weight: bold;">Learn more →</a>
+                                    </div>
+
+                                    <!-- Real-time Visibility -->
+                                    <div style="margin-bottom: 25px;">
+                                        <h3 style="color: #293D99; font-size: 18px; margin: 0 0 5px 0;">Real-time Visibility</h3>
+                                        <p style="font-size: 14px; color: #94A3B8; line-height: 1.6; margin: 0;">Monitor key performance indicators with vector precision. Unified Data: Consolidate multiple streams into a single source of truth.</p>
+                                        <a href="https://clarity.noblesworld.com.ng" style="color: #293D99; text-decoration: none; font-size: 13px; font-weight: bold;">Learn more →</a>
+                                    </div>
+
+                                    <!-- Bank-Grade Security -->
+                                    <div style="margin-bottom: 25px;">
+                                        <h3 style="color: #293D99; font-size: 18px; margin: 0 0 5px 0;">Bank-Grade Security</h3>
+                                        <p style="font-size: 14px; color: #94A3B8; line-height: 1.6; margin: 0;">SOC2 Type II Certified. End-to-end encryption for all financial data.</p>
+                                        <a href="https://clarity.noblesworld.com.ng" style="color: #293D99; text-decoration: none; font-size: 13px; font-weight: bold;">Learn more →</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center" style="padding-bottom: 40px;">
+                                    <a href="https://clarity.noblesworld.com.ng/docs" style="color: #293D99; text-decoration: none; font-size: 14px; font-weight: bold;">Visit our docs to learn more about the product, our models, and features. →</a>
+                                </td>
+                            </tr>
+
+                            <!-- Legal -->
+                            <tr>
+                                <td style="border-top: 1px solid #1A1D23; padding-top: 30px;">
+                                    <p style="font-size: 11px; color: #475569; line-height: 1.6; margin: 0 0 20px 0;">To help with quality, safety, and to improve our products, human reviewers may read, annotate, and process that data. Noble World takes steps to protect your privacy as part of this process, including disconnecting the data from your Noble Clarity Engine Account or API key before reviewers review or annotate it.</p>
+                                    <p style="font-size: 10px; color: #475569; text-align: center; margin: 0 0 5px 0;">© 2026 The Noble's Technology Services</p>
+                                    <p style="font-size: 10px; color: #475569; text-align: center; margin: 0;">This email was sent as part of an onboarding welcome. If you do not wish to receive emails in the future, please <a href="https://clarity.noblesworld.com.ng/unsubscribe" style="color: #475569; text-decoration: underline;">unsubscribe here</a>.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+    `;
+
+    const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST || 'localhost',
+        port: 465, secure: true,
+        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+        tls: { rejectUnauthorized: false }
+    });
+
+    try {
+        await transporter.sendMail({
+            from: `"Noble Clarity" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: subject,
+            html: html
+        });
+        auditLog('WELCOME_EMAIL_SENT', { email }, userId);
+        res.json({ success: true, message: 'Welcome email dispatched' });
+    } catch (err) {
+        log(`❌ Email Error: ${err.message}`);
         res.status(500).json({ error: err.message });
     }
 }

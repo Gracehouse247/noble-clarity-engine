@@ -4,7 +4,10 @@ import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import '../core/app_theme.dart';
 import '../services/api_service.dart';
 import '../providers/financial_provider.dart';
-import '../main.dart'; // For navigationProvider
+import '../core/app_router.dart'; // For navigationProvider
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AiCoachChatScreen extends ConsumerStatefulWidget {
   const AiCoachChatScreen({super.key});
@@ -16,19 +19,71 @@ class AiCoachChatScreen extends ConsumerStatefulWidget {
 class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final List<ChatMessage> _messages = [
-    ChatMessage(
-      text:
-          "I've analyzed your current financial signals. Your Q3 runway looks healthy, but I've spotted a 14% efficiency gap in your marketing spend. How would you like to proceed?",
-      isAi: true,
-      timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-      actionLabel: "View Projection",
-      onAction: () {
-        // Example: Navigate to Scenario Planner
-      },
-    ),
-  ];
+  final List<ChatMessage> _messages = [];
   bool _isTyping = false;
+  bool _isListening = false;
+
+  // Speech services
+  final SpeechToText _speechToText = SpeechToText();
+  final FlutterTts _flutterTts = FlutterTts();
+
+  @override
+  void initState() {
+    super.initState();
+    _messages.add(
+      ChatMessage(
+        text:
+            "I've analyzed your current financial signals. Your Q3 runway looks healthy, but I've spotted a 14% efficiency gap in your marketing spend. How would you like to proceed?",
+        isAi: true,
+        timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
+        actionLabel: "View Projection",
+        onAction: _navigateToProjection,
+      ),
+    );
+    _initializeVoice();
+  }
+
+  Future<void> _initializeVoice() async {
+    await _speechToText.initialize();
+    await _flutterTts.setLanguage("en-US");
+    await _flutterTts.setSpeechRate(0.5);
+  }
+
+  void _navigateToProjection() {
+    ref.read(navigationProvider.notifier).state = AppRoute.roi;
+  }
+
+  Future<void> _startVoiceListening() async {
+    if (_isListening) {
+      await _speechToText.stop();
+      setState(() => _isListening = false);
+      return;
+    }
+
+    var status = await Permission.microphone.status;
+    if (status.isDenied) {
+      status = await Permission.microphone.request();
+      if (status.isDenied) return;
+    }
+
+    setState(() => _isListening = true);
+
+    await _speechToText.listen(
+      onResult: (result) {
+        setState(() {
+          _messageController.text = result.recognizedWords;
+          if (result.finalResult) {
+            _isListening = false;
+            _sendMessage();
+          }
+        });
+      },
+    );
+  }
+
+  Future<void> _speakMessage(String text) async {
+    await _flutterTts.speak(text);
+  }
 
   void _sendMessage() async {
     final text = _messageController.text.trim();
@@ -69,6 +124,7 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
           _isTyping = false;
         });
         _scrollToBottom();
+        _speakMessage(response);
       }
     } catch (e) {
       if (mounted) {
@@ -269,14 +325,32 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    message.text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      height: 1.5,
-                      fontWeight: FontWeight.w400,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          message.text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            height: 1.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      if (isAi)
+                        IconButton(
+                          icon: const Icon(
+                            Icons.volume_up,
+                            color: Colors.white30,
+                            size: 18,
+                          ),
+                          onPressed: () => _speakMessage(message.text),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                    ],
                   ),
                   if (message.actionLabel != null) ...[
                     const SizedBox(height: 12),
@@ -432,10 +506,15 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                      suffixIcon: Icon(
-                        Icons.mic,
-                        color: Colors.white.withValues(alpha: 0.4),
-                        size: 20,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isListening ? Icons.graphic_eq : Icons.mic,
+                          color: _isListening
+                              ? AppTheme.primaryBlue
+                              : Colors.white.withValues(alpha: 0.4),
+                          size: 20,
+                        ),
+                        onPressed: _startVoiceListening,
                       ),
                     ),
                   ),

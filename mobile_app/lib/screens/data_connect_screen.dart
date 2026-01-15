@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../providers/multi_tenant_provider.dart';
 
 class DataConnectScreen extends ConsumerStatefulWidget {

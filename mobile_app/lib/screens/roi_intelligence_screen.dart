@@ -6,6 +6,8 @@ import '../models/financial_models.dart';
 import 'package:intl/intl.dart';
 import 'social_roi_screen.dart';
 import 'email_roi_screen.dart';
+import 'seo_roi_screen.dart';
+import '../core/app_router.dart';
 
 class RoiIntelligenceScreen extends ConsumerWidget {
   const RoiIntelligenceScreen({super.key});
@@ -14,10 +16,26 @@ class RoiIntelligenceScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final financialDataAsync = ref.watch(financialDataProvider);
 
-    return financialDataAsync.when(
-      data: (data) => _buildContent(context, data),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () =>
+              ref.read(navigationProvider.notifier).state = AppRoute.dashboard,
+        ),
+        title: const Text(
+          'ROI Intelligence',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: financialDataAsync.when(
+        data: (data) => _buildContent(context, data),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+      ),
     );
   }
 
@@ -76,7 +94,16 @@ class RoiIntelligenceScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                _buildSegment(context, 'SEO'),
+                _buildSegment(
+                  context,
+                  'SEO',
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SeoRoiScreen(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

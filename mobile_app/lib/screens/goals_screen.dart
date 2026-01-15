@@ -339,104 +339,237 @@ class GoalsScreen extends ConsumerWidget {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF13151F),
+      backgroundColor: Colors.transparent, // Glassmorphic look
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 24,
-          right: 24,
-          top: 24,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'NEW OBJECTIVE',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          return Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+              left: 24,
+              right: 24,
+              top: 32,
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: nameController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Objective Name',
-                labelStyle: TextStyle(color: Colors.white54),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white10),
-                ),
-              ),
+            decoration: const BoxDecoration(
+              color: Color(0xFF13151F),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              border: Border(top: BorderSide(color: Colors.white10)),
             ),
-            const SizedBox(height: 16),
-            Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: targetController,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      labelText: 'Target Value',
-                      labelStyle: TextStyle(color: Colors.white54),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                DropdownButton<String>(
-                  value: selectedMetric,
-                  dropdownColor: const Color(0xFF13151F),
-                  style: const TextStyle(color: AppTheme.primaryBlue),
-                  items: ['Revenue', 'Burn', 'Users', 'Runway'].map((m) {
-                    return DropdownMenuItem(value: m, child: Text(m));
-                  }).toList(),
-                  onChanged: (val) {
-                    if (val != null) selectedMetric = val;
-                  },
+                const SizedBox(height: 24),
+                const Text(
+                  'NEW MISSION OBJECTIVE',
+                  style: TextStyle(
+                    color: AppTheme.primaryBlue,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 12,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Name Input
+                _buildModalInput(
+                  label: 'OBJECTIVE NAME',
+                  child: TextField(
+                    controller: nameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'e.g., Q1 Revenue Target',
+                      hintStyle: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.2),
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.flag_outlined,
+                        color: Colors.white30,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white.withValues(alpha: 0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Value & Metric Row
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: _buildModalInput(
+                        label: 'TARGET VALUE',
+                        child: TextField(
+                          controller: targetController,
+                          keyboardType: TextInputType.number,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: '0.00',
+                            hintStyle: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.2),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.analytics_outlined,
+                              color: Colors.white30,
+                              size: 20,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withValues(alpha: 0.05),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 1,
+                      child: _buildModalInput(
+                        label: 'METRIC',
+                        child: Container(
+                          height: 58, // Match textfield height
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedMetric,
+                              dropdownColor: const Color(0xFF1E1E2C),
+                              style: const TextStyle(
+                                color: AppTheme.primaryBlue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              isExpanded: true,
+                              items: ['Revenue', 'Burn', 'Users', 'Runway'].map(
+                                (m) {
+                                  return DropdownMenuItem(
+                                    value: m,
+                                    child: Text(
+                                      m,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                              onChanged: (val) {
+                                if (val != null) {
+                                  setModalState(() {
+                                    selectedMetric = val;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 40),
+
+                // Action Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryBlue.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryBlue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        if (nameController.text.isNotEmpty) {
+                          final goal = FinancialGoal(
+                            id: DateTime.now().millisecondsSinceEpoch
+                                .toString(),
+                            name: nameController.text,
+                            metric: selectedMetric,
+                            targetValue:
+                                double.tryParse(targetController.text) ?? 1000,
+                            deadline: 'Q1 2026',
+                          );
+                          ref
+                              .read(profilesDataProvider.notifier)
+                              .addGoal(profileId, goal);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text(
+                        'INITIALIZE OBJECTIVE',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.5,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryBlue,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {
-                  if (nameController.text.isNotEmpty) {
-                    final goal = FinancialGoal(
-                      id: '',
-                      name: nameController.text,
-                      metric: selectedMetric,
-                      targetValue:
-                          double.tryParse(targetController.text) ?? 1000,
-                      deadline: 'Q1 2026',
-                    );
-                    ref
-                        .read(profilesDataProvider.notifier)
-                        .addGoal(profileId, goal);
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('ENGAGE MISSION'),
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildModalInput({required String label, required Widget child}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.3),
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+          ),
+        ),
+        const SizedBox(height: 10),
+        child,
+      ],
     );
   }
 

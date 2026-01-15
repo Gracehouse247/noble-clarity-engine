@@ -2,6 +2,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 
+import '../providers/auth_provider.dart';
+import '../services/api_service.dart';
+
 class IntegrationsScreen extends ConsumerStatefulWidget {
   const IntegrationsScreen({super.key});
 
@@ -21,27 +24,80 @@ class _IntegrationsScreenState extends ConsumerState<IntegrationsScreen> {
     'HubSpot': false,
   };
 
-  void _toggleConnection(String service) {
+  bool _isSyncing = false;
+
+  Future<void> _toggleConnection(String service) async {
+    final userId = ref.read(authProvider).userId ?? 'guest';
+    final apiService = ref.read(apiServiceProvider);
+
+    if (_connectedStatus[service] == true) {
+      // Simulation: disconnect
+      setState(() {
+        _connectedStatus[service] = false;
+      });
+      return;
+    }
+
     setState(() {
-      _connectedStatus[service] = !(_connectedStatus[service] ?? false);
+      _isSyncing = true;
     });
 
-    final isConnecting = _connectedStatus[service]!;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          isConnecting ? 'Connected to $service' : 'Disconnected from $service',
-        ),
-        backgroundColor: isConnecting ? AppTheme.profitGreen : AppTheme.lossRed,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    try {
+      final result = await apiService.syncIntegration(service, userId);
+
+      if (mounted) {
+        setState(() {
+          _connectedStatus[service] = true;
+          _isSyncing = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Connected to $service'),
+                if (result['status'] != null)
+                  Text(
+                    'Status: ${result['status']}',
+                    style: const TextStyle(fontSize: 12, color: Colors.white70),
+                  ),
+              ],
+            ),
+            backgroundColor: AppTheme.profitGreen,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to connect to $service: $e'),
+            backgroundColor: AppTheme.lossRed,
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: _isSyncing
+              ? const LinearProgressIndicator(
+                  backgroundColor: Colors.transparent,
+                  color: AppTheme.primaryBlue,
+                  minHeight: 2,
+                )
+              : const SizedBox(height: 2),
+        ),
         SliverPadding(
           padding: const EdgeInsets.all(24),
           sliver: SliverList(

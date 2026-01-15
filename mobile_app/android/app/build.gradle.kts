@@ -62,8 +62,10 @@ android {
                 "proguard-rules.pro"
             )
             
-            // Use release signing
-            signingConfig = signingConfigs.getByName("release")
+            // Use release signing if keys are available
+            if (keystoreProperties.getProperty("storeFile") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 }

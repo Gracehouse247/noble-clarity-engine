@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 import 'voice_assistant_sheet.dart';
-import '../main.dart'; // Import for navigationProvider
+import '../core/app_router.dart'; // Import for navigationProvider
 
 class SharedAiFab extends ConsumerWidget {
   const SharedAiFab({super.key});

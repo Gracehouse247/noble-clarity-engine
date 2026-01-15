@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../providers/auth_provider.dart';
 
 class AppDrawer extends ConsumerWidget {
@@ -128,10 +128,18 @@ class AppDrawer extends ConsumerWidget {
                   _buildDrawerItem(
                     context,
                     ref,
-                    title: 'Manual Entry',
-                    icon: Icons.edit_note_outlined,
-                    route: AppRoute.dataEntry,
-                    isActive: currentRoute == AppRoute.dataEntry,
+                    title: 'Privacy Policy',
+                    icon: Icons.privacy_tip_outlined,
+                    route: AppRoute.privacy,
+                    isActive: currentRoute == AppRoute.privacy,
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    ref,
+                    title: 'Terms of Service',
+                    icon: Icons.description_outlined,
+                    route: AppRoute.terms,
+                    isActive: currentRoute == AppRoute.terms,
                   ),
 
                   const SizedBox(height: 24),
@@ -297,9 +305,9 @@ class AppDrawer extends ConsumerWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: isActive ? Colors.white : Colors.white70,
+                    color: isActive ? Colors.white : Colors.white,
                     fontSize: 14,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                   ),
                 ),
                 if (isActive) ...[

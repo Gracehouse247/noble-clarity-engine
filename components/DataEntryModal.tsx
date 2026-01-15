@@ -189,7 +189,7 @@ const DataEntryModal: React.FunctionComponent<DataEntryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4 bg-slate-950/90 backdrop-blur-md">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-0 md:p-4 bg-slate-950/90 backdrop-blur-md">
       <div className="bg-slate-900 border border-slate-800 md:rounded-2xl w-full max-w-6xl h-full md:max-h-[90vh] flex flex-col lg:flex-row shadow-2xl animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
 
         {/* Main Content Column */}

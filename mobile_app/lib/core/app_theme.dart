@@ -31,6 +31,13 @@ class AppTheme {
       onSurface: Colors.white,
     ),
 
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: surfaceDark,
+      contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+
     textTheme: TextTheme(
       displayLarge: GoogleFonts.montserrat(
         fontSize: 32,
@@ -50,6 +57,12 @@ class AppTheme {
       ),
       bodyLarge: GoogleFonts.inter(fontSize: 16, color: textPrimary),
       bodyMedium: GoogleFonts.inter(fontSize: 14, color: textSecondary),
+      bodySmall: GoogleFonts.inter(fontSize: 12, color: textSecondary),
+      labelLarge: GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: textPrimary,
+      ),
       labelSmall: GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w500,
@@ -82,6 +95,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: primaryBlue),
       ),
+      errorStyle: GoogleFonts.inter(color: Colors.white, fontSize: 12),
       hintStyle: GoogleFonts.inter(color: textSecondary),
     ),
   );

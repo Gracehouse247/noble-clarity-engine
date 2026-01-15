@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../providers/auth_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -290,7 +290,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   );
                               if (mounted) {
                                 ref.read(navigationProvider.notifier).state =
-                                    AppRoute.dataConnect;
+                                    AppRoute.dashboard;
                               }
                             },
                             style: ElevatedButton.styleFrom(

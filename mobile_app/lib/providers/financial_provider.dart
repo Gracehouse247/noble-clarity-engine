@@ -33,9 +33,25 @@ final _fetchActiveDataProvider = FutureProvider<FinancialData>((ref) async {
   final apiService = ref.watch(apiServiceProvider);
   final authState = ref.watch(authProvider);
   final activeId = ref.watch(activeProfileIdProvider);
+  final userId = authState.userId;
+
+  if (userId == null) {
+    return const FinancialData(
+      revenue: 0,
+      cogs: 0,
+      operatingExpenses: 0,
+      currentAssets: 0,
+      currentLiabilities: 0,
+      leadsGenerated: 0,
+      conversions: 0,
+      marketingSpend: 0,
+      industry: 'SaaS',
+      date: '',
+    );
+  }
 
   try {
-    final data = await apiService.getFinancialData(authState.userId!);
+    final data = await apiService.getFinancialData(userId);
 
     // Side effect: seed the profiles data map with the fetched data
     final notifier = ref.read(profilesDataProvider.notifier);

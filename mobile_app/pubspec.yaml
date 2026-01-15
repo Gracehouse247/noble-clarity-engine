@@ -60,6 +60,13 @@ dependencies:
   shared_preferences: ^2.2.2
   file_picker: ^10.3.8
   url_launcher: ^6.3.2
+  csv: ^6.0.0
+
+  # PDF Export
+  pdf: ^3.11.1
+  printing: ^5.13.5
+  path_provider: ^2.1.5
+  open_filex: ^4.5.0
 
 dev_dependencies:
   flutter_test:

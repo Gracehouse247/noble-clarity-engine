@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../main.dart';
+import '../core/app_router.dart';
 import '../widgets/app_drawer.dart';
 import '../core/app_theme.dart';
 import 'dashboard_home.dart';
@@ -47,9 +47,21 @@ class MainScreenShell extends ConsumerWidget {
       centerTitle: true,
       leading: Builder(
         builder: (context) {
+          final bool canGoBack = AppRouter.getBackRoute(route) != null;
+
           return IconButton(
-            icon: const Icon(Icons.menu_open, color: AppTheme.primaryBlue),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: Icon(
+              canGoBack ? Icons.arrow_back : Icons.menu_open,
+              color: AppTheme.primaryBlue,
+            ),
+            onPressed: () {
+              final AppRoute? backRoute = AppRouter.getBackRoute(route);
+              if (backRoute != null) {
+                ref.read(navigationProvider.notifier).state = backRoute;
+              } else {
+                Scaffold.of(context).openDrawer();
+              }
+            },
           );
         },
       ),
