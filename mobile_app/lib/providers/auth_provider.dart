@@ -328,6 +328,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // In a real scenario, this would involve Firebase Multi-Factor Authentication (MFA)
     state = state.copyWith(isTwoFactorEnabled: enabled);
   }
+
+  // Manual verification success (for OTP)
+  void verifySuccess() {
+    state = state.copyWith(isAuthenticated: true);
+  }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {

@@ -25,6 +25,8 @@ class ApiConfig {
   static const String welcomeEmail = '/welcome-email';
   static const String webhooks = '/webhooks';
   static const String systemStatus = '/system-status';
+  static const String otpSend = '/auth/otp/send';
+  static const String otpVerify = '/auth/otp/verify';
 
   // Cache Configuration
   static const Duration cacheValidDuration = Duration(hours: 24);
