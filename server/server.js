@@ -284,6 +284,14 @@ app.use(async (req, res, next) => {
         return handleWebhooks(req, res);
     }
 
+    // 11. OTP Authentication
+    if (p.includes('/auth/otp/send')) {
+        return handleOtpSend(req, res);
+    }
+    if (p.includes('/auth/otp/verify')) {
+        return handleOtpVerify(req, res);
+    }
+
     next();
 });
 
@@ -298,6 +306,79 @@ const getStoredDevices = () => {
 const saveStoredDevices = (data) => {
     fs.writeFileSync(DEVICES_PATH, JSON.stringify(data, null, 2));
 };
+
+// --- 🔐 OTP HANDLER (IN-MEMORY) ---
+const otpStore = new Map(); // Stores { email: { code, expires } }
+
+async function handleOtpSend(req, res) {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    // Generate 6-digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Store with 10-minute expiration
+    otpStore.set(email, {
+        code,
+        expires: Date.now() + 10 * 60 * 1000
+    });
+
+    // Send Email
+    const subject = "Your Noble Verification Code";
+    const html = `
+        <div style="font-family: sans-serif; padding: 20px; background: #0F1116; color: white;">
+            <h2 style="color: #007AFF;">Verify your Identity</h2>
+            <p>Use the code below to complete your sign-in to Noble Clarity Engine.</p>
+            <h1 style="font-size: 32px; letter-spacing: 5px; background: #1A1D23; padding: 15px; border-radius: 8px; text-align: center; display: inline-block;">${code}</h1>
+            <p style="color: #666; font-size: 12px; margin-top: 20px;">This code expires in 10 minutes.</p>
+        </div>
+    `;
+
+    try {
+        const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST || 'localhost',
+            port: 465, secure: true,
+            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+            tls: { rejectUnauthorized: false }
+        });
+
+        await transporter.sendMail({
+            from: `"Noble Security" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject,
+            html
+        });
+
+        auditLog('OTP_SENT', { email }, 'system');
+        res.json({ success: true, message: 'OTP sent' });
+    } catch (err) {
+        log(`❌ OTP Email Error: ${err.message}`);
+        res.status(500).json({ error: 'Failed to send OTP' });
+    }
+}
+
+async function handleOtpVerify(req, res) {
+    const { email, code } = req.body;
+
+    if (!otpStore.has(email)) {
+        return res.json({ success: false, message: 'Code expired or not found' });
+    }
+
+    const data = otpStore.get(email);
+
+    if (Date.now() > data.expires) {
+        otpStore.delete(email);
+        return res.json({ success: false, message: 'Code expired' });
+    }
+
+    if (data.code === code) {
+        otpStore.delete(email); // consume code
+        auditLog('OTP_VERIFIED', { email }, 'system');
+        return res.json({ success: true });
+    }
+
+    return res.json({ success: false, message: 'Invalid code' });
+}
 
 async function handleRegisterDevice(req, res) {
     const userId = req.headers['x-user-id'] || req.body.userId || 'guest';
