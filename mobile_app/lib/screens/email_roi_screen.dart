@@ -5,6 +5,8 @@ import '../core/app_theme.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/social_roi_models.dart';
+import '../widgets/social_roi_ai_coach.dart' as social_ai;
 
 // State Provider for Email ROI Inputs
 final emailRoiInputsProvider =
@@ -435,51 +437,192 @@ class _EmailMarketingRoiScreenState
     final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0E1A),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Email Marketing ROI',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save, color: AppTheme.primaryBlue),
-            onPressed: () async {
-              await ref.read(emailRoiInputsProvider.notifier).saveToStorage();
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Email ROI data saved'),
-                  backgroundColor: AppTheme.profitGreen,
-                ),
-              );
-            },
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppTheme.primaryBlue,
-          labelColor: AppTheme.primaryBlue,
-          unselectedLabelColor: Colors.white54,
-          tabs: const [
-            Tab(text: 'Dashboard'),
-            Tab(text: 'Inputs'),
-            Tab(text: 'Scenarios'),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryBlue.withValues(alpha: 0.2),
+                    AppTheme.accentBlue.withValues(alpha: 0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.email_outlined,
+                color: AppTheme.primaryBlue,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Email ROI',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  'Marketing Intelligence',
+                  style: TextStyle(
+                    color: Colors.white38,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppTheme.profitGreen.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppTheme.profitGreen.withValues(alpha: 0.2),
+              ),
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.save_outlined,
+                color: AppTheme.profitGreen,
+                size: 20,
+              ),
+              onPressed: () async {
+                await ref.read(emailRoiInputsProvider.notifier).saveToStorage();
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Email ROI intelligence saved'),
+                    backgroundColor: AppTheme.profitGreen,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              indicator: BoxDecoration(
+                color: AppTheme.primaryBlue,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryBlue.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white38,
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+              tabs: const [
+                Tab(text: 'Dashboard'),
+                Tab(text: 'Inputs'),
+                Tab(text: 'Scenarios'),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showAiCoachForEmailROI(context, ref, inputs, results),
+        backgroundColor: AppTheme.primaryBlue,
+        icon: const Icon(Icons.psychology, color: Colors.white),
+        label: const Text(
+          'AI Marketing Coach',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Stack(
         children: [
-          _buildDashboardTab(results, currencyFormat),
-          _buildInputsTab(inputs),
-          _buildScenariosTab(inputs, results, currencyFormat),
+          // Background Glows
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 100,
+            left: -50,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.purple.withValues(alpha: 0.05),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFF0A0E1A),
+                  const Color(0xFF1A1F2E),
+                  AppTheme.primaryBlue.withValues(alpha: 0.05),
+                ],
+              ),
+            ),
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildDashboardTab(results, currencyFormat),
+                _buildInputsTab(inputs),
+                _buildScenariosTab(inputs, results, currencyFormat),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -487,76 +630,207 @@ class _EmailMarketingRoiScreenState
 
   Widget _buildDashboardTab(EmailRoiResults results, NumberFormat format) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 140, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // KPI Cards
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.5,
-            children: [
-              _buildKpiCard(
-                'Total Investment',
-                format.format(results.totalInvestment),
-                Icons.attach_money,
-                Colors.red.shade400,
-              ),
-              _buildKpiCard(
-                'Total Value (LTV)',
-                format.format(results.totalValueLTV),
-                Icons.trending_up,
-                AppTheme.profitGreen,
-              ),
-              _buildKpiCard(
-                'Net Profit',
-                format.format(results.netProfit),
-                Icons.account_balance_wallet,
-                results.netProfit >= 0 ? Colors.white : Colors.red.shade400,
-              ),
-              _buildKpiCard(
-                'Email ROI',
-                '${results.overallROI.toStringAsFixed(1)}%',
-                Icons.percent,
-                AppTheme.primaryBlue,
-              ),
-              _buildKpiCard(
-                'CPA',
-                format.format(results.cpa),
-                Icons.person,
-                Colors.purple.shade400,
-              ),
-              _buildKpiCard(
-                'CTOR',
-                '${results.ctor.toStringAsFixed(1)}%',
-                Icons.mouse,
-                Colors.amber.shade400,
-              ),
-            ],
-          ),
+          // Hero ROI Card
+          _buildHeroRoiCard(results),
           const SizedBox(height: 24),
 
-          // Investment Breakdown Chart
+          // Main KPI Grid
+          _buildKpiGrid(results, format),
+          const SizedBox(height: 32),
+
+          // Cost Structure Chart
           _buildInvestmentChart(results),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
-          // Campaign Metrics
+          // Deliverability Warning
+          if (results.lostRevenue > 0) ...[
+            _buildWarningCard(results, format),
+            const SizedBox(height: 32),
+          ],
+
+          // Detailed Metrics Section
           _buildMetricsSection(results, format),
+          const SizedBox(height: 48),
         ],
       ),
     );
   }
 
-  Widget _buildKpiCard(String label, String value, IconData icon, Color color) {
+  Widget _buildHeroRoiCard(EmailRoiResults results) {
+    final isPositive = results.overallROI >= 0;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppTheme.primaryBlue.withValues(alpha: 0.2),
+            AppTheme.accentBlue.withValues(alpha: 0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'OVERALL EMAIL ROI',
+                    style: TextStyle(
+                      color: Colors.white54,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Performance Score',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: (isPositive ? AppTheme.profitGreen : AppTheme.lossRed)
+                      .withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color:
+                        (isPositive ? AppTheme.profitGreen : AppTheme.lossRed)
+                            .withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isPositive ? Icons.trending_up : Icons.trending_down,
+                      color: isPositive
+                          ? AppTheme.profitGreen
+                          : AppTheme.lossRed,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      isPositive ? 'PROFITABLE' : 'LOSS',
+                      style: TextStyle(
+                        color: isPositive
+                            ? AppTheme.profitGreen
+                            : AppTheme.lossRed,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            '${results.overallROI.toStringAsFixed(1)}%',
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              color: isPositive ? AppTheme.profitGreen : AppTheme.lossRed,
+              letterSpacing: -1,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'FOR EVERY \$1 SPENT, YOU GENERATE \$${(results.totalValueLTV / results.totalInvestment).toStringAsFixed(2)}',
+            style: const TextStyle(
+              color: Colors.white38,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKpiGrid(EmailRoiResults results, NumberFormat format) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      childAspectRatio: 1.4,
+      children: [
+        _buildKpiCard(
+          'Total Investment',
+          format.format(results.totalInvestment),
+          Icons.outbound_outlined,
+          AppTheme.lossRed,
+          'Total Cost',
+        ),
+        _buildKpiCard(
+          'Total Value (LTV)',
+          format.format(results.totalValueLTV),
+          Icons.account_balance_wallet_outlined,
+          AppTheme.profitGreen,
+          'Lifetime Value',
+        ),
+        _buildKpiCard(
+          'Net Profit',
+          format.format(results.netProfit),
+          Icons.insights,
+          Colors.white,
+          'Gain/Loss',
+        ),
+        _buildKpiCard(
+          'CPA',
+          format.format(results.cpa),
+          Icons.person_add_outlined,
+          Colors.purple.shade300,
+          'Cost Per Acq.',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildKpiCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+    String subLabel,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Column(
@@ -566,28 +840,47 @@ class _EmailMarketingRoiScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: color, size: 16),
+              ),
+              Text(
+                subLabel,
+                style: const TextStyle(
+                  color: Colors.white24,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Icon(icon, color: color.withValues(alpha: 0.3), size: 20),
             ],
           ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white54,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ],
       ),
@@ -596,78 +889,87 @@ class _EmailMarketingRoiScreenState
 
   Widget _buildInvestmentChart(EmailRoiResults results) {
     final data = [
-      _ChartData('Platform', results.platformCosts, AppTheme.primaryBlue),
-      _ChartData('Labor/Agency', results.hrCosts, Colors.red.shade400),
-      _ChartData('Content/List', results.otherCosts, Colors.orange.shade400),
+      _ChartData('ESP Platform', results.platformCosts, AppTheme.primaryBlue),
+      _ChartData('Labor & Agency', results.hrCosts, AppTheme.accentBlue),
+      _ChartData('Content & List', results.otherCosts, Colors.purple.shade400),
       _ChartData(
         'Acquisition',
         results.acquisitionCost,
-        Colors.purple.shade400,
+        Colors.orange.shade400,
       ),
     ].where((d) => d.value > 0).toList();
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Cost Structure',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
+          const Row(
+            children: [
+              Icon(Icons.pie_chart_outline, color: Colors.white38, size: 18),
+              SizedBox(width: 12),
+              Text(
+                'Investment Structure',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 32),
           SizedBox(
             height: 200,
             child: PieChart(
               PieChartData(
-                sectionsSpace: 2,
-                centerSpaceRadius: 50,
+                sectionsSpace: 4,
+                centerSpaceRadius: 60,
                 sections: data.map((d) {
                   return PieChartSectionData(
                     value: d.value,
                     title: '',
                     color: d.color,
-                    radius: 50,
+                    radius: 20,
+                    badgeWidget: null,
                   );
                 }).toList(),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           ...data.map(
             (d) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 12),
               child: Row(
                 children: [
                   Container(
-                    width: 12,
-                    height: 12,
+                    width: 10,
+                    height: 10,
                     decoration: BoxDecoration(
                       color: d.color,
-                      borderRadius: BorderRadius.circular(2),
+                      shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       d.label,
                       style: const TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white54,
                         fontSize: 12,
                       ),
                     ),
                   ),
                   Text(
-                    '\$${d.value.toStringAsFixed(0)}',
+                    NumberFormat.simpleCurrency(
+                      decimalDigits: 0,
+                    ).format(d.value),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -683,57 +985,130 @@ class _EmailMarketingRoiScreenState
     );
   }
 
-  Widget _buildMetricsSection(EmailRoiResults results, NumberFormat format) {
+  Widget _buildWarningCard(EmailRoiResults results, NumberFormat format) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppTheme.lossRed.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppTheme.lossRed.withValues(alpha: 0.2)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            'Campaign Metrics',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.lossRed.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.warning_amber_rounded,
+              color: AppTheme.lossRed,
+              size: 24,
             ),
           ),
-          const SizedBox(height: 16),
-          _buildMetricRow(
-            'Emails Opened',
-            results.emailsOpened.toStringAsFixed(0),
-          ),
-          _buildMetricRow('Clicks', results.clicks.toStringAsFixed(0)),
-          _buildMetricRow(
-            'Conversions',
-            results.conversions.toStringAsFixed(0),
-          ),
-          _buildMetricRow(
-            'Unsubscribes',
-            results.unsubscribes.toStringAsFixed(0),
-          ),
-          _buildMetricRow(
-            'Immediate Revenue',
-            format.format(results.immediateRevenue),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'DELIVERABILITY LOSS',
+                  style: TextStyle(
+                    color: AppTheme.lossRed,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'You are losing ${format.format(results.lostRevenue)} in revenue due to bounced emails. Improve list hygiene to recover this.',
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMetricRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+  Widget _buildMetricsSection(EmailRoiResults results, NumberFormat format) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 16),
+          child: Text(
+            'Campaign Efficiency',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        _buildMetricRowPremium(
+          'CTOR',
+          '${results.ctor.toStringAsFixed(1)}%',
+          Icons.mouse_outlined,
+          Colors.amber,
+        ),
+        _buildMetricRowPremium(
+          'Email Conversions',
+          results.conversions.toStringAsFixed(0),
+          Icons.shopping_bag_outlined,
+          AppTheme.profitGreen,
+        ),
+        _buildMetricRowPremium(
+          'Total Clicks',
+          results.clicks.toStringAsFixed(0),
+          Icons.ads_click,
+          AppTheme.primaryBlue,
+        ),
+        _buildMetricRowPremium(
+          'Unsubscribe Rate',
+          '${(results.unsubscribes / results.emailsOpened * 100).toStringAsFixed(1)}%',
+          Icons.person_remove_outlined,
+          AppTheme.lossRed,
+        ),
+        _buildMetricRowPremium(
+          'Immediate Revenue',
+          format.format(results.immediateRevenue),
+          Icons.payments_outlined,
+          AppTheme.profitGreen,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMetricRowPremium(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white54, fontSize: 12),
+          Icon(icon, color: color.withValues(alpha: 0.5), size: 18),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
+            ),
           ),
           Text(
             value,
@@ -750,11 +1125,21 @@ class _EmailMarketingRoiScreenState
 
   Widget _buildInputsTab(EmailRoiInputs inputs) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 140, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Business Model Toggle
+          // Business Model Selector
+          const Text(
+            'BUSINESS MODEL',
+            style: TextStyle(
+              color: Colors.white38,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -764,72 +1149,108 @@ class _EmailMarketingRoiScreenState
                   () => ref
                       .read(emailRoiInputsProvider.notifier)
                       .updateField('businessModel', 'ecommerce'),
+                  Icons.shopping_cart_outlined,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: _buildToggleButton(
-                  'Lead Gen',
+                  'Lead Generation',
                   inputs.businessModel == 'leadgen',
                   () => ref
                       .read(emailRoiInputsProvider.notifier)
                       .updateField('businessModel', 'leadgen'),
+                  Icons.people_outline,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
-          _buildSectionHeader('Investment Inputs'),
-          _buildInputField('ESP Cost (\$)', inputs.espCost, 'espCost'),
-          _buildInputField(
-            'Software Cost (\$)',
-            inputs.softwareCost,
-            'softwareCost',
+          _buildSectionHeaderPremium(
+            'Investment Inputs',
+            Icons.account_balance_wallet_outlined,
           ),
-          _buildInputField('Team Hours', inputs.teamHours, 'teamHours'),
-          _buildInputField('Hourly Rate (\$)', inputs.hourlyRate, 'hourlyRate'),
-          _buildInputField('Agency Fees (\$)', inputs.agencyFees, 'agencyFees'),
-          _buildInputField(
-            'Content Cost (\$)',
+          const SizedBox(height: 16),
+          _buildInputFieldPremium(
+            'ESP Monthly Cost',
+            inputs.espCost,
+            'espCost',
+            Icons.cloud_outlined,
+          ),
+          _buildInputFieldPremium(
+            'Strategy & Agency Fees',
+            inputs.agencyFees,
+            'agencyFees',
+            Icons.groups_outlined,
+          ),
+          _buildInputFieldPremium(
+            'Content Creation',
             inputs.contentCost,
             'contentCost',
+            Icons.edit_note_outlined,
           ),
-          _buildInputField('List Cost (\$)', inputs.listCost, 'listCost'),
+          _buildInputFieldPremium(
+            'Software/Tools Cost',
+            inputs.softwareCost,
+            'softwareCost',
+            Icons.construction_outlined,
+          ),
 
-          const SizedBox(height: 24),
-          _buildSectionHeader('Campaign Metrics'),
-          _buildInputField('Emails Sent', inputs.emailsSent, 'emailsSent'),
-          _buildInputField('Open Rate (%)', inputs.openRate, 'openRate'),
-          _buildInputField('CTR (%)', inputs.ctr, 'ctr'),
-          _buildInputField(
+          const SizedBox(height: 32),
+          _buildSectionHeaderPremium(
+            'Campaign Metrics',
+            Icons.analytics_outlined,
+          ),
+          const SizedBox(height: 16),
+          _buildInputFieldPremium(
+            'Volume Sent',
+            inputs.emailsSent,
+            'emailsSent',
+            Icons.send_outlined,
+          ),
+          _buildInputFieldPremium(
+            'Open Rate (%)',
+            inputs.openRate,
+            'openRate',
+            Icons.mail_outline,
+          ),
+          _buildInputFieldPremium(
+            'CTR (%)',
+            inputs.ctr,
+            'ctr',
+            Icons.touch_app_outlined,
+          ),
+          _buildInputFieldPremium(
             'Conversion Rate (%)',
             inputs.conversionRate,
             'conversionRate',
-          ),
-          _buildInputField(
-            'Unsubscribe Rate (%)',
-            inputs.unsubscribeRate,
-            'unsubscribeRate',
+            Icons.shopping_bag_outlined,
           ),
 
-          const SizedBox(height: 24),
-          _buildSectionHeader('Value Metrics'),
-          _buildInputField(
+          const SizedBox(height: 32),
+          _buildSectionHeaderPremium(
+            'Value Parameters',
+            Icons.diamond_outlined,
+          ),
+          const SizedBox(height: 16),
+          _buildInputFieldPremium(
             inputs.businessModel == 'ecommerce'
-                ? 'AOV (\$)'
-                : 'Value/Lead (\$)',
+                ? 'Average Order Value'
+                : 'Value Per Lead',
             inputs.businessModel == 'ecommerce'
                 ? inputs.aov
                 : inputs.valuePerLead,
             inputs.businessModel == 'ecommerce' ? 'aov' : 'valuePerLead',
+            Icons.paid_outlined,
           ),
-          _buildInputField('Customer LTV (\$)', inputs.ltv, 'ltv'),
-          _buildInputField(
-            'Subscriber Acquisition Cost (\$)',
-            inputs.subscriberAcquisitionCost,
-            'subscriberAcquisitionCost',
+          _buildInputFieldPremium(
+            'Customer Lifetime Value',
+            inputs.ltv,
+            'ltv',
+            Icons.stars_outlined,
           ),
+          const SizedBox(height: 48),
         ],
       ),
     );
@@ -841,147 +1262,134 @@ class _EmailMarketingRoiScreenState
     NumberFormat format,
   ) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 140, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionHeader('"What-If" Planner'),
-          const SizedBox(height: 16),
-          _buildSliderInput(
+          _buildSectionHeaderPremium(
+            '"What-If" Intelligence',
+            Icons.psychology_outlined,
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Simulate optimization scenarios to see impact on profit.',
+            style: TextStyle(color: Colors.white38, fontSize: 12),
+          ),
+          const SizedBox(height: 32),
+
+          _buildSliderInputPremium(
             'Improve Open Rate',
             inputs.whatIfOpenRate,
             0,
             10,
             'whatIfOpenRate',
-            suffix: '%',
+            '%',
           ),
-          const SizedBox(height: 16),
-          _buildSliderInput(
+          const SizedBox(height: 24),
+          _buildSliderInputPremium(
             'Improve Conversion Rate',
             inputs.whatIfConversionRate,
             0,
             5,
             'whatIfConversionRate',
-            suffix: '%',
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppTheme.profitGreen.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppTheme.profitGreen.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  'POTENTIAL ADDITIONAL PROFIT',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '+${format.format(results.profitUplift)}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: AppTheme.profitGreen,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            '%',
           ),
 
           const SizedBox(height: 32),
-          _buildSectionHeader('A/B Test Uplift'),
+          _buildUpliftCard(
+            'PROJECTED PROFIT UPLIFT',
+            results.profitUplift,
+            AppTheme.profitGreen,
+            format,
+          ),
+
+          const SizedBox(height: 48),
+          _buildSectionHeaderPremium(
+            'A/B Test Comparison',
+            Icons.compare_arrows_outlined,
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: _buildInputField(
-                  'Conv A (%)',
+                child: _buildInputFieldPremium(
+                  'Conversion A (%)',
                   inputs.abConversionA,
                   'abConversionA',
+                  Icons.looks_one_outlined,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _buildInputField(
-                  'Conv B (%)',
+                child: _buildInputFieldPremium(
+                  'Conversion B (%)',
                   inputs.abConversionB,
                   'abConversionB',
+                  Icons.looks_two_outlined,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.purple.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.purple.withValues(alpha: 0.3)),
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  'PROJECTED REVENUE GAIN',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '+${format.format(results.abUplift)}',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.purple.shade400,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+          _buildUpliftCard(
+            'REVENUE GAIN FROM WINNER',
+            results.abUplift,
+            Colors.purple.shade400,
+            format,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeaderPremium(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: AppTheme.primaryBlue, size: 16),
+        const SizedBox(width: 12),
+        Text(
+          title.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpliftCard(
+    String label,
+    double value,
+    Color color,
+    NumberFormat format,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.white54,
+              fontWeight: FontWeight.bold,
             ),
           ),
-
-          const SizedBox(height: 32),
-          _buildSectionHeader('Deliverability Loss'),
-          const SizedBox(height: 16),
-          _buildInputField('Bounce Rate (%)', inputs.bounceRate, 'bounceRate'),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.red.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  'ESTIMATED LOST REVENUE',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  format.format(results.lostRevenue),
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.red.shade400,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 12),
+          Text(
+            '+${format.format(value)}',
+            style: TextStyle(
+              fontSize: 32,
+              color: color,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -989,85 +1397,121 @@ class _EmailMarketingRoiScreenState
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title.toUpperCase(),
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.bold,
-        color: Colors.white38,
-        letterSpacing: 1.5,
-      ),
-    );
-  }
-
-  Widget _buildToggleButton(String label, bool isActive, VoidCallback onTap) {
+  Widget _buildToggleButton(
+    String label,
+    bool isActive,
+    VoidCallback onTap,
+    IconData icon,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: isActive
-              ? AppTheme.primaryBlue
-              : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(12),
+          gradient: isActive
+              ? LinearGradient(
+                  colors: [AppTheme.primaryBlue, AppTheme.accentBlue],
+                )
+              : null,
+          color: isActive ? null : Colors.white.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isActive
                 ? AppTheme.primaryBlue
                 : Colors.white.withValues(alpha: 0.1),
           ),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: AppTheme.primaryBlue.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Colors.white : Colors.white54,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: isActive ? Colors.white : Colors.white24,
+              size: 20,
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isActive ? Colors.white : Colors.white54,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildInputField(String label, double value, String field) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+  Widget _buildInputFieldPremium(
+    String label,
+    double value,
+    String field,
+    IconData icon,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 11,
+                color: Colors.white38,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
           TextFormField(
             initialValue: value.toString(),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
             decoration: InputDecoration(
+              prefixIcon: Icon(
+                icon,
+                color: AppTheme.primaryBlue.withValues(alpha: 0.5),
+                size: 18,
+              ),
               filled: true,
-              fillColor: Colors.white.withValues(alpha: 0.05),
+              fillColor: Colors.white.withValues(alpha: 0.03),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: Colors.white.withValues(alpha: 0.05),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: Colors.white.withValues(alpha: 0.05),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppTheme.primaryBlue),
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  color: AppTheme.primaryBlue,
+                  width: 1.5,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
               ),
             ),
             onChanged: (val) {
@@ -1084,14 +1528,14 @@ class _EmailMarketingRoiScreenState
     );
   }
 
-  Widget _buildSliderInput(
+  Widget _buildSliderInputPremium(
     String label,
     double value,
     double min,
     double max,
-    String field, {
-    String suffix = '',
-  }) {
+    String field,
+    String suffix,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1100,30 +1544,171 @@ class _EmailMarketingRoiScreenState
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: const TextStyle(fontSize: 13, color: Colors.white70),
             ),
-            Text(
-              '+${value.toStringAsFixed(1)}$suffix',
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppTheme.primaryBlue,
-                fontWeight: FontWeight.bold,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '+${value.toStringAsFixed(1)}$suffix',
+                style: const TextStyle(
+                  color: AppTheme.primaryBlue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
               ),
             ),
           ],
         ),
-        Slider(
-          value: value,
-          min: min,
-          max: max,
-          divisions: ((max - min) * 10).toInt(),
-          activeColor: AppTheme.primaryBlue,
-          inactiveColor: Colors.white.withValues(alpha: 0.1),
-          onChanged: (val) {
-            ref.read(emailRoiInputsProvider.notifier).updateField(field, val);
-          },
+        const SizedBox(height: 8),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: 4,
+            activeTrackColor: AppTheme.primaryBlue,
+            inactiveTrackColor: Colors.white.withValues(alpha: 0.05),
+            thumbColor: Colors.white,
+            overlayColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+          ),
+          child: Slider(
+            value: value,
+            min: min,
+            max: max,
+            divisions: ((max - min) * 10).toInt(),
+            onChanged: (val) => ref
+                .read(emailRoiInputsProvider.notifier)
+                .updateField(field, val),
+          ),
         ),
       ],
+    );
+  }
+
+  void _showAiCoachForEmailROI(
+    BuildContext context,
+    WidgetRef ref,
+    EmailRoiInputs inputs,
+    EmailRoiResults results,
+  ) {
+    final contextPrompt =
+        '''
+You are an expert Email Marketing Strategist. 
+
+CURRENT EMAIL PERFORMANCE:
+- Email ROI: ${results.overallROI.toStringAsFixed(1)}%
+- Total Investment: \$${results.totalInvestment.toStringAsFixed(0)}
+- Lifetime Value Generated: \$${results.totalValueLTV.toStringAsFixed(0)}
+- Net Profit: \$${results.netProfit.toStringAsFixed(0)}
+
+METRICS:
+- Delivery Volume: ${inputs.emailsSent}
+- Open Rate: ${inputs.openRate}%
+- CTR: ${inputs.ctr}%
+- Conversion Rate: ${inputs.conversionRate}%
+- CTOR: ${results.ctor.toStringAsFixed(1)}%
+- Bounce Rate: ${inputs.bounceRate}% (Lost Revenue: \$${results.lostRevenue.toStringAsFixed(0)})
+
+Provide actionable email marketing optimization advice focusing on:
+1. List segmentation the user should implement
+2. Subject line strategies to improve open rates
+3. CTA audit (why is CTOR ${results.ctor.toStringAsFixed(1)}%?)
+4. Deliverability quick-fixes for the bounce rate
+5. Automation sequence recommendations
+
+Be highly strategic, data-driven, and focus on maximizing the LTV:CAC ratio.
+''';
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: const BoxDecoration(
+          color: Color(0xFF0F172A),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryBlue.withValues(alpha: 0.2),
+                    AppTheme.primaryBlue.withValues(alpha: 0.05),
+                  ],
+                ),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryBlue.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.psychology,
+                      color: AppTheme.primaryBlue,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Email Strategy AI Coach',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Expert Marketing Intelligence',
+                          style: TextStyle(color: Colors.white54, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white54),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: social_ai.SocialROIAiCoach(
+                contextPrompt: contextPrompt,
+                state: SocialRoiState(
+                  timeframe: 'Monthly',
+                  platforms: [
+                    SocialPlatformData(
+                      id: 'email',
+                      name: 'Email Marketing',
+                      adSpend: results.platformCosts,
+                      contentCost: results.otherCosts,
+                      websiteClicks: results.clicks.round(),
+                      websiteConversionRate: inputs.conversionRate,
+                      aov: inputs.aov,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1132,6 +1717,5 @@ class _ChartData {
   final String label;
   final double value;
   final Color color;
-
   _ChartData(this.label, this.value, this.color);
 }

@@ -8,6 +8,7 @@ import '../core/app_router.dart'; // For navigationProvider
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../services/ai_knowledge_base.dart';
 
 class AiCoachChatScreen extends ConsumerStatefulWidget {
   const AiCoachChatScreen({super.key});
@@ -100,8 +101,38 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
     _scrollToBottom();
 
     try {
+      // HYBRID SYSTEM: Check local knowledge base first
+      final localAnswer = AiKnowledgeBase.findAnswer(text);
+
+      if (localAnswer != null) {
+        // ✅ Found in knowledge base - instant, free response!
+        debugPrint(
+          '💡 Knowledge Base Hit: ${text.substring(0, text.length > 30 ? 30 : text.length)}...',
+        );
+
+        if (mounted) {
+          setState(() {
+            _messages.add(
+              ChatMessage(
+                text: localAnswer,
+                isAi: true,
+                timestamp: DateTime.now(),
+              ),
+            );
+            _isTyping = false;
+          });
+          _scrollToBottom();
+          _speakMessage(localAnswer);
+        }
+        return;
+      }
+
+      // ❌ Not in knowledge base - fall back to Gemini API
+      debugPrint(
+        '🤖 Gemini API Fallback: ${text.substring(0, text.length > 30 ? 30 : text.length)}...',
+      );
+
       final financialData = ref.read(financialDataProvider).value;
-      // If data is null, we can still ask AI but with less context or generic context
       final apiService = ref.read(apiServiceProvider);
 
       String response;
@@ -111,7 +142,7 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
           question: text,
         );
       } else {
-        // Fallback to generic AI call if needed or show error
+        // No financial data - use generic AI
         response =
             "I'm currently unable to access your real-time financial data, but based on general strategy: $text. (Please connect your data for precise insights).";
       }
@@ -185,11 +216,51 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
                     },
                   ),
                 ),
+                _buildSuggestions(),
                 _buildInputArea(),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    final suggestions = [
+      "What is Noble Clarity Engine?",
+      "How long is my runway?",
+      "Which ad channel should I use?",
+      "What lies beyond 2026?",
+    ];
+
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: suggestions.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ActionChip(
+              label: Text(
+                suggestions[index],
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+              backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
+              side: BorderSide(color: AppTheme.primaryBlue.withValues(alpha: 0.3)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              onPressed: () {
+                _messageController.text = suggestions[index];
+                _sendMessage();
+              },
+            ),
+          );
+        },
       ),
     );
   }

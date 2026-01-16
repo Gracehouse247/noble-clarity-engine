@@ -290,7 +290,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                       password: _passwordController.text,
                                     );
                               } catch (e) {
-                                if (mounted) {
+                                if (context.mounted) {
                                   final authState = ref.read(authProvider);
                                   String msg =
                                       authState.errorMessage ??

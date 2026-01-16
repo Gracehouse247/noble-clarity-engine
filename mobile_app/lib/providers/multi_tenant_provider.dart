@@ -3,22 +3,46 @@ import '../models/financial_models.dart';
 import '../services/api_service.dart';
 import 'auth_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // --- Profiles List ---
 class ProfilesNotifier extends StateNotifier<List<BusinessProfile>> {
   ProfilesNotifier() : super([]) {
-    _loadInitial();
+    _loadFromPrefs();
   }
 
-  void _loadInitial() {
-    // In a real app, load from storage. For now, seed with one.
-    state = [
-      const BusinessProfile(
-        id: 'main_123',
-        name: 'Main Business',
-        industry: 'SaaS',
-      ),
-    ];
+  Future<void> _loadFromPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonStr = prefs.getString('business_profiles');
+      if (jsonStr != null) {
+        final List<dynamic> list = jsonDecode(jsonStr);
+        state = list.map((item) => BusinessProfile.fromJson(item)).toList();
+      } else {
+        // Seed with one if empty
+        state = [
+          const BusinessProfile(
+            id: 'main_123',
+            name: 'Main Business',
+            industry: 'SaaS',
+          ),
+        ];
+        _saveToPrefs();
+      }
+    } catch (e) {
+      debugPrint('Error loading profiles from prefs: $e');
+    }
+  }
+
+  Future<void> _saveToPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonStr = jsonEncode(state.map((p) => p.toJson()).toList());
+      await prefs.setString('business_profiles', jsonStr);
+    } catch (e) {
+      debugPrint('Error saving profiles to prefs: $e');
+    }
   }
 
   void addProfile(String name, String industry) {
@@ -27,11 +51,13 @@ class ProfilesNotifier extends StateNotifier<List<BusinessProfile>> {
       ...state,
       BusinessProfile(id: newId, name: name, industry: industry),
     ];
+    _saveToPrefs();
   }
 
   void deleteProfile(String id) {
     if (state.length <= 1) return;
     state = state.where((p) => p.id != id).toList();
+    _saveToPrefs();
   }
 
   void updateProfile(BusinessProfile updatedProfile) {
@@ -39,6 +65,7 @@ class ProfilesNotifier extends StateNotifier<List<BusinessProfile>> {
       for (final profile in state)
         if (profile.id == updatedProfile.id) updatedProfile else profile,
     ];
+    _saveToPrefs();
   }
 }
 
@@ -56,22 +83,64 @@ final activeProfileIdProvider = StateProvider<String>((ref) {
 // --- Profiles Data ---
 class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
   final Ref ref;
-  ProfilesDataNotifier(this.ref) : super({});
+  ProfilesDataNotifier(this.ref) : super({}) {
+    _loadFromPrefs();
+  }
+
+  Future<void> _loadFromPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys().where((k) => k.startsWith('profile_data_'));
+
+      final Map<String, ProfileData> loaded = {};
+
+      for (final key in keys) {
+        final profileId = key.replaceFirst('profile_data_', '');
+        final jsonStr = prefs.getString(key);
+        if (jsonStr != null) {
+          try {
+            loaded[profileId] = ProfileData.fromJson(jsonDecode(jsonStr));
+          } catch (e) {
+            debugPrint('Error parsing profile data for $profileId: $e');
+          }
+        }
+      }
+
+      if (loaded.isNotEmpty) {
+        state = loaded;
+      }
+    } catch (e) {
+      debugPrint('Error loading profile data from prefs: $e');
+    }
+  }
+
+  Future<void> _saveToPrefs(String profileId, ProfileData data) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        'profile_data_$profileId',
+        jsonEncode(data.toJson()),
+      );
+    } catch (e) {
+      debugPrint('Error saving profile data to prefs: $e');
+    }
+  }
 
   void updateData(String profileId, FinancialData data) {
+    ProfileData newData;
     final existing = state[profileId];
     if (existing == null) {
-      state = {...state, profileId: ProfileData(current: data)};
+      newData = ProfileData(current: data);
     } else {
-      state = {
-        ...state,
-        profileId: ProfileData(
-          current: data,
-          history: existing.history,
-          goals: existing.goals,
-        ),
-      };
+      newData = ProfileData(
+        current: data,
+        history: existing.history,
+        goals: existing.goals,
+      );
     }
+
+    state = {...state, profileId: newData};
+    _saveToPrefs(profileId, newData);
   }
 
   // --- GOALS API SYNC ---
@@ -83,14 +152,13 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
     final goals = await ref.read(apiServiceProvider).getGoals(userId);
     final existing = state[profileId];
     if (existing != null) {
-      state = {
-        ...state,
-        profileId: ProfileData(
-          current: existing.current,
-          history: existing.history,
-          goals: goals,
-        ),
-      };
+      final newData = ProfileData(
+        current: existing.current,
+        history: existing.history,
+        goals: goals,
+      );
+      state = {...state, profileId: newData};
+      _saveToPrefs(profileId, newData);
     }
   }
 
@@ -102,14 +170,13 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
       final newGoal = await ref.read(apiServiceProvider).addGoal(userId, goal);
       final existing = state[profileId];
       if (existing != null) {
-        state = {
-          ...state,
-          profileId: ProfileData(
-            current: existing.current,
-            history: existing.history,
-            goals: [...existing.goals, newGoal],
-          ),
-        };
+        final newData = ProfileData(
+          current: existing.current,
+          history: existing.history,
+          goals: [...existing.goals, newGoal],
+        );
+        state = {...state, profileId: newData};
+        _saveToPrefs(profileId, newData);
       }
     } catch (e) {
       debugPrint('Error adding goal: $e');
@@ -126,16 +193,15 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
           .updateGoal(userId, goal.id, goal);
       final existing = state[profileId];
       if (existing != null) {
-        state = {
-          ...state,
-          profileId: ProfileData(
-            current: existing.current,
-            history: existing.history,
-            goals: existing.goals
-                .map((g) => g.id == goal.id ? updated : g)
-                .toList(),
-          ),
-        };
+        final newData = ProfileData(
+          current: existing.current,
+          history: existing.history,
+          goals: existing.goals
+              .map((g) => g.id == goal.id ? updated : g)
+              .toList(),
+        );
+        state = {...state, profileId: newData};
+        _saveToPrefs(profileId, newData);
       }
     } catch (e) {
       debugPrint('Error updating goal: $e');
@@ -150,14 +216,13 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
       await ref.read(apiServiceProvider).deleteGoal(userId, goalId);
       final existing = state[profileId];
       if (existing != null) {
-        state = {
-          ...state,
-          profileId: ProfileData(
-            current: existing.current,
-            history: existing.history,
-            goals: existing.goals.where((g) => g.id != goalId).toList(),
-          ),
-        };
+        final newData = ProfileData(
+          current: existing.current,
+          history: existing.history,
+          goals: existing.goals.where((g) => g.id != goalId).toList(),
+        );
+        state = {...state, profileId: newData};
+        _saveToPrefs(profileId, newData);
       }
     } catch (e) {
       debugPrint('Error deleting goal: $e');
@@ -171,43 +236,47 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
     final snapshot = existing.current.copyWith(
       date: DateTime.now().toIso8601String(),
     );
-    state = {
-      ...state,
-      profileId: ProfileData(
-        current: existing.current,
-        history: [...existing.history, snapshot],
-        goals: existing.goals,
-      ),
-    };
+
+    final newData = ProfileData(
+      current: existing.current,
+      history: [...existing.history, snapshot],
+      goals: existing.goals,
+    );
+
+    state = {...state, profileId: newData};
+    _saveToPrefs(profileId, newData);
   }
 
   void updateManualData(String profileId, FinancialData newData) {
+    ProfileData updatedProfileData;
     final existing = state[profileId];
+
     if (existing == null) {
-      state = {...state, profileId: ProfileData(current: newData)};
+      updatedProfileData = ProfileData(current: newData);
     } else {
-      state = {
-        ...state,
-        profileId: ProfileData(
-          current: newData,
-          history: existing.history,
-          goals: existing.goals,
-        ),
-      };
+      updatedProfileData = ProfileData(
+        current: newData,
+        history: existing.history,
+        goals: existing.goals,
+      );
     }
+
+    state = {...state, profileId: updatedProfileData};
+    _saveToPrefs(profileId, updatedProfileData);
   }
 
   void clearHistory(String profileId) {
     final existing = state[profileId];
     if (existing == null) return;
-    state = {
-      ...state,
-      profileId: ProfileData(
-        current: existing.current,
-        history: [],
-        goals: existing.goals,
-      ),
-    };
+
+    final newData = ProfileData(
+      current: existing.current,
+      history: [],
+      goals: existing.goals,
+    );
+
+    state = {...state, profileId: newData};
+    _saveToPrefs(profileId, newData);
   }
 
   Future<void> loadDemoData() async {
@@ -216,6 +285,14 @@ class ProfilesDataNotifier extends StateNotifier<Map<String, ProfileData>> {
 
     final activeId = ref.read(activeProfileIdProvider);
     if (activeId.isEmpty) return;
+
+    // Check if we already have data, if so, don't overwrite with demo data unless forced
+    // For now, we'll assume loadDemoData is an explicit action or only for fresh/empty states
+    /* 
+    if (state[activeId]?.current.revenue != 0) {
+       return; 
+    } 
+    */
 
     final demoData = FinancialData(
       revenue: 1500000,

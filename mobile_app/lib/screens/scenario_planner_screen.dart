@@ -123,9 +123,9 @@ class _ScenarioPlannerScreenState extends ConsumerState<ScenarioPlannerScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Q4 Expansion',
-            style: TextStyle(
+          Text(
+            'Q${(DateTime.now().month / 3).ceil()} Expansion',
+            style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,

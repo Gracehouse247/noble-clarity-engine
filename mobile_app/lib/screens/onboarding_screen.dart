@@ -2,6 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 import '../core/app_router.dart';
+import '../providers/onboarding_provider.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -99,9 +100,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ],
                       ),
                       TextButton(
-                        onPressed: () =>
-                            ref.read(navigationProvider.notifier).state =
-                                AppRoute.login,
+                        onPressed: () async {
+                          await ref
+                              .read(onboardingProvider.notifier)
+                              .completeOnboarding();
+                          ref.read(navigationProvider.notifier).state =
+                              AppRoute.login;
+                        },
                         child: const Text(
                           'Skip',
                           style: TextStyle(
@@ -168,13 +173,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         width: double.infinity,
                         height: 60,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_currentPage < _steps.length - 1) {
                               _pageController.nextPage(
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeOutCubic,
                               );
                             } else {
+                              await ref
+                                  .read(onboardingProvider.notifier)
+                                  .completeOnboarding();
                               ref.read(navigationProvider.notifier).state =
                                   AppRoute.login;
                             }

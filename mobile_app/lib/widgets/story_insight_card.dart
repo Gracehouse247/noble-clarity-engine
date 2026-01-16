@@ -5,8 +5,14 @@ import '../screens/ai_insights_feed.dart'; // Import for InsightType
 class StoryInsightCard extends StatelessWidget {
   final InsightCardData data;
   final VoidCallback? onAction;
+  final VoidCallback? onAskClarity;
 
-  const StoryInsightCard({super.key, required this.data, this.onAction});
+  const StoryInsightCard({
+    super.key,
+    required this.data,
+    this.onAction,
+    this.onAskClarity,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +227,7 @@ class StoryInsightCard extends StatelessWidget {
                   // "Ask Clarity" link
                   Center(
                     child: TextButton.icon(
-                      onPressed: () {}, // Handled by parent
+                      onPressed: onAskClarity,
                       icon: const Icon(
                         Icons.mic_none,
                         size: 16,

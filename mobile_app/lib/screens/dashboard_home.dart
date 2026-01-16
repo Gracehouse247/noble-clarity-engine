@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../core/app_theme.dart';
-import '../widgets/kpi_card.dart';
-import '../providers/financial_provider.dart';
 import '../models/financial_models.dart';
-import '../providers/auth_provider.dart';
-import '../widgets/business_switcher.dart';
+import '../providers/financial_provider.dart';
 import 'package:intl/intl.dart';
 import '../core/app_router.dart';
 import '../widgets/drill_down_modal.dart';
 import '../widgets/benchmark_card.dart';
 import '../providers/multi_tenant_provider.dart';
-
+import '../widgets/kpi_card.dart';
+import '../widgets/business_switcher.dart';
 import '../widgets/dashboard_action_buttons.dart';
 
 class DashboardHome extends ConsumerStatefulWidget {
@@ -80,7 +78,7 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(ref),
+            // Header removed as per request
             const SizedBox(height: 16),
             _buildSubHeader(),
             const SizedBox(height: 24),
@@ -135,87 +133,6 @@ class _DashboardHomeState extends ConsumerState<DashboardHome> {
               backgroundColor: AppTheme.primaryBlue,
             ),
             child: const Text('Retry Connection'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader(WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final userName = authState.displayName ?? 'Partner';
-    final photoUrl =
-        authState.photoUrl ?? 'https://i.pravatar.cc/150?u=${authState.userId}';
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: Row(
-        children: [
-          Builder(
-            builder: (context) {
-              return IconButton(
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: const Icon(Icons.menu_open, color: AppTheme.primaryBlue),
-                style: IconButton.styleFrom(
-                  backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppTheme.primaryBlue.withValues(alpha: 0.3),
-                          width: 2,
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(photoUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Welcome back',
-                          style: TextStyle(color: Colors.white54, fontSize: 12),
-                        ),
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: Colors.white70,
-                  ),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withValues(alpha: 0.05),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

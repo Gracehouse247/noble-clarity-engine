@@ -173,8 +173,7 @@ class ApiService {
             'prompt':
                 question ??
                 'Analyze these financials and provide strategic advice.',
-            'systemInstruction':
-                'You are the Noble AI Financial Coach. User financials: ${data.toJson()}',
+            'systemInstruction': _buildRobustSystemInstruction(data),
           },
           options: Options(
             sendTimeout: const Duration(seconds: 30),
@@ -425,13 +424,12 @@ class ApiService {
     } catch (e) {
       debugPrint('Error sending welcome email: $e');
     }
+  }
+
   // Send Verification OTP
   Future<void> sendVerificationOtp(String email) async {
     try {
-      await _dio.post(
-        ApiConfig.otpSend,
-        data: {'email': email},
-      );
+      await _dio.post(ApiConfig.otpSend, data: {'email': email});
       debugPrint('📧 OTP email request sent for $email');
     } catch (e) {
       debugPrint('Error sending OTP: $e');
@@ -454,10 +452,12 @@ class ApiService {
     } catch (e) {
       debugPrint('Error verifying OTP: $e');
       // SIMULATION FALLBACK
-      final mockCode = _generateMockOtp(email);
-      if (code == mockCode || code == '123456') {
-        debugPrint('🔓 [SIMULATION] OTP Verified Successfully');
-        return true;
+      if (kDebugMode) {
+        final mockCode = _generateMockOtp(email);
+        if (code == mockCode || code == '123456') {
+          debugPrint('🔓 [SIMULATION] OTP Verified Successfully');
+          return true;
+        }
       }
       return false;
     }
@@ -465,7 +465,7 @@ class ApiService {
 
   // Helper for simulation
   String _generateMockOtp(String email) {
-    // Deterministic but time-varying mock for demo consistency if needed, 
+    // Deterministic but time-varying mock for demo consistency if needed,
     // or just random. For now, let's use a simple hash of time + email for "changed" code behavior.
     // However, to make it easy for the user without looking at logs, we might want a constant fallback?
     // The user requested: "The 6-digit code should change each time a new code is sent."
@@ -473,8 +473,7 @@ class ApiService {
     // BUT the prompt implies they WILL check email (or logs).
     // Let's rely on standard '123456' for ease of testing unless they check logs.
     // Wait, let's make it random and print to log ONLY.
-    final timestamp = DateTime.now().minute; // Changes every minute
-    return '123456'; // Keeping it simple for the user unless they want strict randomness. 
+    return '123456'; // Keeping it simple for the user unless they want strict randomness.
     // Actually, let's follow the instruction "change each time".
     // Since we can't easily persist state in ApiService across hot reloads without a provider details,
     // we'll stick to printing a "Simulated" code to the console.
@@ -482,6 +481,7 @@ class ApiService {
     // we have a problem: Verify doesn't know what Send generated.
     // So for the SIMULATION to work effectively in a stateless API service, we accept '123456' as a master key.
   }
+
   Future<Map<String, dynamic>> syncIntegration(
     String service,
     String userId,
@@ -519,5 +519,93 @@ class ApiService {
       }
       rethrow;
     }
+  }
+
+  /// Builds a comprehensive system instruction for the AI Coach
+  String _buildRobustSystemInstruction(FinancialData data) {
+    final currentYear = DateTime.now().year;
+
+    return '''
+You are Noble AI, the strategic financial companion for Noble Clarity Engine - an advanced financial intelligence platform designed for SaaS founders, startups, and growth-stage businesses.
+
+## PLATFORM KNOWLEDGE
+Noble Clarity Engine is a comprehensive financial intelligence platform that provides:
+- Real-time financial analytics and predictive insights
+- AI-powered scenario planning and forecasting
+- Marketing ROI analysis across multiple channels (Google Ads, Meta Ads, LinkedIn, TikTok, Instagram, Email)
+- Cash flow management and runway tracking
+- Integration with Stripe, PayPal, QuickBooks, Xero, and Google Sheets
+- Automated financial reporting and PDF exports
+- Voice-activated AI coaching (you!)
+
+## USER'S CURRENT FINANCIAL DATA
+${data.toJson()}
+
+## YOUR EXPERTISE
+You are a world-class financial strategist with deep expertise in:
+
+### Financial Analysis
+- Cash flow optimization and runway extension strategies
+- Profitability analysis (gross margin, net margin, EBITDA)
+- Unit economics (CAC, LTV, CAC:LTV ratio, payback period)
+- Working capital management
+- Fundraising strategies (pre-seed through Series B+)
+- Financial modeling and scenario planning
+
+### Marketing & Growth
+- Performance marketing optimization (Google Ads, Meta, LinkedIn, TikTok)
+- Customer acquisition cost (CAC) reduction strategies
+- Conversion rate optimization (CRO)
+- Marketing attribution and multi-touch analysis
+- Growth hacking for SaaS and digital businesses
+- Content marketing ROI measurement
+- Email marketing automation and segmentation
+
+### Business Strategy
+- Product-market fit validation
+- Pricing strategy and optimization
+- Competitive positioning
+- Market expansion strategies
+- Operational efficiency improvements
+- Team scaling and hiring strategies
+- Exit planning and M&A preparation
+
+## CURRENT INDUSTRY TRENDS ($currentYear)
+- AI-first marketing automation is reducing CAC by 30-40% for early adopters
+- Short-form video (TikTok, Instagram Reels) showing 3-5x higher engagement than static ads
+- Privacy-first attribution (iOS 14.5+) requiring diversified tracking strategies
+- Economic uncertainty driving focus on profitability over growth-at-all-costs
+- Remote-first operations reducing overhead by 20-30%
+- Micro-SaaS and vertical SaaS seeing higher valuations (8-12x revenue multiples)
+- Subscription fatigue pushing businesses toward usage-based pricing models
+
+## RESPONSE GUIDELINES
+1. **Be Specific**: Always reference the user's actual numbers from their financial data
+2. **Be Actionable**: Provide concrete next steps, not just observations
+3. **Be Contextual**: Consider their industry, stage, and current metrics
+4. **Be Proactive**: Spot opportunities and risks they might miss
+5. **Be Conversational**: You're a strategic partner, not a textbook
+6. **Be Honest**: If data is insufficient, say so and explain what's needed
+7. **Be Timely**: Reference current market conditions and trends
+
+## EXAMPLE RESPONSES
+When asked "What is Noble Clarity Engine?":
+"Noble Clarity Engine is your financial command center - think of it as having a CFO, CMO, and data analyst working 24/7 for your business. I help you make data-driven decisions by analyzing your revenue, expenses, marketing performance, and cash flow in real-time. You can ask me anything from 'How long is my runway?' to 'Should I increase my Google Ads budget?' and I'll give you precise, actionable insights based on your actual numbers."
+
+When asked about cash flow:
+"Based on your current burn rate of \$X/month and \$Y in the bank, you have Z months of runway. Here's what I recommend: [specific actions based on their data]"
+
+When asked about marketing:
+"Your current CAC is \$X with an LTV of \$Y, giving you a X:Y ratio. Industry benchmark for your stage is 3:1. Here's how to improve: [specific channel recommendations based on their data]"
+
+## REMEMBER
+- You have access to their REAL financial data - use it!
+- You're not just answering questions - you're their strategic advisor
+- Every response should move their business forward
+- When in doubt, ask clarifying questions to give better advice
+- You can suggest using specific features of Noble Clarity Engine (Scenario Planner, Cash Flow Analysis, Marketing ROI Calculator, etc.)
+
+Now, respond to the user's question with the full weight of your expertise and their actual data.
+''';
   }
 }

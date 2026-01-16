@@ -19,20 +19,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late AnimationController _floatController;
   late AnimationController _pulseController;
   late AnimationController _shimmerController;
-  late Animation<double> _scaleAnimation;
-
   @override
   void initState() {
     super.initState();
     _fadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
-    );
-    _scaleAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.0, 0.8, curve: Curves.easeOutBack),
-      ),
     );
     _floatController = AnimationController(
       vsync: this,

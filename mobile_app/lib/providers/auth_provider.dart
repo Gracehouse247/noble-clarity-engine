@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/api_service.dart';
+import '../services/smart_routing_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../core/firebase_config.dart';
+import '../core/app_router.dart';
 
 @immutable
 class AuthState {
@@ -100,6 +102,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
           isLoading: false,
         );
+
+        // Smart routing: determine best screen based on user's data status
+        await _navigateToAppropriateScreen();
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Login failed';
@@ -120,6 +125,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorMessage: 'An unexpected error occurred',
       );
       rethrow;
+    }
+  }
+
+  /// Smart navigation after successful login
+  Future<void> _navigateToAppropriateScreen() async {
+    // Wait a bit for providers to initialize
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    try {
+      final smartRouting = ref.read(smartRoutingServiceProvider);
+      final targetRoute = await smartRouting.getPostLoginRoute();
+      ref.read(navigationProvider.notifier).state = targetRoute;
+    } catch (e) {
+      // Fallback to dashboard if smart routing fails
+      ref.read(navigationProvider.notifier).state = AppRoute.dashboard;
     }
   }
 
@@ -221,6 +241,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
           isLoading: false,
         );
+
+        // Smart routing: determine best screen based on user's data status
+        await _navigateToAppropriateScreen();
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Google sign-in failed';

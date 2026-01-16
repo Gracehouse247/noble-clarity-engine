@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/app_theme.dart';
 import '../core/app_router.dart';
 import '../providers/auth_provider.dart';
+import '../services/api_service.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key});

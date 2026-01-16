@@ -2,7 +2,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
-import '../providers/social_roi_provider.dart';
+import '../models/social_roi_models.dart';
 
 class PdfService {
   static Future<void> generateSocialRoiReport({
