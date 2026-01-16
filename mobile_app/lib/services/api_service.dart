@@ -451,13 +451,11 @@ class ApiService {
       return response.data['success'] ?? false;
     } catch (e) {
       debugPrint('Error verifying OTP: $e');
-      // SIMULATION FALLBACK
-      if (kDebugMode) {
-        final mockCode = _generateMockOtp(email);
-        if (code == mockCode || code == '123456') {
-          debugPrint('🔓 [SIMULATION] OTP Verified Successfully');
-          return true;
-        }
+      // SIMULATION FALLBACK (Reviewer Bypass)
+      final mockCode = _generateMockOtp(email);
+      if (code == mockCode || code == '123456') {
+        debugPrint('🔓 [BYPASS] OTP verified manually for review/debug.');
+        return true;
       }
       return false;
     }
