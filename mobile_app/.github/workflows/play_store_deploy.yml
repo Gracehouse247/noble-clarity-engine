@@ -1,0 +1,48 @@
+name: Deploy to Play Store
+
+on:
+  push:
+    branches:
+      - main  # Only deploy when pushing to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # 1. Setup Java
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 2. Setup Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # 3. Restore sensitive files from Secrets
+      - name: Restore Secrets
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
+          echo "${{ secrets.SERVICE_ACCOUNT_JSON }}" > service_account.json
+        working-directory: mobile_app
+
+      # 4. Build the App Bundle (AAB)
+      - name: Build AAB
+        working-directory: mobile_app
+        run: |
+          flutter pub get
+          flutter build appbundle --release --no-tree-shake-icons
+
+      # 5. Upload to Google Play
+      - name: Upload to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: mobile_app/service_account.json
+          packageName: com.noblesworld.noble_clarity_mobile
+          releaseFiles: mobile_app/build/app/outputs/bundle/release/app-release.aab
+          track: internal  # Start with 'internal' track for safety
