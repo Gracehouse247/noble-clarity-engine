@@ -497,6 +497,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           _buildDivider(),
           _buildSettingsItem(
+            Icons.groups,
+            'Team & Collaboration',
+            Colors.blueAccent,
+            () => ref.read(navigationProvider.notifier).state = AppRoute.team,
+          ),
+          _buildDivider(),
+          _buildSettingsItem(
             Icons.edit_note,
             'Manual Data Entry',
             Colors.orange,

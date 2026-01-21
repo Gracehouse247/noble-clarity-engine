@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
-import '../core/app_theme.dart';
 import 'package:intl/intl.dart';
+import '../core/app_theme.dart';
+import '../widgets/seo_ai_coach.dart';
 
 class SeoRoiScreen extends ConsumerStatefulWidget {
   const SeoRoiScreen({super.key});
@@ -47,10 +48,131 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
     });
   }
 
+  void _showAiCoachForSEO(BuildContext context) {
+    final traffic = double.tryParse(_trafficController.text) ?? 0;
+    final conv = double.tryParse(_convController.text) ?? 0;
+    final value = double.tryParse(_valueController.text) ?? 0;
+    final cost = double.tryParse(_costController.text) ?? 1;
+
+    final data = SeoMetricData(
+      traffic: traffic,
+      conversionRate: conv,
+      valuePerLead: value,
+      monthlyCost: cost,
+      potentialRevenue: _potentialRevenue,
+      roi: _calculatedRoi,
+    );
+
+    const contextPrompt = '''
+You are an expert SEO Strategist and Digital Marketing Coach with 25 years of experience.
+Your goal is to analyze the user's SEO performance metrics and provide high-level strategic advice to improve their organic visibility, conversion rates, and overall ROI.
+
+Understand the following context:
+- "Conversion Rate" refers to Traffic-to-Lead conversion.
+- "Value per Lead" is the estimated monetary value of a qualified lead.
+- "SaaS" or "B2B" strategies often apply here.
+
+Your advice should be:
+1. Data-driven: Reference the user's specific numbers (ROI, Traffic, etc.).
+2. Actionable: Suggest concrete steps (e.g., "Improve page speed", "Target long-tail keywords").
+3. Strategic: Focus on high-impact changes (e.g., "Increasing conversion by 0.5% yields \$X more").
+
+When answering:
+- Keep responses concise and easy to read on mobile.
+- Use bullet points for lists.
+- Be encouraging but realistic.
+''';
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: const BoxDecoration(
+          color: Color(0xFF0F172A),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryBlue.withValues(alpha: 0.2),
+                    AppTheme.primaryBlue.withValues(alpha: 0.05),
+                  ],
+                ),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryBlue.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.manage_search,
+                      color: AppTheme.primaryBlue,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'AI SEO Coach',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Expert Search Strategy Analysis',
+                          style: TextStyle(color: Colors.white54, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white54),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            // AI Coach Content
+            Expanded(
+              child: SeoAiCoach(contextPrompt: contextPrompt, data: data),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF030303),
+      backgroundColor: const Color(0xFF0A0E1A), // Consistent background
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showAiCoachForSEO(context),
+        backgroundColor: AppTheme.primaryBlue,
+        icon: const Icon(Icons.psychology, color: Colors.white),
+        label: const Text(
+          'AI SEO Coach',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Stack(
         children: [
           // Background Aesthetic Glows
@@ -89,17 +211,17 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
                   delegate: SliverChildListDelegate([
                     const SizedBox(height: 10),
                     _buildMainKpiCard(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16), // Consistent spacing
                     _buildSectionHeader('SEO PERFORMANCE CALCULATOR'),
                     const SizedBox(height: 16),
                     _buildCalculatorCard(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16), // Consistent spacing
                     _buildSectionHeader('TOP PERFORMING KEYWORDS'),
                     const SizedBox(height: 16),
                     _buildKeywordList(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16), // Consistent spacing
                     _buildDomainAuthorityCard(),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 32),
                     _buildLogicExplainer(),
                     const SizedBox(height: 120),
                   ]),
@@ -119,16 +241,20 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
       expandedHeight: 100,
       floating: true,
       pinned: true,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios_new,
-          color: Colors.white70,
-          size: 20,
+      leading: Container(
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
-        onPressed: () => Navigator.pop(context),
+        child: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+        titlePadding: const EdgeInsets.only(left: 60, bottom: 16),
         centerTitle: false,
         title: const Text(
           'SEO Intelligence',
@@ -144,37 +270,50 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
   }
 
   Widget _buildMainKpiCard() {
-    return GlassContainer(
-      blur: 20,
-      opacity: 0.1,
-      borderRadius: BorderRadius.circular(32),
-      border: Border.fromBorderSide(
-        BorderSide(color: Colors.white.withValues(alpha: 0.08)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildQuickStat(
-              'Organic Traffic',
-              NumberFormat.compact().format(
-                double.parse(_trafficController.text),
-              ),
-            ),
-            _buildDivider(),
-            _buildQuickStat(
-              'Monthly Value',
-              '\$${NumberFormat.compact().format(_potentialRevenue)}',
-            ),
-            _buildDivider(),
-            _buildQuickStat(
-              'SEO ROI',
-              '${_calculatedRoi.toStringAsFixed(1)}x',
-              color: AppTheme.profitGreen,
-            ),
+    final isPositive = _calculatedRoi > 1.0;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.03),
           ],
         ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildQuickStat(
+            'Organic Traffic',
+            NumberFormat.compact().format(
+              double.parse(_trafficController.text),
+            ),
+          ),
+          _buildDivider(),
+          _buildQuickStat(
+            'Monthly Value',
+            '\$${NumberFormat.compact().format(_potentialRevenue)}',
+          ),
+          _buildDivider(),
+          _buildQuickStat(
+            'SEO ROI',
+            '${_calculatedRoi.toStringAsFixed(1)}x',
+            color: isPositive ? AppTheme.profitGreen : AppTheme.lossRed,
+          ),
+        ],
       ),
     );
   }
@@ -183,7 +322,7 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
     return Container(
       height: 40,
       width: 1,
-      color: Colors.white.withValues(alpha: 0.05),
+      color: Colors.white.withValues(alpha: 0.1),
     );
   }
 
@@ -193,7 +332,7 @@ class _SeoRoiScreenState extends ConsumerState<SeoRoiScreen> {
         Text(
           label.toUpperCase(),
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.4),
+            color: Colors.white.withValues(alpha: 0.5),
             fontSize: 9,
             fontWeight: FontWeight.w800,
             letterSpacing: 1,

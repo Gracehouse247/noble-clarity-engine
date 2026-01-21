@@ -63,11 +63,12 @@ class StaticContentScreen extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'â€¢ ',
+                    Text(
+                      '\u2022 ',
                       style: TextStyle(
                         color: AppTheme.primaryBlue,
                         fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                     Expanded(

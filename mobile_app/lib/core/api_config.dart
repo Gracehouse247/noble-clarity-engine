@@ -9,10 +9,10 @@ class ApiConfig {
   // Active Base URL
   static String get baseUrl => _isProduction ? _productionUrl : _developmentUrl;
 
-  // Mobile-Optimized Timeouts for snappy response
-  static const Duration connectTimeout = Duration(seconds: 10);
-  static const Duration receiveTimeout = Duration(seconds: 15);
-  static const Duration sendTimeout = Duration(seconds: 10);
+  // Mobile-Optimized Timeouts - Increased for resilience on 4G/5G
+  static const Duration connectTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 45);
+  static const Duration sendTimeout = Duration(seconds: 30);
 
   // API Endpoints (without /api prefix - already in baseUrl)
   static const String dashboardData = '/revenue-intelligence';

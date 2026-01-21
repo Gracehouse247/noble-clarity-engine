@@ -211,24 +211,24 @@ class SocialMediaRoiScreen extends ConsumerWidget {
                 children: [
                   // Hero ROI Card
                   _buildHeroRoiCard(roiState, currencyFormat),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
                   // KPI Grid
                   _buildKpiGrid(roiState, currencyFormat),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // Charts Section
                   _buildChartsSection(roiState, currencyFormat),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // AI-Powered Analysis
                   _buildAnalysisText(roiState, currencyFormat),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // Channel Efficiency
                   if (roiState.platforms.isNotEmpty) ...[
                     _buildChannelEfficiencyChart(roiState),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
                   ],
 
                   // Input Parameters
@@ -256,7 +256,7 @@ class SocialMediaRoiScreen extends ConsumerWidget {
                     AppTheme.accentBlue,
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // Platforms Section
                   _buildPlatformsSection(
@@ -266,7 +266,7 @@ class SocialMediaRoiScreen extends ConsumerWidget {
                     currencyFormat,
                   ),
 
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
@@ -404,7 +404,7 @@ Be direct, data-driven, and focused on profit maximization.
     final isPositive = state.socialRoi >= 0;
 
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,

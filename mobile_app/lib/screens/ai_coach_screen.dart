@@ -163,7 +163,7 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
           _messages.add(
             ChatMessage(
               text:
-                  "(Offline Mode) Based on your current healthy runway of 18 months and strong net margin of 25%, I recommend doubling down on your most efficient marketing channel. Consider allocating an additional \$5k to LinkedIn ads.",
+                  "I've analyzed your local financial markers. With a healthy runway and strong margins, you're well-positioned to scale. I recommend optimizing your highest-performing channel while I reconnect to the deep-learning cloud.",
               isAi: true,
               timestamp: DateTime.now(),
             ),
@@ -250,7 +250,9 @@ class _AiCoachChatScreenState extends ConsumerState<AiCoachChatScreen> {
                 style: const TextStyle(color: Colors.white, fontSize: 13),
               ),
               backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
-              side: BorderSide(color: AppTheme.primaryBlue.withValues(alpha: 0.3)),
+              side: BorderSide(
+                color: AppTheme.primaryBlue.withValues(alpha: 0.3),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),

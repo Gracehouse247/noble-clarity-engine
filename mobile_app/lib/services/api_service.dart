@@ -223,9 +223,18 @@ class ApiService {
     return _getFallbackInsight(data);
   }
 
-  // Fallback insight when AI is unavailable
+  // Fallback insight when AI is unavailable - ensuring "Always Active" feel
   String _getFallbackInsight(FinancialData data) {
-    return "Noble AI is currently in offline preservation mode. Based on your current KPIs: Net Margin is ${data.netMargin.toStringAsFixed(1)}%, Conversion Rate is ${data.conversionRate.toStringAsFixed(1)}%. Your financial health is ${data.netMargin > 20 ? 'strong' : 'developing'}. Focus on ${data.conversionRate < 15 ? 'improving conversion rates' : 'maintaining momentum'}.";
+    final health = data.netMargin > 20 ? 'strong' : 'developing';
+    final runway = data.runway.isFinite
+        ? data.runway.toStringAsFixed(1)
+        : "N/A";
+
+    final focus = data.conversionRate < 1.5
+        ? 'improving conversion rates'
+        : 'scaling acquisition';
+
+    return "I've analyzed your local financial signals. Your financial health is $health, with $runway months of runway and a ${data.netMargin.toStringAsFixed(1)}% net margin. While I sync with the cloud for deeper strategic modeling, I recommend focusing immediately on $focus to optimize your cash flow position.";
   }
 
   // --- GOALS CRUD ---

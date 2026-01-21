@@ -630,26 +630,26 @@ class _EmailMarketingRoiScreenState
 
   Widget _buildDashboardTab(EmailRoiResults results, NumberFormat format) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 140, 20, 100),
+      padding: const EdgeInsets.fromLTRB(20, 120, 20, 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Hero ROI Card
           _buildHeroRoiCard(results),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Main KPI Grid
           _buildKpiGrid(results, format),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
           // Cost Structure Chart
           _buildInvestmentChart(results),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
           // Deliverability Warning
           if (results.lostRevenue > 0) ...[
             _buildWarningCard(results, format),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
           ],
 
           // Detailed Metrics Section

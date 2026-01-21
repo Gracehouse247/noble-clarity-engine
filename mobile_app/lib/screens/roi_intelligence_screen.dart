@@ -126,7 +126,7 @@ class RoiIntelligenceScreen extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
           // Efficiency Funnel
           _buildSectionHeader('Marketing Efficiency', 'Last 30 Days'),
@@ -164,21 +164,21 @@ class RoiIntelligenceScreen extends ConsumerWidget {
                           '+12% vs. last 30d',
                           AppTheme.profitGreen,
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
                         _buildFunnelItem(
                           'Leads Generated',
                           NumberFormat.compact().format(leads),
                           '${ctr.toStringAsFixed(1)}% CTR',
                           Colors.white38,
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
                         _buildFunnelItem(
                           'Conversions',
                           NumberFormat.compact().format(conversions),
                           '${convRate.toStringAsFixed(1)}% Conv.',
                           Colors.white38,
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
                         _buildFunnelItem(
                           'Customer Value',
                           currencyFormat.format(
@@ -196,7 +196,7 @@ class RoiIntelligenceScreen extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
           // Tactical Metrics Cards
           Row(
@@ -221,7 +221,7 @@ class RoiIntelligenceScreen extends ConsumerWidget {
             ],
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
           if (marketingPlatforms.isNotEmpty) ...[
             _buildSectionHeader('Spend Distribution', ''),
@@ -288,7 +288,7 @@ class RoiIntelligenceScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
           ],
 
           // Platform Performance
